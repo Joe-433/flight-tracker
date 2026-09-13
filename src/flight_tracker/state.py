@@ -59,6 +59,8 @@ class State:
     # observation series stays price-only so it stays small and diffable;
     # this holds the one snapshot the reports actually render.
     latest: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # Cheapest fare ever seen, per stop class. The bar for record-low alerts.
+    records: Dict[str, Dict[str, object]] = field(default_factory=dict)
 
     # -- io -----------------------------------------------------------------
 
@@ -81,6 +83,7 @@ class State:
             "alerts",
             "observations",
             "latest",
+            "records",
         ):
             if key in raw:
                 setattr(state, key, raw[key])
@@ -99,6 +102,7 @@ class State:
             "alerts": self.alerts,
             "observations": self.observations,
             "latest": self.latest,
+            "records": self.records,
         }
         # Atomic write: a half-written state file would look like a fresh start
         # and silently wipe price history.

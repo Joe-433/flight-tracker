@@ -47,7 +47,7 @@ class Band:
 @dataclass
 class Source:
     backend: str = "pairs"
-    pairs_per_run: int = 20
+    pairs_per_run: int = 24
     jitter_seconds: List[float] = field(default_factory=lambda: [2, 5])
     retries: int = 2
     bands: List[Band] = field(default_factory=list)
@@ -64,6 +64,8 @@ class Alerts:
     cooldown_hours: float = 12.0
     rebeat_drop_usd: float = 15.0
     max_per_run: int = 3
+    record_low: bool = True
+    record_min_drop_usd: float = 5.0
 
 
 @dataclass

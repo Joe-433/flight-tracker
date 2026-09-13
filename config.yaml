@@ -45,22 +45,35 @@ source:
   #         actually implements get_calendar_grid; see README).
   # mock  = deterministic fake data, for testing the pipeline offline.
   backend: "pairs"
-  pairs_per_run: 20      # per run; see README "Request budget" for the math
+  pairs_per_run: 24      # per run; see README "Request budget" for the math
   jitter_seconds: [2, 5] # random pause between requests
   retries: 2
   # How the per-run budget is split across the horizon. Near-term fares move
   # fast and are the time-sensitive ones; fares 3 months out barely move, so
   # they get revisited less often. Each band rotates on its own cursor.
+  # Shares are set from measured price behaviour, not intuition. Measured
+  # 2026-09-13 over 467 fares:
+  #     7-21 days    min $339   median $528   <- last-minute premium
+  #    22-45 days    min $338   median $422
+  #    46-75 days    min $297   median $409   <- the big outlier lows
+  #    76-105 days   min $357   median $393   <- most consistently cheap
+  # The flat "nothing ever moves" wall starts around 115 days, NOT 76, so the
+  # far band gets a full share rather than the scraps it had at first.
   bands:
     - {within_days: 21,  share: 0.10}  # last-minute: expensive, kept as a toehold
-    - {within_days: 45,  share: 0.35}  # prices start falling
-    - {within_days: 75,  share: 0.35}  # the floor
-    - {within_days: 105, share: 0.20}  # still live, approaching the wall
+    - {within_days: 45,  share: 0.30}
+    - {within_days: 75,  share: 0.30}
+    - {within_days: 105, share: 0.30}
 
 alerts:
   threshold_usd: 250              # nonstop: tell me now
   threshold_usd_with_stops: 200   # a layover has to be worth $50+ to hear about
   cooldown_hours: 12     # don't re-alert the same date pair inside this window
+  # Record lows: tell me when a fare beats the cheapest ever seen, whatever the
+  # number. Self-limiting -- every alert raises its own bar -- so it can't spam
+  # even while the thresholds above stay silent for months.
+  record_low: true
+  record_min_drop_usd: 5
   rebeat_drop_usd: 15    # ...unless it dropped at least this much more
   max_per_run: 3         # spam guard
 

@@ -49,7 +49,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python -m flight_tracker report --send --limit 10
+        run: python -m flight_tracker report --send --limit 5
 
       - name: Skipped
         if: steps.gate.outputs.send != 'true'

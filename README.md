@@ -69,19 +69,23 @@ ceiling that matters is how hard you're willing to hit Google.
 495 date pairs (99 departure dates × 5 trip lengths), swept as a rotating
 slice split across bands, each with its own cursor:
 
-| Band | Pairs | Per run | Full pass every |
-|---|---|---|---|
-| 7–21 days | 75 | 2 | ~9.4 h |
-| 22–45 days | 120 | 7 | **~4.3 h** |
-| 46–75 days | 150 | 7 | ~5.4 h |
-| 76–105 days | 150 | 4 | ~9.4 h |
+| Band | Pairs | Per run | Full pass every | Median fare |
+|---|---|---|---|---|
+| 7–21 days | 75 | 2 | ~9.4 h | $528 |
+| 22–45 days | 120 | 7 | ~4.3 h | $422 |
+| 46–75 days | 150 | 7 | ~5.4 h | $409 |
+| 76–105 days | 150 | 7 | ~5.4 h | **$393** |
 
-The near band keeps a toehold rather than a fair share: it's where fares are
-worst, but it's also the only place a last-minute mistake fare could show up.
+Shares come from measured behaviour, not intuition. The first version gave
+76–105 days only 20% of the budget on the strength of a probe showing a flat
+$409 wall — but that wall starts at ~115 days, not 76, and the 76–105 band
+turns out to have the *lowest* median of any band. It now gets a full share.
+The near band keeps a toehold rather than a fair share: it's the worst value on
+the route, but it's the only place a last-minute mistake fare could appear.
 
-Totals: 20 requests per run, every 15 minutes, **~1,920 per day** — about one
-request every 45 seconds. Each request now yields up to two fares (cheapest
-nonstop *and* cheapest one-stop) at no extra cost.
+Totals: 24 requests per run, every 15 minutes, **~2,300 per day** — about one
+request every 37 seconds. Each request returns the cheapest fare in *both* stop
+classes at no extra cost.
 
 If Google ever starts blocking datacenter IPs, the same code runs unchanged on
 a Raspberry Pi or an Oracle Cloud always-free VM under plain `cron`:
@@ -246,23 +250,40 @@ so a rotating partial sweep still shows the whole window. `<- cheap day` marks
 days under the route-wide percentile cutoff. The daily digest workflow pushes
 this to your alert channels every morning.
 
+### Record lows
+
+A fixed threshold can stay silent for months. If nothing on the route has ever
+been under $250, a $250 alarm never rings and the tracker looks dead while it's
+working perfectly. So there's a second, quieter alert: **a fare that beats the
+cheapest ever seen**, whatever the number.
+
+It can't become a stream, because every alert raises its own bar. Nonstop and
+connecting fares keep independent records, the first fare in a class arms the
+bar silently (alerting there would mean alerting on the first thing we ever
+saw), and an improvement smaller than `alerts.record_min_drop_usd` ($5) is
+ignored. Records expire with the history window so one winter fluke doesn't set
+the bar forever.
+
+These arrive in blue with no `@here` — they're information, not the $250 alarm.
+Turn them off with `alerts.record_low: false`.
+
 ### Weekly report
 
 Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
 Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
-> **Cheapest NY metro → LA metro**
-> **1.  $297  ·  Thu Oct 29 → Tue Nov 3 · 5n**
-> 1:25p  ·  LGA→LAX  ·  1 stop  ·  WN 3056 +1
-> **2.  $409  ·  Thu Oct 29 → Sun Nov 1 · 3n**
-> 9:50p  ·  JFK→LAX  ·  nonstop  ·  AA 171
-> *Outbound times and airports · prices as last seen*
+```
+#  PRICE  DEPART      RETURN     N  TIME   ROUTE    STOPS   FLIGHT
+1  $297   Thu Oct 29  Tue Nov 3  5  1:25p  LGA→LAX  1 stop  WN 3056 +1
+2  $315   Fri Oct 30  Tue Nov 3  4  7:00a  LGA→LAX  1 stop  WN 2531 +1
+3  $409   Thu Oct 29  Sun Nov 1  3  9:50p  JFK→LAX  nonstop AA 171
+```
 
-Discord gets this as a real **embed** — coloured spine, proper title, spaced
-fields — not a fenced code block. A code block renders as a grey monospace slab
-that reads like a dumped text file; email and SMS get the same content as
-indented plain text.
+Discord gets this as a real **embed** — coloured spine, title, footer — with
+the table in a monospace block inside it. The embed is what stops it reading
+like a dumped text file; the monospace block is what keeps the columns lined
+up. Columns run in decision order: price, dates, time, airports, flight.
 
 The last column is the **flight number**, not the airline name — it's shorter,
 it still tells you the carrier, and it's what you paste into a booking site.

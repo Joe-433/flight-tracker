@@ -5,7 +5,7 @@ import unittest
 
 from helpers import make_config
 
-from flight_tracker.cli import _clock12, cheapest_rows
+from flight_tracker.cli import _clock12, cheapest_table
 from flight_tracker.sources.base import Offer
 from flight_tracker.state import State
 
@@ -27,8 +27,7 @@ def offer(price, out="2026-10-14", nights=3, **kw):
 
 
 def rendered(state, limit=10):
-    """Flatten rows to one searchable blob, the way a channel renders them."""
-    return "\n".join("%s\n%s" % pair for pair in cheapest_rows(state, make_config(), limit))
+    return cheapest_table(state, make_config(), limit)
 
 
 def stocked(offers) -> State:
@@ -53,7 +52,7 @@ class TestClock(unittest.TestCase):
 
 class TestCheapestReport(unittest.TestCase):
     def test_empty(self):
-        self.assertEqual(cheapest_rows(State(), make_config()), [])
+        self.assertIn("No fares tracked", cheapest_table(State(), make_config()))
 
     def test_sorted_by_price_and_limited(self):
         state = stocked([
@@ -68,11 +67,23 @@ class TestCheapestReport(unittest.TestCase):
         self.assertLess(body.index("$338"), body.index("$420"))
 
     def test_price_leads_then_date_then_time(self):
-        headline, detail = cheapest_rows(stocked([offer(338)]), make_config())[0]
-        self.assertTrue(headline.startswith("1.  $338"))
-        self.assertIn("Wed Oct 14", headline)
-        self.assertTrue(detail.startswith("7:05a"))
-        self.assertLess(detail.index("JFK"), detail.index("JetBlue"))
+        table = cheapest_table(stocked([offer(338)]), make_config())
+        header, row = table.splitlines()[1], table.splitlines()[2]
+        self.assertLess(header.index("PRICE"), header.index("DEPART"))
+        self.assertLess(header.index("DEPART"), header.index("TIME"))
+        self.assertLess(header.index("TIME"), header.index("ROUTE"))
+        self.assertLess(header.index("ROUTE"), header.index("FLIGHT"))
+        self.assertIn("$338", row)
+        self.assertIn("Wed Oct 14", row)
+
+    def test_columns_line_up(self):
+        table = cheapest_table(
+            stocked([offer(338, "2026-10-14"), offer(1200, "2026-11-02")]),
+            make_config(),
+        )
+        rows = table.splitlines()[1:-1]
+        starts = [line.index("$") for line in rows[1:]]
+        self.assertEqual(len(set(starts)), 1)
 
     def test_layovers_are_labelled(self):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))

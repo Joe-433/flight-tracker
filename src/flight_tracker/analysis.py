@@ -25,7 +25,7 @@ from typing import Dict, List, Optional
 
 from .config import Config
 from .sources.base import Offer
-from .state import State
+from .state import State, hours_since, utcnow
 
 def min_route_samples(cheap_percentile: float) -> int:
     """How much history a percentile cutoff needs before it means anything.
@@ -104,6 +104,79 @@ class DayStat:
     cheap: bool = False
     samples: int = 0
     stops: int = 0
+
+
+@dataclass
+class RecordLow:
+    """A fare that beat the cheapest ever seen in its stop class."""
+
+    offer: Offer
+    previous: float
+    previous_seen: Optional[str] = None
+
+    @property
+    def saving(self) -> float:
+        return self.previous - self.offer.price
+
+
+def stop_class(offer: Offer) -> str:
+    return "nonstop" if offer.stops == 0 else "connecting"
+
+
+def claim_record_lows(
+    offers: List[Offer],
+    state: State,
+    cfg: Config,
+    now: Optional[dt.datetime] = None,
+) -> List[RecordLow]:
+    """Find fares beating the all-time low, and raise the bar. Mutates state.
+
+    This exists because a fixed threshold can stay silent for months: if
+    nothing on the route has ever been under $250, a $250 alarm never rings and
+    the tracker looks dead even while it's working perfectly. A record low is
+    self-limiting by construction -- every alert raises its own bar -- so it
+    can never become a stream.
+
+    The first fare in a class arms the bar silently. Alerting on it would mean
+    alerting on literally the first thing we ever saw.
+    """
+    if not cfg.alerts.record_low:
+        return []
+
+    now = now or utcnow()
+    best: Dict[str, Offer] = {}
+    for offer in offers:
+        name = stop_class(offer)
+        if name not in best or offer.price < best[name].price:
+            best[name] = offer
+
+    found: List[RecordLow] = []
+    for name, offer in best.items():
+        record = state.records.get(name)
+
+        # Let a record expire with the rest of the history, so the bar resets
+        # with the season instead of being set forever by one winter fluke.
+        if record is not None:
+            age = hours_since(str(record.get("seen")), now)
+            if age is not None and age > cfg.history.days * 24:
+                record = None
+
+        if record is None:
+            state.records[name] = {"price": offer.price, "seen": now.isoformat()}
+            continue
+
+        previous = float(record.get("price", 0) or 0)
+        if offer.price <= previous - cfg.alerts.record_min_drop_usd:
+            found.append(
+                RecordLow(
+                    offer=offer,
+                    previous=previous,
+                    previous_seen=str(record.get("seen") or "") or None,
+                )
+            )
+            state.records[name] = {"price": offer.price, "seen": now.isoformat()}
+
+    return found
 
 
 @dataclass

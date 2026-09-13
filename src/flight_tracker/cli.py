@@ -16,10 +16,10 @@ from typing import List, Optional
 
 from . import analysis, deadman
 from .config import Config, load_config
-from .notify import GREEN, Message, Notifier
+from .notify import BLURPLE, GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
 from .sources.base import Offer, date_pairs
-from .state import State, utcnow
+from .state import State, hours_since as _hours_since, utcnow
 
 DEFAULT_CONFIG = "config.yaml"
 DEFAULT_STATE = os.path.join("data", "state.json")
@@ -68,27 +68,31 @@ def describe(deal: analysis.Deal, cfg: Config) -> str:
 def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
     offer = deal.offer
     airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
-    lines = [
-        "%s \u2192 %s  \u00b7  %d nights"
-        % (
-            _pretty_date(offer.out_date),
-            _pretty_date(offer.ret_date),
-            offer.nights,
+    fields = [
+        (
+            "When",
+            "%s \u2192 %s  \u00b7  %d nights"
+            % (
+                _pretty_date(offer.out_date),
+                _pretty_date(offer.ret_date),
+                offer.nights,
+            ),
         ),
-        "%s  \u00b7  %s\u2192%s  \u00b7  %s"
-        % (
-            _clock12(offer.dep_time).strip(),
-            offer.dep_airport or "???",
-            offer.arr_airport or "???",
-            offer.flight_no or airlines,
+        (
+            "Flight",
+            "%s  \u00b7  %s\u2192%s  \u00b7  %s"
+            % (
+                _clock12(offer.dep_time).strip(),
+                offer.dep_airport or "???",
+                offer.arr_airport or "???",
+                offer.flight_no or airlines,
+            ),
         ),
-        "",
-        describe(deal, cfg) or "cheapest in this sweep",
+        ("Why", describe(deal, cfg) or "cheapest in this sweep"),
     ]
     if deal.baseline:
-        lines.append(
-            "Recent median for these dates: %s"
-            % _money(deal.baseline, offer.currency)
+        fields.append(
+            ("Recent median for these dates", _money(deal.baseline, offer.currency))
         )
     return Message(
         title="%s  ·  %s → %s  ·  %s"
@@ -98,11 +102,60 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
             cfg.route.destination_label,
             offer.label,
         ),
-        body="\n".join(lines),
+        fields=fields,
         url=offer.url,  # makes the embed title itself tappable
         urgent=True,
         color=GREEN,
         footer="Tap the title to book",
+    )
+
+
+def record_message(record: analysis.RecordLow, cfg: Config) -> Message:
+    offer = record.offer
+    airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
+    age = ""
+    hours = _hours_since(record.previous_seen)
+    if hours is not None:
+        age = " \u00b7 set %s ago" % (
+            "%dh" % hours if hours < 48 else "%dd" % (hours / 24)
+        )
+    return Message(
+        title="New low  \u00b7  %s  \u00b7  %s \u2192 %s  \u00b7  %s"
+        % (
+            _money(offer.price, offer.currency),
+            cfg.route.origin_label,
+            cfg.route.destination_label,
+            offer.label,
+        ),
+        fields=[
+            (
+                "Beats the previous %s low" % analysis.stop_class(offer),
+                "%s, down %s%s"
+                % (_money(record.previous), _money(record.saving), age),
+            ),
+            (
+                "When",
+                "%s \u2192 %s  \u00b7  %d nights"
+                % (
+                    _pretty_date(offer.out_date),
+                    _pretty_date(offer.ret_date),
+                    offer.nights,
+                ),
+            ),
+            (
+                "Flight",
+                "%s  \u00b7  %s\u2192%s  \u00b7  %s"
+                % (
+                    _clock12(offer.dep_time).strip(),
+                    offer.dep_airport or "???",
+                    offer.arr_airport or "???",
+                    offer.flight_no or airlines,
+                ),
+            ),
+        ],
+        url=offer.url,
+        color=BLURPLE,  # informational: no @here, this is not the $250 alarm
+        footer="Still above your alert threshold \u00b7 tap the title to book",
     )
 
 
@@ -207,6 +260,18 @@ def cmd_run(args: argparse.Namespace) -> int:
             notifier.send(deal_message(deal, cfg))
         state.mark_alerted(deal.offer, now=now)
         sent += 1
+
+    for record in analysis.claim_record_lows(offers, state, cfg, now=now):
+        print(
+            "record low: %s (%s), was %s"
+            % (
+                _money(record.offer.price, record.offer.currency),
+                analysis.stop_class(record.offer),
+                _money(record.previous),
+            )
+        )
+        if not args.no_notify:
+            notifier.send(record_message(record, cfg))
 
     if assessment.cheapest:
         print(
@@ -458,75 +523,87 @@ def _short_date(value: str) -> str:
     return dt.date.fromisoformat(value).strftime("%a %b %-d")
 
 
-def cheapest_rows(
-    state: State, cfg: Config, limit: int = 10
-) -> List[Tuple[str, str]]:
-    """Top N cheapest fares as (headline, detail) pairs.
-
-    Ordered by what you decide on, in the order you decide it: price, then
-    when it leaves, then which airports, then which flight. Two short lines
-    beat one wide one on a phone.
-    """
-    rows = []
-    for key, snap in state.latest.items():
-        try:
-            price = float(snap["price"])  # type: ignore[arg-type]
-        except (KeyError, TypeError, ValueError):
-            continue
-        rows.append((price, snap))
-    rows.sort(key=lambda r: r[0])
-
-    out: List[Tuple[str, str]] = []
-    for index, (price, snap) in enumerate(rows[:limit], start=1):
-        out_date = str(snap.get("out_date", ""))
-        ret_date = str(snap.get("ret_date", ""))
-        nights = ""
-        if out_date and ret_date:
-            nights = " \u00b7 %dn" % (
+def _row_parts(index: int, price: float, snap: dict, cfg: Config) -> List[str]:
+    out_date = str(snap.get("out_date", ""))
+    ret_date = str(snap.get("ret_date", ""))
+    nights = ""
+    if out_date and ret_date:
+        nights = str(
+            (
                 dt.date.fromisoformat(ret_date) - dt.date.fromisoformat(out_date)
             ).days
-
-        stops = snap.get("stops")
-        stops_text = "nonstop" if stops == 0 else (
-            "%s stop" % stops if isinstance(stops, int) else "? stops"
-        )
-        airlines = snap.get("airlines") or []
-        # The flight number is shorter than the airline name and more useful --
-        # it already names the carrier, and it's what a booking site wants.
-        who = str(snap.get("flight_no") or "") or (
-            ", ".join(str(a) for a in airlines)[:18] or "?"
         )
 
-        out.append((
-            "%d.  %s  \u00b7  %s \u2192 %s%s"
-            % (
-                index,
-                _money(price, cfg.search.currency),
-                _short_date(out_date) if out_date else "?",
-                _short_date(ret_date) if ret_date else "?",
-                nights,
-            ),
-            "%s  \u00b7  %s\u2192%s  \u00b7  %s  \u00b7  %s"
-            % (
-                _clock12(snap.get("dep_time")).strip(),
-                snap.get("dep_airport") or "???",
-                snap.get("arr_airport") or "???",
-                stops_text,
-                who,
-            ),
-        ))
-    return out
+    stops = snap.get("stops")
+    stops_text = (
+        "nonstop"
+        if stops == 0
+        else ("%s stop" % stops if isinstance(stops, int) else "?")
+    )
+    airlines = snap.get("airlines") or []
+    # The flight number is shorter than the airline name and more useful: it
+    # already names the carrier, and it's what a booking site wants.
+    who = str(snap.get("flight_no") or "") or (
+        ", ".join(str(a) for a in airlines)[:12] or "?"
+    )
+
+    return [
+        "%d" % index,
+        _money(price, cfg.search.currency),
+        _short_date(out_date) if out_date else "?",
+        _short_date(ret_date) if ret_date else "?",
+        nights,
+        _clock12(snap.get("dep_time")).strip(),
+        "%s\u2192%s" % (snap.get("dep_airport") or "???", snap.get("arr_airport") or "???"),
+        stops_text,
+        who,
+    ]
+
+
+HEADERS = ["#", "PRICE", "DEPART", "RETURN", "N", "TIME", "ROUTE", "STOPS", "FLIGHT"]
+
+
+def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
+    """Top N cheapest fares as an aligned monospace table.
+
+    Columns are ordered the way the decision is made: price, then dates, then
+    departure time, then airports, then which flight. Rendered inside a code
+    fence so Discord keeps it fixed-width -- the embed around it supplies the
+    title and colour, so this stays a table rather than looking like a dumped
+    text file.
+    """
+    ranked = []
+    for snap in state.latest.values():
+        try:
+            ranked.append((float(snap["price"]), snap))  # type: ignore[arg-type]
+        except (KeyError, TypeError, ValueError):
+            continue
+    ranked.sort(key=lambda r: r[0])
+    if not ranked:
+        return "No fares tracked yet."
+
+    rows = [
+        _row_parts(index, price, snap, cfg)
+        for index, (price, snap) in enumerate(ranked[:limit], start=1)
+    ]
+    widths = [
+        max(len(HEADERS[column]), max(len(row[column]) for row in rows))
+        for column in range(len(HEADERS))
+    ]
+
+    def line(parts: List[str]) -> str:
+        return "  ".join(part.ljust(widths[i]) for i, part in enumerate(parts)).rstrip()
+
+    return "\n".join(["```", line(HEADERS)] + [line(row) for row in rows] + ["```"])
 
 
 def cmd_report(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     state = State.load(args.state)
-    rows = cheapest_rows(state, cfg, limit=args.limit)
     message = Message(
-        title="Cheapest %s \u2192 %s"
-        % (cfg.route.origin_label, cfg.route.destination_label),
-        body="" if rows else "No fares tracked yet.",
-        fields=rows,
+        title="Cheapest %s \u2192 %s \u00b7 top %d"
+        % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
+        body=cheapest_table(state, cfg, limit=args.limit),
         footer="Outbound times and airports \u00b7 prices as last seen \u00b7 "
         "%d date pairs tracked" % len(state.latest),
         color=GREEN,
