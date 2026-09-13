@@ -1,0 +1,109 @@
+from __future__ import annotations
+
+import datetime as dt
+import unittest
+
+from helpers import make_config
+
+from flight_tracker.cli import _clock12, cheapest_report
+from flight_tracker.sources.base import Offer
+from flight_tracker.state import State
+
+NOW = dt.datetime(2026, 9, 13, 12, 0, tzinfo=dt.timezone.utc)
+
+
+def offer(price, out="2026-10-14", nights=3, **kw):
+    ret = (dt.date.fromisoformat(out) + dt.timedelta(days=nights)).isoformat()
+    base = dict(
+        stops=0,
+        airlines=["JetBlue"],
+        dep_airport="JFK",
+        arr_airport="LAX",
+        dep_time="07:05",
+        arr_time="10:40",
+    )
+    base.update(kw)
+    return Offer(out_date=out, ret_date=ret, price=price, **base)
+
+
+def stocked(offers) -> State:
+    state = State()
+    state.record(offers, make_config().history, now=NOW)
+    return state
+
+
+class TestClock(unittest.TestCase):
+    def test_morning_and_afternoon(self):
+        self.assertEqual(_clock12("07:05"), "7:05a")
+        self.assertEqual(_clock12("17:30"), "5:30p")
+
+    def test_midnight_and_noon_are_12(self):
+        self.assertEqual(_clock12("00:15"), "12:15a")
+        self.assertEqual(_clock12("12:00"), "12:00p")
+
+    def test_missing_time_does_not_crash(self):
+        for bad in (None, "", "nope", "aa:bb"):
+            self.assertIn("--", _clock12(bad))
+
+
+class TestCheapestReport(unittest.TestCase):
+    def test_empty(self):
+        self.assertIn("No fares tracked", cheapest_report(State(), make_config()))
+
+    def test_sorted_by_price_and_limited(self):
+        state = stocked([
+            offer(500, "2026-10-20"),
+            offer(338, "2026-10-14"),
+            offer(420, "2026-10-18"),
+        ])
+        body = cheapest_report(state, make_config(), limit=2)
+        self.assertIn("$338", body)
+        self.assertIn("$420", body)
+        self.assertNotIn("$500", body)
+        self.assertLess(body.index("$338"), body.index("$420"))
+
+    def test_price_leads_then_date_then_time(self):
+        body = cheapest_report(stocked([offer(338)]), make_config())
+        line = [x for x in body.splitlines() if "$338" in x][0]
+        self.assertTrue(line.strip().startswith("1. $338"))
+        self.assertIn("Wed Oct 14", line)
+        detail = body.splitlines()[body.splitlines().index(line) + 1]
+        self.assertTrue(detail.strip().startswith("7:05a"))
+        self.assertLess(detail.index("JFK>LAX"), detail.index("JetBlue"))
+
+    def test_layovers_are_labelled(self):
+        body = cheapest_report(stocked([offer(200, stops=1)]), make_config())
+        self.assertIn("1 stop", body)
+        body = cheapest_report(stocked([offer(200, stops=0)]), make_config())
+        self.assertIn("nonstop", body)
+
+    def test_missing_details_render_placeholders(self):
+        body = cheapest_report(
+            stocked([offer(300, dep_airport=None, arr_airport=None, dep_time=None,
+                           airlines=[])]),
+            make_config(),
+        )
+        self.assertIn("???>???", body)
+        self.assertIn("$300", body)
+
+
+class TestLatestSnapshot(unittest.TestCase):
+    def test_refreshes_even_when_the_price_point_is_skipped(self):
+        """Redundant prices aren't logged, but the report must not go stale."""
+        cfg = make_config().history
+        state = State()
+        state.record([offer(338, dep_time="07:05")], cfg, now=NOW)
+        state.record(
+            [offer(338, dep_time="09:30")], cfg, now=NOW + dt.timedelta(hours=1)
+        )
+        self.assertEqual(len(state.observations["2026-10-14|2026-10-17"]), 1)
+        self.assertEqual(state.latest["2026-10-14|2026-10-17"]["dep_time"], "09:30")
+
+    def test_trim_drops_departed_flights(self):
+        state = stocked([offer(338, "2026-09-01")])
+        state.trim(30, now=NOW)
+        self.assertEqual(state.latest, {})
+
+
+if __name__ == "__main__":
+    unittest.main()

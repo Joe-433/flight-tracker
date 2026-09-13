@@ -26,6 +26,15 @@ class Offer:
     stops: Optional[int] = None
     duration_minutes: Optional[int] = None
 
+    # Outbound leg details. Google's roundtrip payload lists OUTBOUND options
+    # priced for the whole trip, so the return leg's airports and times aren't
+    # in the response -- only the outbound's. Anything showing these must say
+    # so rather than implying it describes the return too.
+    dep_airport: Optional[str] = None
+    arr_airport: Optional[str] = None
+    dep_time: Optional[str] = None   # "HH:MM", 24h
+    arr_time: Optional[str] = None
+
     @property
     def key(self) -> str:
         """History key. Nonstop keeps the bare date-pair form.
@@ -37,6 +46,21 @@ class Offer:
         if not self.stops:
             return "%s|%s" % (self.out_date, self.ret_date)
         return "%s|%s|%d" % (self.out_date, self.ret_date, self.stops)
+
+    def snapshot(self) -> dict:
+        """Flat dict for state.json -- what the weekly report renders from."""
+        return {
+            "price": self.price,
+            "stops": self.stops,
+            "airlines": self.airlines,
+            "dep_airport": self.dep_airport,
+            "arr_airport": self.arr_airport,
+            "dep_time": self.dep_time,
+            "arr_time": self.arr_time,
+            "out_date": self.out_date,
+            "ret_date": self.ret_date,
+            "url": self.url,
+        }
 
     @property
     def label(self) -> str:

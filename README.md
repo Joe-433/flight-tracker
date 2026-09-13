@@ -246,6 +246,35 @@ so a rotating partial sweep still shows the whole window. `<- cheap day` marks
 days under the route-wide percentile cutoff. The daily digest workflow pushes
 this to your alert channels every morning.
 
+### Weekly report
+
+Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
+Discord, ordered the way you'd actually decide: price, then dates, then
+departure time, then airports, then airline.
+
+```
+ 1. $338   Wed Oct 14 -> Sat Oct 17 3n
+    7:05a  JFK>LAX  1 stop  JetBlue
+ 2. $357   Tue Nov 3 -> Tue Nov 10 7n
+    8:00a  EWR>LAX  nonstop  Alaska
+```
+
+Any time, on demand:
+
+```bash
+python -m flight_tracker report --limit 10
+```
+
+Two things this report is honest about. Times and airports describe the
+**outbound leg only** — Google's roundtrip payload prices the whole trip but
+only details the outbound, so the return leg's airports and times aren't in the
+response at all. And prices are **as last seen**, which for the far bands can
+be several hours old.
+
+GitHub cron is UTC-only and DST-blind, so the workflow fires at both 13:00 and
+14:00 UTC and the job itself checks whether it's really 6am in Los Angeles.
+Without that the report would drift an hour twice a year.
+
 ### Running a scan on demand
 
 ```bash

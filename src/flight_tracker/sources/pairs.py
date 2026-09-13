@@ -19,6 +19,17 @@ from ..config import Config
 from .base import Offer, ScrapeError, Source, plan_slice
 
 
+def _clock(moment: Any) -> Optional[str]:
+    """Pull "HH:MM" out of a fast-flights SimpleDatetime, tolerantly."""
+    value = getattr(moment, "time", None)
+    if not value or len(value) < 2:
+        return None
+    try:
+        return "%02d:%02d" % (int(value[0]), int(value[1]))
+    except (TypeError, ValueError):
+        return None
+
+
 def _explain(exc: Exception) -> str:
     """Translate the scraper's failure modes into something actionable.
 
@@ -174,6 +185,13 @@ class PairsSource(Source):
         if legs and all(getattr(f, "duration", None) for f in legs):
             duration = sum(int(f.duration) for f in legs)
 
+        dep_airport = arr_airport = dep_time = arr_time = None
+        if legs:
+            dep_airport = getattr(getattr(legs[0], "from_airport", None), "code", None)
+            arr_airport = getattr(getattr(legs[-1], "to_airport", None), "code", None)
+            dep_time = _clock(getattr(legs[0], "departure", None))
+            arr_time = _clock(getattr(legs[-1], "arrival", None))
+
         return Offer(
             out_date=out_date,
             ret_date=ret_date,
@@ -183,6 +201,10 @@ class PairsSource(Source):
             url=url,
             stops=stops,
             duration_minutes=duration,
+            dep_airport=dep_airport,
+            arr_airport=arr_airport,
+            dep_time=dep_time,
+            arr_time=arr_time,
         )
 
     # -- sweep --------------------------------------------------------------

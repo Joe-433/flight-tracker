@@ -430,6 +430,99 @@ def cmd_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+def _clock12(value: Optional[str]) -> str:
+    """"07:05" -> "7:05a". Times are the third thing you read; keep them narrow."""
+    if not value or ":" not in value:
+        return "  --  "
+    try:
+        hour, minute = (int(x) for x in value.split(":", 1))
+    except ValueError:
+        return "  --  "
+    suffix = "a" if hour < 12 else "p"
+    display = hour % 12 or 12
+    return "%d:%02d%s" % (display, minute, suffix)
+
+
+def _short_date(value: str) -> str:
+    return dt.date.fromisoformat(value).strftime("%a %b %-d")
+
+
+def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
+    """Top N cheapest known fares.
+
+    Ordered by what you decide on, in the order you decide it: price, then
+    when it leaves, then which airports, then who's flying it. Two lines per
+    fare so it stays readable on a phone.
+    """
+    rows = []
+    for key, snap in state.latest.items():
+        try:
+            price = float(snap["price"])  # type: ignore[arg-type]
+        except (KeyError, TypeError, ValueError):
+            continue
+        rows.append((price, key, snap))
+    rows.sort(key=lambda r: r[0])
+
+    if not rows:
+        return "No fares tracked yet."
+
+    lines = ["```"]
+    for index, (price, _key, snap) in enumerate(rows[:limit], start=1):
+        out_date = str(snap.get("out_date", ""))
+        ret_date = str(snap.get("ret_date", ""))
+        nights = ""
+        if out_date and ret_date:
+            nights = " %dn" % (
+                dt.date.fromisoformat(ret_date) - dt.date.fromisoformat(out_date)
+            ).days
+
+        stops = snap.get("stops")
+        stops_text = "nonstop" if stops == 0 else (
+            "%s stop" % stops if isinstance(stops, int) else "? stops"
+        )
+        route = "%s>%s" % (
+            snap.get("dep_airport") or "???",
+            snap.get("arr_airport") or "???",
+        )
+        airlines = snap.get("airlines") or []
+        airline = ", ".join(str(a) for a in airlines)[:18] or "?"
+
+        lines.append(
+            "%2d. %-6s %s -> %s%s"
+            % (
+                index,
+                _money(price, cfg.search.currency),
+                _short_date(out_date) if out_date else "?",
+                _short_date(ret_date) if ret_date else "?",
+                nights,
+            )
+        )
+        lines.append(
+            "    %-6s %s  %s  %s"
+            % (_clock12(snap.get("dep_time")), route, stops_text, airline)
+        )
+    lines.append("```")
+    lines.append("Outbound times/airports; prices as last seen.")
+    return "\n".join(lines)
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    state = State.load(args.state)
+    message = Message(
+        title="\u2708\ufe0f Cheapest %s \u2192 %s, top %d"
+        % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
+        body=cheapest_report(state, cfg, limit=args.limit),
+    )
+    if args.send:
+        results = Notifier.from_env().send(message)
+        for name, ok, error in results:
+            print("  %-8s %s%s" % (name, "ok" if ok else "FAILED", "" if ok else ": %s" % error))
+        return 0 if all(ok for _, ok, _ in results) else 1
+    print(message.as_text())
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -453,6 +546,11 @@ def build_parser() -> argparse.ArgumentParser:
     days.add_argument("--limit", type=int, default=14)
     days.add_argument("--send", action="store_true", help="push the table to alerts")
     days.set_defaults(func=cmd_days)
+
+    report = sub.add_parser("report", help="top N cheapest fares, formatted")
+    report.add_argument("--limit", type=int, default=10)
+    report.add_argument("--send", action="store_true")
+    report.set_defaults(func=cmd_report)
 
     test = sub.add_parser("test-alert", help="send a test notification")
     test.add_argument("--console", action="store_true")

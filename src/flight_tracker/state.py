@@ -55,6 +55,10 @@ class State:
     )
     alerts: Dict[str, Dict[str, object]] = field(default_factory=dict)
     observations: Dict[str, List[List[object]]] = field(default_factory=dict)
+    # Latest full detail per date pair (times, airports, airline). The
+    # observation series stays price-only so it stays small and diffable;
+    # this holds the one snapshot the reports actually render.
+    latest: Dict[str, Dict[str, object]] = field(default_factory=dict)
 
     # -- io -----------------------------------------------------------------
 
@@ -76,6 +80,7 @@ class State:
             "deadman",
             "alerts",
             "observations",
+            "latest",
         ):
             if key in raw:
                 setattr(state, key, raw[key])
@@ -93,6 +98,7 @@ class State:
             "deadman": self.deadman,
             "alerts": self.alerts,
             "observations": self.observations,
+            "latest": self.latest,
         }
         # Atomic write: a half-written state file would look like a fresh start
         # and silently wipe price history.
@@ -131,6 +137,10 @@ class State:
 
         added = 0
         for offer in offers:
+            snapshot = offer.snapshot()
+            snapshot["seen"] = stamp
+            self.latest[offer.key] = snapshot
+
             series = self.observations.setdefault(offer.key, [])
             if series:
                 last_ts, last_price = series[-1][0], float(series[-1][1])
@@ -175,6 +185,10 @@ class State:
         for key in list(self.alerts):
             if key.split("|", 1)[0] < today:
                 del self.alerts[key]
+
+        for key in list(self.latest):
+            if key.split("|", 1)[0] < today or key not in self.observations:
+                del self.latest[key]
 
     def series(self, key: str) -> List[Tuple[str, float]]:
         return [(str(ts), float(price)) for ts, price in self.observations.get(key, [])]
