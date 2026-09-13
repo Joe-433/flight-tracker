@@ -77,7 +77,7 @@ class History:
 class Deals:
     min_observations: int = 6
     pct_below_baseline: float = 0.15
-    cheap_percentile: float = 0.20
+    cheap_percentile: float = 0.05
 
 
 @dataclass
@@ -132,6 +132,8 @@ def load_config(path: str) -> Config:
         cfg.alerts.threshold_usd = float(os.environ["FT_THRESHOLD_USD"])
     if os.getenv("FT_BACKEND"):
         cfg.source.backend = os.environ["FT_BACKEND"]
+    if os.getenv("FT_PAIRS_PER_RUN"):
+        cfg.source.pairs_per_run = int(os.environ["FT_PAIRS_PER_RUN"])
 
     if cfg.search.max_stops != 0:
         # Not an error, but the whole point of this tracker is nonstops.

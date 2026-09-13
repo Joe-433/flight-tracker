@@ -58,7 +58,7 @@ history:
 deals:
   min_observations: 6    # per date pair, before its baseline is trusted
   pct_below_baseline: 0.15   # 15% under its own median = notable
-  cheap_percentile: 0.20     # bottom 20% of recent route-wide fares
+  cheap_percentile: 0.05     # bottom 5% of recent route-wide fares
 
 deadman:
   fail_runs: 2           # consecutive empty/failed sweeps before alarming

@@ -16,6 +16,9 @@ on:
         description: "pairs | grid | mock"
         required: false
         default: "pairs"
+      pairs:
+        description: "Date pairs to sweep this run (default 20; try 80 for a deep manual scan)"
+        required: false
 
 permissions:
   contents: write
@@ -28,7 +31,7 @@ concurrency:
 jobs:
   sweep:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -52,6 +55,7 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           FT_THRESHOLD_USD: ${{ github.event.inputs.threshold }}
           FT_BACKEND: ${{ github.event.inputs.backend }}
+          FT_PAIRS_PER_RUN: ${{ github.event.inputs.pairs }}
         run: python -m flight_tracker run --console
 
       - name: Commit price history

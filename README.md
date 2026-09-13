@@ -183,21 +183,25 @@ Three independent signals, evaluated per date pair:
 
 | Signal | Meaning | Config |
 |---|---|---|
-| `threshold` | At or under the price you said you'd pay. | `alerts.threshold_usd` |
-| `baseline` | ≥15% below *this date pair's* own recent median. Catches a genuine drop on an expensive week. | `deals.pct_below_baseline`, `deals.min_observations` |
-| `percentile` | In the bottom 20% of everything logged lately on the route. Catches "this day is just a cheap day." | `deals.cheap_percentile` |
+| `threshold` | At or under the price you said you'd pay. | `alerts.threshold_usd` ($250) |
+| `percentile` | In the **bottom 5%** of everything logged lately on the route. | `deals.cheap_percentile` (0.05) |
+| `baseline` | ≥15% below *this date pair's* own recent median. | `deals.pct_below_baseline` |
 
-**It alerts on `threshold` alone, or on `baseline` AND `percentile` together.**
-Either of the latter two on its own is too trigger-happy: a 15% drop from an
-absurd price is still an absurd price, and the bottom 20% of a quiet week is
-just Tuesday.
+**It alerts on `threshold` alone, or on `percentile` alone** — anything under
+$250, or anything in the cheapest 5% the tracker has ever seen.
 
-`baseline` only engages once a date pair has `min_observations` (6) readings, and
-`percentile` only once the route has 20+ total — until then you'll get threshold
-alerts only, which is the correct behavior for a cold start.
+`baseline` never alerts by itself: a 15% drop from an absurd price is still an
+absurd price. It rides along in the "why" line so you can see when a fare is
+both cheap *and* falling.
 
-A fare is scored *before* the current sweep is written to history, so a fare is
-never part of its own baseline.
+A 5% cutoff needs real history before it means anything — computed from 20
+observations it's just "the cheapest thing we've seen", which would fire on
+every new low. So it stays dormant until there are enough samples for ~3 to sit
+below the cutoff: **60 observations for 5%** (`min_route_samples`). Until then
+you get threshold alerts only, which is the right behavior for a cold start.
+
+A fare is scored *before* the current sweep is written to history, so it's never
+part of its own baseline.
 
 ### Low-price days
 
@@ -215,6 +219,30 @@ Cheapest fare per departure date, merged across history and the current sweep �
 so a rotating partial sweep still shows the whole window. `<- cheap day` marks
 days under the route-wide percentile cutoff. The daily digest workflow pushes
 this to your alert channels every morning.
+
+### Running a scan on demand
+
+The scheduled sweep takes ~2.7 hours to walk the near band. To force one now:
+
+```bash
+gh workflow run "watch fares"
+```
+
+For a **deep scan** — sweep 80 date pairs in one go instead of 20, covering
+most of the near horizon immediately:
+
+```bash
+gh workflow run "watch fares" -f pairs=80
+```
+
+Watch it and read the result:
+
+```bash
+gh run watch $(gh run list --workflow="watch fares" --limit 1 --json databaseId --jq '.[0].databaseId')
+```
+
+Manual runs alert exactly like scheduled ones, cooldown and all. Locally,
+`--pairs N` does the same thing, though live backends need Python ≥ 3.10.
 
 ### Alert spam control
 

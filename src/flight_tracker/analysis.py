@@ -9,13 +9,16 @@ something fired:
   percentile -- relative to the route: bottom N% of everything we've logged
                 lately. Catches "this specific day is just a cheap day".
 
-A fare alerts on `threshold` alone, or on `baseline` AND `percentile` together
-(either one alone is too trigger-happy).
+A fare alerts on `threshold` alone, or on `percentile` alone. `baseline` never
+alerts by itself -- a 15% drop from an absurd price is still an absurd price --
+but it rides along in the "why" so you can see when a fare is both cheap in
+absolute terms and falling.
 """
 
 from __future__ import annotations
 
 import datetime as dt
+import math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
@@ -23,7 +26,17 @@ from .config import Config
 from .sources.base import Offer
 from .state import State
 
-MIN_ROUTE_SAMPLES = 20  # below this, the route-wide percentile means nothing
+def min_route_samples(cheap_percentile: float) -> int:
+    """How much history a percentile cutoff needs before it means anything.
+
+    A 5% cutoff computed from 20 observations is just "the single cheapest
+    thing we've seen", which would alert on every new low. Requiring ~3
+    observations below the cutoff makes it a real threshold: 60 samples for 5%,
+    20 for 20%.
+    """
+    if cheap_percentile <= 0:
+        return 20
+    return max(20, int(math.ceil(3.0 / cheap_percentile)))
 
 
 def median(values: List[float]) -> Optional[float]:
@@ -59,9 +72,7 @@ class Deal:
 
     @property
     def alertworthy(self) -> bool:
-        if "threshold" in self.reasons:
-            return True
-        return "baseline" in self.reasons and "percentile" in self.reasons
+        return "threshold" in self.reasons or "percentile" in self.reasons
 
     @property
     def score(self) -> float:
@@ -102,9 +113,10 @@ def assess(
     """Score this run's offers against stored history."""
     history = state.all_prices()
     route_median = median(history)
+    needed = min_route_samples(cfg.deals.cheap_percentile)
     cheap_cutoff = (
         percentile(history, cfg.deals.cheap_percentile)
-        if len(history) >= MIN_ROUTE_SAMPLES
+        if len(history) >= needed
         else None
     )
 

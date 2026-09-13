@@ -18,6 +18,16 @@ def seeded_state(key: str, prices, start: dt.datetime = NOW) -> State:
     return state
 
 
+class TestMinRouteSamples(unittest.TestCase):
+    def test_tighter_percentile_needs_more_history(self):
+        self.assertEqual(analysis.min_route_samples(0.05), 60)
+        self.assertEqual(analysis.min_route_samples(0.20), 20)
+
+    def test_never_below_floor(self):
+        self.assertEqual(analysis.min_route_samples(0.9), 20)
+        self.assertEqual(analysis.min_route_samples(0), 20)
+
+
 class TestPercentile(unittest.TestCase):
     def test_interpolates(self):
         self.assertEqual(analysis.percentile([10, 20, 30, 40], 0.0), 10)
@@ -42,7 +52,7 @@ class TestAssess(unittest.TestCase):
         self.assertEqual(result.alerts, [])
 
     def test_baseline_alone_does_not_alert(self):
-        """A drop with no route context is not enough on its own."""
+        """A 15% drop from an absurd price is still an absurd price."""
         cfg = make_config(
             alerts={"threshold_usd": 100}, deals={"min_observations": 3}
         )
@@ -52,20 +62,30 @@ class TestAssess(unittest.TestCase):
         self.assertEqual(result.deals[0].reasons, ["baseline"])
         self.assertEqual(result.alerts, [])
 
-    def test_baseline_plus_percentile_alerts(self):
+    def test_percentile_alone_alerts(self):
+        """Bottom 5% of the route is an alert on its own, no threshold needed."""
         cfg = make_config(
-            alerts={"threshold_usd": 100},
-            deals={"min_observations": 3, "cheap_percentile": 0.5},
+            alerts={"threshold_usd": 100}, deals={"cheap_percentile": 0.05}
         )
-        offer = make_offer(400)
-        state = seeded_state(offer.key, [500, 510, 505, 500])
-        # Pad route history past MIN_ROUTE_SAMPLES with expensive fares.
+        state = State()
+        needed = analysis.min_route_samples(0.05)
         state.observations["2026-09-25|2026-09-29"] = [
-            [NOW.isoformat(), 700 + i] for i in range(analysis.MIN_ROUTE_SAMPLES)
+            [NOW.isoformat(), 700 + i] for i in range(needed)
         ]
-        result = analysis.assess([offer], state, cfg, now=NOW)
-        self.assertIn("baseline", result.alerts[0].reasons)
-        self.assertIn("percentile", result.alerts[0].reasons)
+        result = analysis.assess([make_offer(300)], state, cfg, now=NOW)
+        self.assertEqual(result.alerts[0].reasons, ["percentile"])
+
+    def test_percentile_silent_until_enough_history(self):
+        cfg = make_config(
+            alerts={"threshold_usd": 100}, deals={"cheap_percentile": 0.05}
+        )
+        state = State()
+        state.observations["2026-09-25|2026-09-29"] = [
+            [NOW.isoformat(), 700 + i]
+            for i in range(analysis.min_route_samples(0.05) - 1)
+        ]
+        result = analysis.assess([make_offer(300)], state, cfg, now=NOW)
+        self.assertEqual(result.alerts, [])
 
     def test_baseline_needs_enough_observations(self):
         cfg = make_config(alerts={"threshold_usd": 100}, deals={"min_observations": 6})

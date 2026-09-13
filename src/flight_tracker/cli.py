@@ -121,6 +121,8 @@ def cmd_run(args: argparse.Namespace) -> int:
         cfg.source.backend = args.backend
     if args.threshold is not None:
         cfg.alerts.threshold_usd = args.threshold
+    if args.pairs is not None:
+        cfg.source.pairs_per_run = args.pairs
 
     state = State.load(args.state)
     notifier = Notifier.from_env(force_console=args.console)
@@ -237,9 +239,10 @@ def cmd_days(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     state = State.load(args.state)
     history = state.all_prices()
+    needed = analysis.min_route_samples(cfg.deals.cheap_percentile)
     cutoff = (
         analysis.percentile(history, cfg.deals.cheap_percentile)
-        if len(history) >= analysis.MIN_ROUTE_SAMPLES
+        if len(history) >= needed
         else None
     )
     stats = analysis.day_stats([], state, cutoff)
@@ -254,7 +257,7 @@ def cmd_days(args: argparse.Namespace) -> int:
     else:
         body += "\nNot enough history yet for a cheap-day cutoff (%d/%d observations)." % (
             len(history),
-            analysis.MIN_ROUTE_SAMPLES,
+            needed,
         )
 
     message = Message(
@@ -353,6 +356,11 @@ def build_parser() -> argparse.ArgumentParser:
     run = sub.add_parser("run", help="one sweep + alerting")
     run.add_argument("--backend", choices=["pairs", "grid", "mock"])
     run.add_argument("--threshold", type=float)
+    run.add_argument(
+        "--pairs",
+        type=int,
+        help="override source.pairs_per_run for this run (manual deep scan)",
+    )
     run.add_argument("--no-notify", action="store_true", help="decide but don't send")
     run.add_argument("--console", action="store_true", help="also print alerts")
     run.add_argument("--fail-on-down", action="store_true", help="exit 1 if unhealthy")
