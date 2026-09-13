@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# Flight tracker config. Everything tunable lives here; no code changes needed.
+# ---------------------------------------------------------------------------
+
+route:
+  # Google "MID" knowledge-graph ids. A city MID covers the whole metro area,
+  # which is how we collapse 3 NY airports x 5 LA airports into one query.
+  # VERIFY THESE ONCE: `python -m flight_tracker verify --config config.yaml`
+  origin: "/m/02_286"
+  destination: "/m/030qb3t"
+  origin_label: "NY metro"
+  destination_label: "LA metro"
+
+search:
+  window_days: 14        # rolling window starting today
+  min_days_ahead: 0      # set to 14 if "2 weeks out" means "at least 14 days away"
+  trip_nights: [3, 4, 5, 6, 7]
+  max_stops: 0           # 0 = nonstop only
+  carry_on_bags: 1
+  checked_bags: 0
+  currency: "USD"
+  adults: 1
+  seat: "economy"
+  exclude_basic_economy: false
+
+source:
+  # pairs = one request per date pair, rotating slice per run (works with
+  #         fast-flights 3.1.0 as published).
+  # grid  = one request for the whole calendar matrix (needs a fork that
+  #         actually implements get_calendar_grid; see README).
+  # mock  = deterministic fake data, for testing the pipeline offline.
+  backend: "pairs"
+  pairs_per_run: 12      # request budget per run; see README for the math
+  jitter_seconds: [2, 7] # random pause between requests
+  retries: 2
+
+alerts:
+  threshold_usd: 250     # hard "tell me now" price
+  cooldown_hours: 12     # don't re-alert the same date pair inside this window
+  rebeat_drop_usd: 15    # ...unless it dropped at least this much more
+  max_per_run: 3         # spam guard
+
+deals:
+  history_days: 30
+  min_observations: 6    # per date pair, before its baseline is trusted
+  pct_below_baseline: 0.15   # 15% under its own median = notable
+  cheap_percentile: 0.20     # bottom 20% of recent route-wide fares
+
+deadman:
+  fail_runs: 2           # consecutive empty/failed sweeps before alarming
+  stale_hours: 6         # or: no usable price for this long
+  renotify_hours: 24     # while still down, nag at most this often

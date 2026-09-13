@@ -1,0 +1,68 @@
+name: watch fares
+
+on:
+  schedule:
+    # Every 30 minutes. GitHub's minimum is 5, but each run costs ~12 requests
+    # to Google; see README "Request budget" before turning this up.
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+    inputs:
+      threshold:
+        description: "Override alert threshold (USD) for this run"
+        required: false
+      backend:
+        description: "pairs | grid | mock"
+        required: false
+        default: "pairs"
+
+permissions:
+  contents: write
+
+concurrency:
+  # Never let two sweeps race on data/state.json.
+  group: watch-fares
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sweep
+        env:
+          PYTHONPATH: src
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          FT_THRESHOLD_USD: ${{ github.event.inputs.threshold }}
+          FT_BACKEND: ${{ github.event.inputs.backend }}
+        run: python -m flight_tracker run --console
+
+      - name: Commit price history
+        run: |
+          git config user.name "flight-tracker"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/state.json
+          if git diff --staged --quiet; then
+            echo "no price changes"
+          else
+            git commit -m "chore: price history $(date -u +%Y-%m-%dT%H:%MZ)"
+            # A concurrent push is unlikely (see `concurrency` above) but cheap
+            # to survive.
+            git pull --rebase --autostash || true
+            git push
+          fi

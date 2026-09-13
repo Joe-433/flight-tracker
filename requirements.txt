@@ -1,0 +1,4 @@
+# Scraping boundary. Pinned: this library is the part most likely to break.
+fast-flights==3.1.0
+# Human-editable config.
+PyYAML>=6.0
