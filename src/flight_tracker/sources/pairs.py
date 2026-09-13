@@ -19,6 +19,20 @@ from ..config import Config
 from .base import Offer, ScrapeError, Source, plan_slice
 
 
+def _explain(exc: Exception) -> str:
+    """Translate the scraper's failure modes into something actionable.
+
+    `IndexError` here is not a bug in our code -- it's fast-flights' parser
+    walking a Google payload that doesn't have the shape it expects, which in
+    practice means Google returned nothing for that date pair. Distinguishing
+    it from a genuine transport failure matters: a few of these per sweep is
+    normal, all of them is the scraper breaking.
+    """
+    if isinstance(exc, (IndexError, KeyError, TypeError)):
+        return "no parsable results (empty or unfamiliar Google payload): %r" % exc
+    return "%s: %s" % (type(exc).__name__, exc)
+
+
 class PairsSource(Source):
     name = "pairs"
 
@@ -95,7 +109,9 @@ class PairsSource(Source):
             results = None
 
         if last_exc is not None and not results:
-            self.errors.append("%s->%s: %s" % (out_date, ret_date, last_exc))
+            self.errors.append(
+                "%s->%s: %s" % (out_date, ret_date, _explain(last_exc))
+            )
             return None
         if not results:
             return None
