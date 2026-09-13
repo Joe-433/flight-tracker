@@ -2,11 +2,11 @@ name: watch fares
 
 on:
   schedule:
-    # Hourly. Two budgets constrain this, not one: requests to Google, and
-    # GitHub Actions minutes (private repos bill them; public repos don't).
-    # At these defaults: ~1,460 min/month against a 2,000 free-tier allowance.
-    # Read README "Two budgets" before turning it up.
-    - cron: "0 * * * *"
+    # Every 15 minutes. The repo is public, so Actions minutes are free and
+    # unlimited -- the only real ceiling is how hard we're willing to hit
+    # Google. See README "Request budget" before turning this up further;
+    # GitHub's own minimum interval is 5 minutes.
+    - cron: "*/15 * * * *"
   workflow_dispatch:
     inputs:
       threshold:

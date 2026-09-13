@@ -34,8 +34,8 @@ class Search:
 @dataclass
 class Source:
     backend: str = "pairs"
-    pairs_per_run: int = 16
-    jitter_seconds: List[float] = field(default_factory=lambda: [1, 3])
+    pairs_per_run: int = 10
+    jitter_seconds: List[float] = field(default_factory=lambda: [2, 6])
     retries: int = 2
 
 

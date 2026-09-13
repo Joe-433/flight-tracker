@@ -30,8 +30,8 @@ source:
   #         actually implements get_calendar_grid; see README).
   # mock  = deterministic fake data, for testing the pipeline offline.
   backend: "pairs"
-  pairs_per_run: 16      # per run; see README "Two budgets" for the math
-  jitter_seconds: [1, 3] # random pause between requests
+  pairs_per_run: 10      # per run; see README "Request budget" for the math
+  jitter_seconds: [2, 6] # random pause between requests
   retries: 2
 
 alerts:

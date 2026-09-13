@@ -37,57 +37,51 @@ below collapses to 1.
 3.9.6 only, so the live backends won't run locally without a newer Python. The
 `mock` backend and the tests run fine on 3.9.
 
-### Two budgets
+### Request budget
 
-**Requests to Google.** The window is 14 days × trip lengths `[3,4,5,6,7]` ≈
-**50 date pairs**. Sweeping all of them every 15 minutes would be ~4,800
-requests/day — the kind of volume that gets you blocked. Instead each run walks
-a **rotating slice** (`source.pairs_per_run`, default 16) and stores a cursor in
-state, so consecutive runs pick up where the last left off.
+The repo is public, so **Actions minutes are free and unlimited**. The only
+ceiling that matters is how hard you're willing to hit Google.
 
-**GitHub Actions minutes.** This repo is private, and private repos bill Actions
-minutes (public repos get them free and unlimited). Free tier is 2,000
-minutes/month, Pro is 3,000. A run is billed in whole minutes, so the goal is to
-keep each sweep comfortably under 2.
+The window is 14 days × trip lengths `[3,4,5,6,7]` ≈ **50 date pairs**.
+Sweeping all of them every 15 minutes would be ~4,800 requests/day — the kind
+of volume that gets you blocked. Instead each run walks a **rotating slice**
+(`source.pairs_per_run`, default 10) and stores a cursor in state, so
+consecutive runs pick up where the last left off.
 
-At the defaults — hourly cron, 16 pairs, 1–3s jitter:
+At the defaults — every 15 minutes, 10 pairs, 2–6s jitter:
 
 | | |
 |---|---|
-| Requests per run | 16 |
-| Requests per day | ~384 |
-| Full window covered every | ~3 hours |
-| Minutes per run | ~2 (≈110s of work) |
-| **Minutes per month** | **~1,460** of 2,000 |
+| Requests per run | 10 |
+| Requests per day | ~960 |
+| Pairs covered per hour | 40 |
+| Full window covered every | ~75 minutes |
+| Runtime per run | ~1 minute |
 
-That leaves ~500 minutes of headroom for the daily digest (~30/month), test
-runs, and manual dispatches. Check real usage after a few days at
-*Settings → Billing → Plans and usage* — if runs take longer than estimated,
-drop `pairs_per_run` before dropping the cadence.
+Both dials are independent: `pairs_per_run` trades requests-per-hour against
+per-run duration, the cron trades it against burstiness. Spreading the same
+volume over more, smaller runs looks less like scraping than fewer large ones,
+which is why the slice is small and the cron is frequent. GitHub's minimum
+interval is 5 minutes, but cron is best-effort and runs get delayed 15+ minutes
+under load anyway, so going below 15 buys less than it looks like.
 
-**If you want it faster than hourly**, in order of preference:
-
-1. **Self-hosted runner** on a Mac or Raspberry Pi that's always on — minutes
-   are unmetered for self-hosted runners even on a private repo, and it also
-   sidesteps any datacenter-IP blocking. Needs Python ≥ 3.10 on that machine.
-2. **Plain `cron` / `launchd`** on that same machine, no GitHub involved:
-   `PYTHONPATH=src python -m flight_tracker run` every 15 minutes.
-3. **Make the repo public** — unlimited free minutes, at the cost of your price
-   history being world-readable.
-4. **Pay** for minutes, which defeats the point.
+If Google ever starts blocking datacenter IPs, the same code runs unchanged on
+a Raspberry Pi or an Oracle Cloud always-free VM under plain `cron`:
+`PYTHONPATH=src python -m flight_tracker run`.
 
 ---
 
 ## Setup
 
-### 1. Push it to GitHub (private)
+### 1. Push it to GitHub (public)
 
 ```bash
-gh repo create flight-tracker --private --source . --push
+gh repo create flight-tracker --public --source . --push
 ```
 
-Private keeps your price history to yourself but meters Actions minutes — see
-**Two budgets** above for why the cron is hourly rather than every 15 minutes.
+Public repos get unlimited free Actions minutes, which is what makes a
+15-minute cron free. The trade is that your committed price history is
+world-readable — it's just fares, but it is public.
 
 ### 2. Alerts — Discord is the easy one
 
