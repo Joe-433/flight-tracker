@@ -51,4 +51,18 @@ class MockSource(Source):
                     duration_minutes=355,
                 )
             )
+            if self.cfg.search.max_stops >= 1:
+                # A connecting fare, usually cheaper and occasionally a steal.
+                offers.append(
+                    Offer(
+                        out_date=out_date,
+                        ret_date=ret_date,
+                        price=round(price * (0.55 + 0.3 * r)),
+                        currency=self.cfg.search.currency,
+                        airlines=AIRLINES[int(r * 7) % len(AIRLINES)],
+                        url="https://www.google.com/travel/flights",
+                        stops=1,
+                        duration_minutes=480,
+                    )
+                )
         return offers, next_cursors

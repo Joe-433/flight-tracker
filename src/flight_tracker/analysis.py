@@ -40,6 +40,19 @@ def min_route_samples(cheap_percentile: float) -> int:
     return max(20, int(math.ceil(3.0 / cheap_percentile)))
 
 
+def threshold_for(offer, cfg) -> float:
+    """The price bar this offer has to clear.
+
+    A layover only earns its place by being materially cheaper, so connecting
+    fares are held to a lower number than nonstops. Unknown stop count is
+    treated as connecting: better to stay quiet than to alert on a fare that
+    turns out to have a stop in it.
+    """
+    if offer.stops == 0:
+        return cfg.alerts.threshold_usd
+    return cfg.alerts.threshold_usd_with_stops
+
+
 def median(values: List[float]) -> Optional[float]:
     if not values:
         return None
@@ -90,6 +103,7 @@ class DayStat:
     ret_date: str
     cheap: bool = False
     samples: int = 0
+    stops: int = 0
 
 
 @dataclass
@@ -128,7 +142,7 @@ def assess(
         baseline = None
         discount = None
 
-        if offer.price <= cfg.alerts.threshold_usd:
+        if offer.price <= threshold_for(offer, cfg):
             reasons.append("threshold")
 
         # `assess` runs before this sweep is recorded, so the series holds
@@ -171,27 +185,31 @@ def day_stats(
     today = (now or dt.datetime.now(dt.timezone.utc)).date().isoformat()
     best: Dict[str, DayStat] = {}
 
-    def consider(out_date: str, ret_date: str, price: float) -> None:
+    def consider(out_date: str, ret_date: str, price: float, stops: int = 0) -> None:
         if out_date < today:
             return
         current = best.get(out_date)
         if current is None:
             best[out_date] = DayStat(
-                out_date=out_date, price=price, ret_date=ret_date, samples=1
+                out_date=out_date, price=price, ret_date=ret_date, samples=1,
+                stops=stops,
             )
             return
         current.samples += 1
         if price < current.price:
             current.price = price
             current.ret_date = ret_date
+            current.stops = stops
 
     for key, points in state.observations.items():
-        out_date, _, ret_date = key.partition("|")
+        parts = key.split("|")
+        out_date, ret_date = parts[0], parts[1]
+        stops = int(parts[2]) if len(parts) > 2 else 0
         for _, price in points:
-            consider(out_date, ret_date, float(price))
+            consider(out_date, ret_date, float(price), stops)
 
     for offer in offers:  # fresh data wins ties by being applied last
-        consider(offer.out_date, offer.ret_date, offer.price)
+        consider(offer.out_date, offer.ret_date, offer.price, offer.stops or 0)
 
     stats = sorted(best.values(), key=lambda s: s.price)
     if cheap_cutoff is not None:

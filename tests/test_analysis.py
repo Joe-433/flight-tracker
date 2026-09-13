@@ -121,7 +121,56 @@ class TestAssess(unittest.TestCase):
         self.assertEqual(result.deals[0].baseline, 500)
 
 
+class TestStopThresholds(unittest.TestCase):
+    def setUp(self):
+        self.cfg = make_config(
+            alerts={"threshold_usd": 250, "threshold_usd_with_stops": 200}
+        )
+
+    def test_nonstop_uses_the_higher_bar(self):
+        self.assertEqual(
+            analysis.threshold_for(make_offer(240, stops=0), self.cfg), 250
+        )
+
+    def test_connection_uses_the_lower_bar(self):
+        self.assertEqual(
+            analysis.threshold_for(make_offer(240, stops=1), self.cfg), 200
+        )
+
+    def test_connection_between_the_two_bars_stays_silent(self):
+        """$240 with a layover is not worth waking up for; nonstop is."""
+        stopped = analysis.assess([make_offer(240, stops=1)], State(), self.cfg, now=NOW)
+        self.assertEqual(stopped.alerts, [])
+        direct = analysis.assess([make_offer(240, stops=0)], State(), self.cfg, now=NOW)
+        self.assertEqual(len(direct.alerts), 1)
+
+    def test_cheap_connection_alerts(self):
+        result = analysis.assess([make_offer(189, stops=1)], State(), self.cfg, now=NOW)
+        self.assertEqual(len(result.alerts), 1)
+
+    def test_unknown_stop_count_is_treated_as_connecting(self):
+        offer = make_offer(240)
+        offer.stops = None
+        self.assertEqual(analysis.threshold_for(offer, self.cfg), 200)
+
+    def test_stop_classes_track_separate_histories(self):
+        """A $210 one-stop and a $390 nonstop must not average together."""
+        direct = make_offer(390, stops=0)
+        stopped = make_offer(210, stops=1)
+        self.assertNotEqual(direct.key, stopped.key)
+        self.assertEqual(direct.key, "2026-09-20|2026-09-24")
+        self.assertEqual(stopped.key, "2026-09-20|2026-09-24|1")
+
+
 class TestDayStats(unittest.TestCase):
+    def test_reads_stop_count_from_the_key(self):
+        state = State()
+        state.observations["2026-09-20|2026-09-24|1"] = [[NOW.isoformat(), 190]]
+        state.observations["2026-09-20|2026-09-24"] = [[NOW.isoformat(), 380]]
+        stats = analysis.day_stats([], state, None, now=NOW)
+        self.assertEqual(stats[0].price, 190)
+        self.assertEqual(stats[0].stops, 1)
+
     def test_picks_cheapest_per_departure_day(self):
         state = State()
         state.observations["2026-09-20|2026-09-24"] = [[NOW.isoformat(), 300]]

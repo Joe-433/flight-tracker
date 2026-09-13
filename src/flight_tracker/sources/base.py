@@ -28,7 +28,21 @@ class Offer:
 
     @property
     def key(self) -> str:
-        return "%s|%s" % (self.out_date, self.ret_date)
+        """History key. Nonstop keeps the bare date-pair form.
+
+        Connecting fares get a `|<stops>` suffix so they track as their own
+        series -- a $210 one-stop and a $390 nonstop on the same dates are
+        different products and must not average into one price history.
+        """
+        if not self.stops:
+            return "%s|%s" % (self.out_date, self.ret_date)
+        return "%s|%s|%d" % (self.out_date, self.ret_date, self.stops)
+
+    @property
+    def label(self) -> str:
+        if not self.stops:
+            return "nonstop"
+        return "%d stop%s" % (self.stops, "" if self.stops == 1 else "s")
 
     @property
     def nights(self) -> int:

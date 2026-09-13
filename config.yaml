@@ -12,12 +12,25 @@ route:
   destination_label: "LA metro"
 
 search:
-  # Departures from 1 week out to 3 months out. `window_days` is the span of
-  # DEPARTURE dates; the return leg may land past the end of it.
+  # Departures 7 to 105 days out. `window_days` is the span of DEPARTURE
+  # dates; the return leg may land past the end of it.
+  #
+  # Measured 2026-09-13 on 385 real fares, cheapest nonstop per date pair:
+  #     7-14 days   median $625      <- last-minute premium
+  #    14-21 days   median $498
+  #    21-30 days   median $507
+  #    30-45 days   median $409
+  #    45-60 days   median $391      <- floor
+  #    60-75 days   median $419
+  #    75-95 days   median $391
+  #   115-150 days  $409 flat, every single sample, one airline
+  #
+  # The far end isn't a gradient, it's a wall: past ~105 days Google returns
+  # base-fare inventory that doesn't move, so sweeping it buys nothing.
   min_days_ahead: 7
-  window_days: 83
+  window_days: 98
   trip_nights: [3, 4, 5, 6, 7]
-  max_stops: 0           # 0 = nonstop only
+  max_stops: 1           # allow one layover -- but see the lower threshold
   carry_on_bags: 1
   checked_bags: 0
   currency: "USD"
@@ -39,12 +52,14 @@ source:
   # fast and are the time-sensitive ones; fares 3 months out barely move, so
   # they get revisited less often. Each band rotates on its own cursor.
   bands:
-    - {within_days: 30, share: 0.55}   # 1 week - 1 month out
-    - {within_days: 60, share: 0.25}   # 1 - 2 months out
-    - {within_days: 90, share: 0.20}   # 2 - 3 months out
+    - {within_days: 21,  share: 0.10}  # last-minute: expensive, kept as a toehold
+    - {within_days: 45,  share: 0.35}  # prices start falling
+    - {within_days: 75,  share: 0.35}  # the floor
+    - {within_days: 105, share: 0.20}  # still live, approaching the wall
 
 alerts:
-  threshold_usd: 250     # hard "tell me now" price
+  threshold_usd: 250              # nonstop: tell me now
+  threshold_usd_with_stops: 200   # a layover has to be worth $50+ to hear about
   cooldown_hours: 12     # don't re-alert the same date pair inside this window
   rebeat_drop_usd: 15    # ...unless it dropped at least this much more
   max_per_run: 3         # spam guard

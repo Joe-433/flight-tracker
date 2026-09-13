@@ -22,7 +22,7 @@ class Search:
     window_days: int = 83   # span of DEPARTURE dates, starting min_days_ahead out
     min_days_ahead: int = 7
     trip_nights: List[int] = field(default_factory=lambda: [3, 4, 5, 6, 7])
-    max_stops: int = 0
+    max_stops: int = 1
     carry_on_bags: int = 1
     checked_bags: int = 0
     currency: str = "USD"
@@ -60,6 +60,7 @@ class Source:
 @dataclass
 class Alerts:
     threshold_usd: float = 250.0
+    threshold_usd_with_stops: float = 200.0  # a layover has to be worth it
     cooldown_hours: float = 12.0
     rebeat_drop_usd: float = 15.0
     max_per_run: int = 3
@@ -135,7 +136,14 @@ def load_config(path: str) -> Config:
     if os.getenv("FT_PAIRS_PER_RUN"):
         cfg.source.pairs_per_run = int(os.environ["FT_PAIRS_PER_RUN"])
 
-    if cfg.search.max_stops != 0:
-        # Not an error, but the whole point of this tracker is nonstops.
-        print("warning: max_stops != 0, alerts will include connections")
+    if cfg.search.max_stops != 0 and (
+        cfg.alerts.threshold_usd_with_stops >= cfg.alerts.threshold_usd
+    ):
+        # Connections are allowed only because they might be much cheaper. If
+        # their threshold isn't lower, they'll just crowd out nonstop alerts.
+        print(
+            "warning: connections are allowed but their threshold (%s) is not "
+            "below the nonstop threshold (%s)"
+            % (cfg.alerts.threshold_usd_with_stops, cfg.alerts.threshold_usd)
+        )
     return cfg

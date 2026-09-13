@@ -117,14 +117,24 @@ class TestPlanSlice(unittest.TestCase):
 
 
 class TestMockSource(unittest.TestCase):
-    def test_deterministic_and_nonstop(self):
+    def test_deterministic(self):
         cfg = make_config(source={"pairs_per_run": 5})
         first, cursors = MockSource(cfg).sweep({})
         second, _ = MockSource(cfg).sweep({})
         self.assertEqual([o.price for o in first], [o.price for o in second])
-        self.assertEqual(len(first), 5)
         self.assertTrue(cursors)
-        self.assertTrue(all(o.stops == 0 for o in first))
+
+    def test_emits_both_stop_classes_when_connections_allowed(self):
+        cfg = make_config(source={"pairs_per_run": 5}, search={"max_stops": 1})
+        offers, _ = MockSource(cfg).sweep({})
+        self.assertEqual(len(offers), 10)
+        self.assertEqual(sorted({o.stops for o in offers}), [0, 1])
+
+    def test_nonstop_only_when_configured(self):
+        cfg = make_config(source={"pairs_per_run": 5}, search={"max_stops": 0})
+        offers, _ = MockSource(cfg).sweep({})
+        self.assertEqual(len(offers), 5)
+        self.assertTrue(all(o.stops == 0 for o in offers))
 
 
 if __name__ == "__main__":

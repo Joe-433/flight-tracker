@@ -1,8 +1,8 @@
 # Nonstop NY ↔ LA fare watcher
 
-Watches nonstop roundtrips between the NY metro and the LA metro for
-departures from **1 week to 3 months out**, and pings you when something is
-actually cheap. Free to run:
+Watches roundtrips between the NY metro and the LA metro for departures
+**7–105 days out**, and pings you when one is actually cheap. Nonstop under
+**$250**, or one layover under **$200**. Free to run:
 GitHub Actions on a public repo, a Discord webhook, no paid APIs.
 
 ```bash
@@ -38,33 +38,50 @@ below collapses to 1.
 3.9.6 only, so the live backends won't run locally without a newer Python. The
 `mock` backend and the tests run fine on 3.9.
 
+### Why 7–105 days
+
+Measured on 2026-09-13 across 385 real fares — cheapest nonstop per date pair:
+
+| Lead time | n | min | median |
+|---|---|---|---|
+| 7–14 days | 35 | $585 | **$625** |
+| 14–21 | 35 | $422 | $498 |
+| 21–30 | 45 | $387 | $507 |
+| 30–45 | 75 | $374 | $409 |
+| 45–60 | 49 | $357 | **$391** ← floor |
+| 60–75 | 66 | $374 | $419 |
+| 75–95 | 80 | $357 | $391 |
+
+Past 90 days it stops being a market at all. A probe of 90–180 days returned
+**$409, every single sample, from one airline, for eleven consecutive
+samples** (115–150 days out). That's base-fare inventory sitting untouched
+until the date gets closer — sweeping it buys nothing.
+
+So: the near end is a last-minute premium, the far end is a wall, and the
+money is in **30–75 days out**. Re-measure any time with
+`gh workflow run "probe range" -f min_days=105 -f window=60`.
+
 ### Request budget
 
 The repo is public, so **Actions minutes are free and unlimited**. The only
 ceiling that matters is how hard you're willing to hit Google.
 
-The horizon is 84 departure dates × trip lengths `[3,4,5,6,7]` = **420 date
-pairs**. Sweeping all of them even once an hour would be 10,000 requests/day —
-the kind of volume that gets you blocked. A flat rotation at a safe rate, on the
-other hand, takes most of a day to come back around, which is useless for the
-near-term dates where fares actually move.
-
-So the budget is **split across bands**, each rotating on its own cursor:
+495 date pairs (99 departure dates × 5 trip lengths), swept as a rotating
+slice split across bands, each with its own cursor:
 
 | Band | Pairs | Per run | Full pass every |
 |---|---|---|---|
-| 1 week – 1 month out | 120 | 11 | **~2.7 hours** |
-| 1 – 2 months out | 150 | 5 | ~7.5 hours |
-| 2 – 3 months out | 150 | 4 | ~9.4 hours |
+| 7–21 days | 75 | 2 | ~9.4 h |
+| 22–45 days | 120 | 7 | **~4.3 h** |
+| 46–75 days | 150 | 7 | ~5.4 h |
+| 76–105 days | 150 | 4 | ~9.4 h |
 
-Fares three months out barely move day to day; fares ten days out move fast and
-are the time-sensitive ones. Banding spends the budget where it changes
-something. Totals: 20 requests per run, **~1,920 per day**, ~1 minute of
-runtime.
+The near band keeps a toehold rather than a fair share: it's where fares are
+worst, but it's also the only place a last-minute mistake fare could show up.
 
-Tune `source.bands` and `source.pairs_per_run` together — shares are
-normalized, so they don't have to sum to 1. Setting `bands: []` falls back to a
-single flat rotation over the whole horizon.
+Totals: 20 requests per run, every 15 minutes, **~1,920 per day** — about one
+request every 45 seconds. Each request now yields up to two fares (cheapest
+nonstop *and* cheapest one-stop) at no extra cost.
 
 If Google ever starts blocking datacenter IPs, the same code runs unchanged on
 a Raspberry Pi or an Oracle Cloud always-free VM under plain `cron`:
@@ -183,12 +200,25 @@ Three independent signals, evaluated per date pair:
 
 | Signal | Meaning | Alerts? |
 |---|---|---|
-| `threshold` | At or under `alerts.threshold_usd` ($250). | **yes — the only trigger** |
-| `percentile` | In the bottom 5% of everything logged lately (`deals.cheap_percentile`). | no |
-| `baseline` | ≥15% below this date pair's own recent median (`deals.pct_below_baseline`). | no |
+| `threshold` | Nonstop ≤ **$250**, or one layover ≤ **$200**. | **yes — the only trigger** |
+| `percentile` | In the bottom 5% of everything logged lately. | no |
+| `baseline` | ≥15% below this date pair's own recent median. | no |
 
-**Only `threshold` sends a message.** Under $250, you hear about it. Nothing
-else pushes a notification.
+**Only `threshold` sends a message**, and the bar depends on how many stops:
+
+| | Alerts at |
+|---|---|
+| Nonstop | ≤ `alerts.threshold_usd` — **$250** |
+| One layover | ≤ `alerts.threshold_usd_with_stops` — **$200** |
+
+A layover has to earn its place. A $240 connecting fare stays silent; a $240
+nonstop doesn't. If the stop count can't be read from the payload, the fare is
+treated as connecting — better to stay quiet than to alert on something that
+turns out to have a stop in it.
+
+The two fare classes keep **separate price histories** (the connecting one gets
+a `|1` suffix on its state key), so a $210 one-stop never averages into the
+nonstop baseline for those dates.
 
 The other two still run: they mark cheap days in the `days` report and explain
 *why* an alerting fare is good ("$238 — under your $250 threshold; in the

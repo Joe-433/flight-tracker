@@ -92,11 +92,52 @@ class PairsSource(Source):
     # -- fetching -----------------------------------------------------------
 
     def fetch_pair(self, out_date: str, ret_date: str) -> Optional[Offer]:
-        """Cheapest nonstop roundtrip for one date pair, or None."""
+        """Cheapest roundtrip for one date pair, or None."""
         query = self._query(out_date, ret_date)
         url = query.url()
+        results = self._fetch(query, out_date, ret_date)
+        if not results:
+            return None
 
+        best: Optional[Offer] = None
+        for offer in self._offers(results, out_date, ret_date, url):
+            if best is None or offer.price < best.price:
+                best = offer
+        return best
+
+    def fetch_pair_by_stops(self, out_date: str, ret_date: str) -> List[Offer]:
+        """Cheapest fare in each stop class for one date pair.
+
+        Returning only the single cheapest would hide a nonstop that clears its
+        own (higher) threshold whenever a connecting fare undercuts it without
+        clearing the connecting threshold.
+        """
+        query = self._query(out_date, ret_date)
+        url = query.url()
+        results = self._fetch(query, out_date, ret_date)
+        if not results:
+            return []
+
+        best: Dict[int, Offer] = {}
+        for offer in self._offers(results, out_date, ret_date, url):
+            stops = offer.stops if offer.stops is not None else 9
+            if stops not in best or offer.price < best[stops].price:
+                best[stops] = offer
+        return [best[k] for k in sorted(best)]
+
+    def _offers(
+        self, results: Any, out_date: str, ret_date: str, url: str
+    ) -> List[Offer]:
+        offers = []
+        for item in results:
+            offer = self._to_offer(item, out_date, ret_date, url)
+            if offer is not None:
+                offers.append(offer)
+        return offers
+
+    def _fetch(self, query: Any, out_date: str, ret_date: str) -> Any:
         last_exc: Optional[Exception] = None
+        results = None
         for attempt in range(self.cfg.source.retries + 1):
             try:
                 results = self._get_flights(query)
@@ -105,25 +146,11 @@ class PairsSource(Source):
                 last_exc = exc
                 if attempt < self.cfg.source.retries:
                     time.sleep(1.5 * (attempt + 1))
-        else:  # pragma: no cover - loop always breaks or exhausts
-            results = None
 
         if last_exc is not None and not results:
-            self.errors.append(
-                "%s->%s: %s" % (out_date, ret_date, _explain(last_exc))
-            )
+            self.errors.append("%s->%s: %s" % (out_date, ret_date, _explain(last_exc)))
             return None
-        if not results:
-            return None
-
-        best: Optional[Offer] = None
-        for item in results:
-            offer = self._to_offer(item, out_date, ret_date, url)
-            if offer is None:
-                continue
-            if best is None or offer.price < best.price:
-                best = offer
-        return best
+        return results
 
     def _to_offer(
         self, item: Any, out_date: str, ret_date: str, url: str
@@ -135,9 +162,12 @@ class PairsSource(Source):
         legs = list(getattr(item, "flights", []) or [])
         stops = max(0, len(legs) - 1) if legs else None
 
-        # Belt and braces: the server-side nonstop filter is the primary
-        # guard, but if Google ever ignores it we drop connections here too.
-        if self.cfg.search.max_stops == 0 and stops not in (None, 0):
+        # Belt and braces: the server-side filter is the primary guard, but if
+        # Google ever ignores it we enforce the stop limit here too. Note that
+        # `legs` describes the OUTBOUND leg only -- Google returns outbound
+        # options priced for the whole roundtrip -- so the return leg's stop
+        # count is enforced server-side and not visible here.
+        if stops is not None and stops > self.cfg.search.max_stops:
             return None
 
         duration = None
@@ -167,8 +197,6 @@ class PairsSource(Source):
         for i, (out_date, ret_date) in enumerate(picked):
             if i:
                 time.sleep(random.uniform(float(lo), float(hi)))
-            offer = self.fetch_pair(out_date, ret_date)
-            if offer is not None:
-                offers.append(offer)
+            offers.extend(self.fetch_pair_by_stops(out_date, ret_date))
 
         return offers, next_cursors

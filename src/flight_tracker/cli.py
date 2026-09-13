@@ -51,7 +51,10 @@ def describe(deal: analysis.Deal, cfg: Config) -> str:
     for reason in deal.reasons:
         if reason == "threshold":
             bits.append(
-                REASON_TEXT[reason] % _money(cfg.alerts.threshold_usd, cfg.search.currency)
+                REASON_TEXT[reason]
+                % _money(
+                    analysis.threshold_for(deal.offer, cfg), cfg.search.currency
+                )
             )
         elif reason == "baseline" and deal.discount is not None:
             bits.append(REASON_TEXT[reason] % ("%.0f%%" % (deal.discount * 100)))
@@ -66,8 +69,8 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
     offer = deal.offer
     airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
     lines = [
-        "%s -> %s nonstop roundtrip"
-        % (cfg.route.origin_label, cfg.route.destination_label),
+        "%s -> %s roundtrip, %s"
+        % (cfg.route.origin_label, cfg.route.destination_label, offer.label),
         "%s out, %s back (%d nights)"
         % (_pretty_date(offer.out_date), _pretty_date(offer.ret_date), offer.nights),
         "Airline: %s" % airlines,
@@ -88,21 +91,26 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
         ),
         body="\n".join(lines),
         url=offer.url,
-        urgent=offer.price <= cfg.alerts.threshold_usd,
+        urgent=True,
     )
 
 
 def days_table(stats: List[analysis.DayStat], cfg: Config, limit: int = 14) -> str:
     if not stats:
         return "No price history yet."
-    rows = ["```", "%-14s %-14s %8s  %s" % ("DEPART", "RETURN", "PRICE", "")]
+    rows = [
+        "```",
+        "%-14s %-14s %8s %-8s %s"
+        % ("DEPART", "RETURN", "PRICE", "STOPS", ""),
+    ]
     for stat in stats[:limit]:
         rows.append(
-            "%-14s %-14s %8s  %s"
+            "%-14s %-14s %8s %-8s %s"
             % (
                 _pretty_date(stat.out_date),
                 _pretty_date(stat.ret_date),
                 _money(stat.price, cfg.search.currency),
+                "nonstop" if not stat.stops else "%d stop" % stat.stops,
                 "<- cheap day" if stat.cheap else "",
             )
         )
