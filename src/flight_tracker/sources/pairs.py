@@ -33,9 +33,19 @@ class PairsSource(Source):
                 get_flights,
             )
         except ImportError as exc:  # pragma: no cover - environment problem
-            raise ScrapeError(
-                "fast-flights is not installed (needs Python >= 3.10): %s" % exc
-            ) from exc
+            # Two very different causes, so name them separately: a missing
+            # fast_flights means it isn't installed (it needs Python >= 3.10);
+            # a missing anything-else means its dependency tree is incomplete,
+            # which it genuinely is -- see requirements.txt.
+            missing = getattr(exc, "name", "") or str(exc)
+            if "fast_flights" in missing:
+                detail = "fast-flights is not installed (it needs Python >= 3.10)"
+            else:
+                detail = (
+                    "fast-flights is installed but its dependency %r is missing; "
+                    "run `pip install -r requirements.txt`" % missing
+                )
+            raise ScrapeError("%s: %s" % (detail, exc)) from exc
 
         self._FlightQuery = FlightQuery
         self._Passengers = Passengers

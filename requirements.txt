@@ -1,4 +1,9 @@
 # Scraping boundary. Pinned: this library is the part most likely to break.
 fast-flights==3.1.0
+# fast-flights 3.1.0 imports typing_extensions (in querying.py, and again via
+# primp) but does NOT declare it. Without this line the install "succeeds" and
+# every scrape dies with ModuleNotFoundError. Upstream bug; keep this pin until
+# they fix it.
+typing_extensions>=4.7
 # Human-editable config.
 PyYAML>=6.0
