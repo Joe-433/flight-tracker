@@ -24,31 +24,47 @@ import smtplib
 import ssl
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from email.message import EmailMessage
 from typing import List, Optional, Tuple
 
 USER_AGENT = "flight-tracker/0.1 (+https://github.com)"
 
 
+# Discord embed accent colours.
+GREEN = 0x2ECC71   # a deal
+RED = 0xE74C3C     # something is wrong
+BLURPLE = 0x5865F2 # informational
+
+
 @dataclass
 class Message:
     title: str
-    body: str
+    body: str = ""
     url: Optional[str] = None
     urgent: bool = False
+    # Rendered as embed fields in Discord, and as an indented list everywhere
+    # else. This is what keeps a ten-flight report from being one grey slab.
+    fields: List[Tuple[str, str]] = field(default_factory=list)
+    footer: Optional[str] = None
+    color: Optional[int] = None
 
     def as_text(self) -> str:
-        parts = [self.title, "", self.body]
+        parts = [self.title]
+        if self.body:
+            parts += ["", self.body]
+        for name, value in self.fields:
+            parts += ["", name, "    " + value]
+        if self.footer:
+            parts += ["", self.footer]
         if self.url:
             parts += ["", self.url]
         return "\n".join(parts).strip()
 
-    def as_markdown(self) -> str:
-        parts = ["**%s**" % self.title, "", self.body]
-        if self.url:
-            parts += ["", "[Book on Google Flights](%s)" % self.url]
-        return "\n".join(parts).strip()
+    def accent(self) -> int:
+        if self.color is not None:
+            return self.color
+        return RED if self.urgent else BLURPLE
 
 
 class Channel:
@@ -74,16 +90,31 @@ class DiscordChannel(Channel):
         self.webhook_url = webhook_url
 
     def send(self, message: Message) -> None:
-        # Discord renders markdown, so the Google Flights deeplink becomes a
-        # short tappable label rather than 400 characters of base64. Other
-        # channels (email, SMS gateways) still get the raw URL, since markdown
-        # would just be noise there.
-        content = message.as_markdown()
+        # An embed, not a wall of text. Discord gives embeds a coloured spine,
+        # a real title, and proper field spacing; a fenced code block just
+        # renders as a grey slab that reads like a dumped file. The deeplink
+        # goes on the embed's `url`, which makes the title itself tappable --
+        # no 400-character base64 URL in the body, and no shortener service.
+        embed = {"title": message.title[:256], "color": message.accent()}
+        if message.body:
+            embed["description"] = message.body[:4096]
+        if message.url:
+            embed["url"] = message.url
+        if message.fields:
+            embed["fields"] = [
+                {"name": name[:256], "value": value[:1024], "inline": False}
+                for name, value in message.fields[:25]
+            ]
+        if message.footer:
+            embed["footer"] = {"text": message.footer[:2048]}
+
+        body = {
+            "embeds": [embed],
+            "allowed_mentions": {"parse": ["everyone"]},
+        }
         if message.urgent:
-            content = "@here " + content
-        payload = json.dumps(
-            {"content": content[:1900], "allowed_mentions": {"parse": ["everyone"]}}
-        ).encode()
+            body["content"] = "@here"
+        payload = json.dumps(body).encode()
         request = urllib.request.Request(
             self.webhook_url,
             data=payload,

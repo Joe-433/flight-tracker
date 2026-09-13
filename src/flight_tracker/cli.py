@@ -16,7 +16,7 @@ from typing import List, Optional
 
 from . import analysis, deadman
 from .config import Config, load_config
-from .notify import Message, Notifier
+from .notify import GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
 from .sources.base import Offer, date_pairs
 from .state import State, utcnow
@@ -69,12 +69,21 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
     offer = deal.offer
     airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
     lines = [
-        "%s -> %s roundtrip, %s"
-        % (cfg.route.origin_label, cfg.route.destination_label, offer.label),
-        "%s out, %s back (%d nights)"
-        % (_pretty_date(offer.out_date), _pretty_date(offer.ret_date), offer.nights),
-        "Flight: %s" % (offer.flight_no or airlines),
-        "Why: %s" % (describe(deal, cfg) or "cheapest in this sweep"),
+        "%s \u2192 %s  \u00b7  %d nights"
+        % (
+            _pretty_date(offer.out_date),
+            _pretty_date(offer.ret_date),
+            offer.nights,
+        ),
+        "%s  \u00b7  %s\u2192%s  \u00b7  %s"
+        % (
+            _clock12(offer.dep_time).strip(),
+            offer.dep_airport or "???",
+            offer.arr_airport or "???",
+            offer.flight_no or airlines,
+        ),
+        "",
+        describe(deal, cfg) or "cheapest in this sweep",
     ]
     if deal.baseline:
         lines.append(
@@ -82,16 +91,18 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
             % _money(deal.baseline, offer.currency)
         )
     return Message(
-        title="%s %s roundtrip %s-%s"
+        title="%s  ·  %s → %s  ·  %s"
         % (
-            "✈️",
             _money(offer.price, offer.currency),
             cfg.route.origin_label,
             cfg.route.destination_label,
+            offer.label,
         ),
         body="\n".join(lines),
-        url=offer.url,
+        url=offer.url,  # makes the embed title itself tappable
         urgent=True,
+        color=GREEN,
+        footer="Tap the title to book",
     )
 
 
@@ -269,7 +280,7 @@ def cmd_days(args: argparse.Namespace) -> int:
         )
 
     message = Message(
-        title="Cheapest %s -> %s days"
+        title="Cheapest %s \u2192 %s days"
         % (cfg.route.origin_label, cfg.route.destination_label),
         body=body,
     )
@@ -447,12 +458,14 @@ def _short_date(value: str) -> str:
     return dt.date.fromisoformat(value).strftime("%a %b %-d")
 
 
-def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
-    """Top N cheapest known fares.
+def cheapest_rows(
+    state: State, cfg: Config, limit: int = 10
+) -> List[Tuple[str, str]]:
+    """Top N cheapest fares as (headline, detail) pairs.
 
     Ordered by what you decide on, in the order you decide it: price, then
-    when it leaves, then which airports, then who's flying it. Two lines per
-    fare so it stays readable on a phone.
+    when it leaves, then which airports, then which flight. Two short lines
+    beat one wide one on a phone.
     """
     rows = []
     for key, snap in state.latest.items():
@@ -460,19 +473,16 @@ def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
             price = float(snap["price"])  # type: ignore[arg-type]
         except (KeyError, TypeError, ValueError):
             continue
-        rows.append((price, key, snap))
+        rows.append((price, snap))
     rows.sort(key=lambda r: r[0])
 
-    if not rows:
-        return "No fares tracked yet."
-
-    lines = ["```"]
-    for index, (price, _key, snap) in enumerate(rows[:limit], start=1):
+    out: List[Tuple[str, str]] = []
+    for index, (price, snap) in enumerate(rows[:limit], start=1):
         out_date = str(snap.get("out_date", ""))
         ret_date = str(snap.get("ret_date", ""))
         nights = ""
         if out_date and ret_date:
-            nights = " %dn" % (
+            nights = " \u00b7 %dn" % (
                 dt.date.fromisoformat(ret_date) - dt.date.fromisoformat(out_date)
             ).days
 
@@ -480,44 +490,46 @@ def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
         stops_text = "nonstop" if stops == 0 else (
             "%s stop" % stops if isinstance(stops, int) else "? stops"
         )
-        route = "%s>%s" % (
-            snap.get("dep_airport") or "???",
-            snap.get("arr_airport") or "???",
-        )
-        # The flight number is both shorter and more useful than the airline
-        # name -- "AA 171" already tells you the carrier, and it's what you
-        # type into a booking site. Fall back only when it's missing.
         airlines = snap.get("airlines") or []
+        # The flight number is shorter than the airline name and more useful --
+        # it already names the carrier, and it's what a booking site wants.
         who = str(snap.get("flight_no") or "") or (
             ", ".join(str(a) for a in airlines)[:18] or "?"
         )
 
-        lines.append(
-            "%2d. %-6s %s -> %s%s"
+        out.append((
+            "%d.  %s  \u00b7  %s \u2192 %s%s"
             % (
                 index,
                 _money(price, cfg.search.currency),
                 _short_date(out_date) if out_date else "?",
                 _short_date(ret_date) if ret_date else "?",
                 nights,
-            )
-        )
-        lines.append(
-            "    %-6s %s  %s  %s"
-            % (_clock12(snap.get("dep_time")), route, stops_text, who)
-        )
-    lines.append("```")
-    lines.append("Outbound times/airports; prices as last seen.")
-    return "\n".join(lines)
+            ),
+            "%s  \u00b7  %s\u2192%s  \u00b7  %s  \u00b7  %s"
+            % (
+                _clock12(snap.get("dep_time")).strip(),
+                snap.get("dep_airport") or "???",
+                snap.get("arr_airport") or "???",
+                stops_text,
+                who,
+            ),
+        ))
+    return out
 
 
 def cmd_report(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     state = State.load(args.state)
+    rows = cheapest_rows(state, cfg, limit=args.limit)
     message = Message(
-        title="\u2708\ufe0f Cheapest %s \u2192 %s, top %d"
-        % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
-        body=cheapest_report(state, cfg, limit=args.limit),
+        title="Cheapest %s \u2192 %s"
+        % (cfg.route.origin_label, cfg.route.destination_label),
+        body="" if rows else "No fares tracked yet.",
+        fields=rows,
+        footer="Outbound times and airports \u00b7 prices as last seen \u00b7 "
+        "%d date pairs tracked" % len(state.latest),
+        color=GREEN,
     )
     if args.send:
         results = Notifier.from_env().send(message)

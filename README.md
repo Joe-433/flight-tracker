@@ -252,12 +252,17 @@ Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
 Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
-```
- 1. $360   Thu Oct 29 -> Sun Nov 1 3n
-    8:00a  LGA>LAX  1 stop  WN 1288 +1
- 2. $409   Thu Oct 29 -> Sun Nov 1 3n
-    9:50p  JFK>LAX  nonstop  AA 171
-```
+> **Cheapest NY metro → LA metro**
+> **1.  $297  ·  Thu Oct 29 → Tue Nov 3 · 5n**
+> 1:25p  ·  LGA→LAX  ·  1 stop  ·  WN 3056 +1
+> **2.  $409  ·  Thu Oct 29 → Sun Nov 1 · 3n**
+> 9:50p  ·  JFK→LAX  ·  nonstop  ·  AA 171
+> *Outbound times and airports · prices as last seen*
+
+Discord gets this as a real **embed** — coloured spine, proper title, spaced
+fields — not a fenced code block. A code block renders as a grey monospace slab
+that reads like a dumped text file; email and SMS get the same content as
+indented plain text.
 
 The last column is the **flight number**, not the airline name — it's shorter,
 it still tells you the carrier, and it's what you paste into a booking site.
@@ -272,9 +277,9 @@ Any time, on demand:
 python -m flight_tracker report --limit 10
 ```
 
-Alert messages carry a tappable **[Book on Google Flights]** link in Discord
-rather than 400 characters of base64 deeplink — no URL shortener involved, just
-markdown. Email and SMS still get the raw URL, where markdown would be noise.
+Alert embeds put the deeplink on the embed's own `url`, so the **title itself
+is tappable** — no 400 characters of base64 in the message body, and no URL
+shortener service. Email and SMS still get the raw URL.
 
 Two things this report is honest about. Times and airports describe the
 **outbound leg only** — Google's roundtrip payload prices the whole trip but

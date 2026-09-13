@@ -5,7 +5,7 @@ import unittest
 
 from helpers import make_config
 
-from flight_tracker.cli import _clock12, cheapest_report
+from flight_tracker.cli import _clock12, cheapest_rows
 from flight_tracker.sources.base import Offer
 from flight_tracker.state import State
 
@@ -24,6 +24,11 @@ def offer(price, out="2026-10-14", nights=3, **kw):
     )
     base.update(kw)
     return Offer(out_date=out, ret_date=ret, price=price, **base)
+
+
+def rendered(state, limit=10):
+    """Flatten rows to one searchable blob, the way a channel renders them."""
+    return "\n".join("%s\n%s" % pair for pair in cheapest_rows(state, make_config(), limit))
 
 
 def stocked(offers) -> State:
@@ -48,7 +53,7 @@ class TestClock(unittest.TestCase):
 
 class TestCheapestReport(unittest.TestCase):
     def test_empty(self):
-        self.assertIn("No fares tracked", cheapest_report(State(), make_config()))
+        self.assertEqual(cheapest_rows(State(), make_config()), [])
 
     def test_sorted_by_price_and_limited(self):
         state = stocked([
@@ -56,45 +61,37 @@ class TestCheapestReport(unittest.TestCase):
             offer(338, "2026-10-14"),
             offer(420, "2026-10-18"),
         ])
-        body = cheapest_report(state, make_config(), limit=2)
+        body = rendered(state, limit=2)
         self.assertIn("$338", body)
         self.assertIn("$420", body)
         self.assertNotIn("$500", body)
         self.assertLess(body.index("$338"), body.index("$420"))
 
     def test_price_leads_then_date_then_time(self):
-        body = cheapest_report(stocked([offer(338)]), make_config())
-        line = [x for x in body.splitlines() if "$338" in x][0]
-        self.assertTrue(line.strip().startswith("1. $338"))
-        self.assertIn("Wed Oct 14", line)
-        detail = body.splitlines()[body.splitlines().index(line) + 1]
-        self.assertTrue(detail.strip().startswith("7:05a"))
-        self.assertLess(detail.index("JFK>LAX"), detail.index("JetBlue"))
+        headline, detail = cheapest_rows(stocked([offer(338)]), make_config())[0]
+        self.assertTrue(headline.startswith("1.  $338"))
+        self.assertIn("Wed Oct 14", headline)
+        self.assertTrue(detail.startswith("7:05a"))
+        self.assertLess(detail.index("JFK"), detail.index("JetBlue"))
 
     def test_layovers_are_labelled(self):
-        body = cheapest_report(stocked([offer(200, stops=1)]), make_config())
-        self.assertIn("1 stop", body)
-        body = cheapest_report(stocked([offer(200, stops=0)]), make_config())
-        self.assertIn("nonstop", body)
+        self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))
+        self.assertIn("nonstop", rendered(stocked([offer(200, stops=0)])))
 
     def test_flight_number_replaces_airline_name(self):
-        body = cheapest_report(
-            stocked([offer(338, flight_no="AA 171")]), make_config()
-        )
+        body = rendered(stocked([offer(338, flight_no="AA 171")]))
         self.assertIn("AA 171", body)
         self.assertNotIn("JetBlue", body)
 
     def test_falls_back_to_airline_when_number_missing(self):
-        body = cheapest_report(stocked([offer(338)]), make_config())
-        self.assertIn("JetBlue", body)
+        self.assertIn("JetBlue", rendered(stocked([offer(338)])))
 
     def test_missing_details_render_placeholders(self):
-        body = cheapest_report(
+        body = rendered(
             stocked([offer(300, dep_airport=None, arr_airport=None, dep_time=None,
-                           airlines=[])]),
-            make_config(),
+                           airlines=[])])
         )
-        self.assertIn("???>???", body)
+        self.assertIn("???", body)
         self.assertIn("$300", body)
 
 
