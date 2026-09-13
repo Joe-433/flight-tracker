@@ -144,6 +144,12 @@ def cmd_run(args: argparse.Namespace) -> int:
         "%s sweep: %d offers, %d errors (backend=%s)"
         % (now.isoformat(timespec="seconds"), len(offers), len(errors), cfg.source.backend)
     )
+    # Partial failures are normal (a date pair with no nonstops at all will
+    # error), but a silent count tells you nothing about which kind you have.
+    for error in errors[:5]:
+        print("  ! %s" % error[:200])
+    if len(errors) > 5:
+        print("  ! ...and %d more" % (len(errors) - 5))
 
     # Assess BEFORE recording, so a fare is never part of its own baseline.
     assessment = analysis.assess(offers, state, cfg, now=now)
