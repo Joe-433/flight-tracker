@@ -1,0 +1,40 @@
+name: probe range
+
+# Read-only fare sampling across an arbitrary lead-time range. Touches no
+# state, sends no alerts. Use it to answer "is it worth searching that far
+# out?" before committing a config change.
+
+on:
+  workflow_dispatch:
+    inputs:
+      min_days:
+        description: "Days out to start from"
+        required: true
+        default: "90"
+      window:
+        description: "Span of departure dates to cover"
+        required: false
+        default: "60"
+      pairs:
+        description: "How many date pairs to sample"
+        required: false
+        default: "15"
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - env:
+          PYTHONPATH: src
+        run: |
+          python -m flight_tracker probe \
+            --min-days "${{ github.event.inputs.min_days }}" \
+            --window "${{ github.event.inputs.window }}" \
+            --pairs "${{ github.event.inputs.pairs }}"

@@ -347,6 +347,81 @@ def cmd_verify(args: argparse.Namespace) -> int:
 # ---------------------------------------------------------------------------
 
 
+def cmd_probe(args: argparse.Namespace) -> int:
+    """Sample fares across an arbitrary lead-time range. Read-only.
+
+    This is the tool for answering "is it worth searching that far out?" --
+    it touches no state, sends no alerts, and can look anywhere on the
+    calendar regardless of what config.yaml says the live window is.
+    """
+    cfg = load_config(args.config)
+    cfg.search.min_days_ahead = args.min_days
+    cfg.search.window_days = args.window
+    if args.nights:
+        cfg.search.trip_nights = args.nights
+    cfg.source.bands = []
+
+    today = dt.date.today()
+    pairs = date_pairs(cfg, today)
+    if not pairs:
+        print("no date pairs in that range")
+        return 1
+
+    # Spread the samples evenly across the range instead of taking a
+    # contiguous block, so the answer isn't one week's worth of weather.
+    stride = max(1, len(pairs) // args.pairs)
+    sampled = pairs[::stride][: args.pairs]
+
+    print(
+        "probing %d-%d days out: %d of %d pairs, nights=%s"
+        % (args.min_days, args.min_days + args.window, len(sampled), len(pairs),
+           cfg.search.trip_nights)
+    )
+
+    try:
+        source = get_source(cfg)
+    except ScrapeError as exc:
+        print("FAIL: %s" % exc)
+        return 1
+
+    results: List[Offer] = []
+    import random as _random
+    import time as _time
+
+    for i, (out_date, ret_date) in enumerate(sampled):
+        if i:
+            _time.sleep(_random.uniform(2, 5))
+        offer = source.fetch_pair(out_date, ret_date)
+        lead = (dt.date.fromisoformat(out_date) - today).days
+        if offer is None:
+            print("  %3d days  %s -> %s   no fare" % (lead, out_date, ret_date))
+            continue
+        results.append(offer)
+        print(
+            "  %3d days  %s -> %s   %s  %s"
+            % (lead, out_date, ret_date, _money(offer.price, offer.currency),
+               ", ".join(offer.airlines) or "?")
+        )
+
+    if not results:
+        print("\nno fares at all in this range")
+        return 1
+
+    prices = sorted(o.price for o in results)
+    print(
+        "\n%d fares | min %s | median %s | max %s"
+        % (
+            len(prices),
+            _money(prices[0]),
+            _money(analysis.median(prices) or 0),
+            _money(prices[-1]),
+        )
+    )
+    if source.errors:
+        print("errors: %d" % len(source.errors))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -374,6 +449,15 @@ def build_parser() -> argparse.ArgumentParser:
     test = sub.add_parser("test-alert", help="send a test notification")
     test.add_argument("--console", action="store_true")
     test.set_defaults(func=cmd_test_alert)
+
+    probe = sub.add_parser(
+        "probe", help="sample fares across a lead-time range (read-only)"
+    )
+    probe.add_argument("--min-days", type=int, required=True)
+    probe.add_argument("--window", type=int, default=30, help="span of departure dates")
+    probe.add_argument("--pairs", type=int, default=15)
+    probe.add_argument("--nights", type=int, nargs="+")
+    probe.set_defaults(func=cmd_probe)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")
     verify.add_argument("--backend", choices=["pairs", "grid", "mock"])
