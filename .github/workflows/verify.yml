@@ -1,0 +1,27 @@
+name: verify scrape
+
+# Manual, on-demand sanity check. Run this first, and again any time the dead
+# man's switch fires. It exists as a workflow because fast-flights needs
+# Python >= 3.10, which you may not have locally.
+
+on:
+  workflow_dispatch:
+    inputs:
+      backend:
+        description: "pairs | grid | mock"
+        required: false
+        default: "pairs"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - env:
+          PYTHONPATH: src
+        run: python -m flight_tracker verify --backend "${{ github.event.inputs.backend }}"
