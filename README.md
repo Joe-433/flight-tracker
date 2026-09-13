@@ -181,24 +181,20 @@ where this scraper breaks in a way even the dead man's switch misses.
 
 Three independent signals, evaluated per date pair:
 
-| Signal | Meaning | Config |
+| Signal | Meaning | Alerts? |
 |---|---|---|
-| `threshold` | At or under the price you said you'd pay. | `alerts.threshold_usd` ($250) |
-| `percentile` | In the **bottom 5%** of everything logged lately on the route. | `deals.cheap_percentile` (0.05) |
-| `baseline` | ≥15% below *this date pair's* own recent median. | `deals.pct_below_baseline` |
+| `threshold` | At or under `alerts.threshold_usd` ($250). | **yes — the only trigger** |
+| `percentile` | In the bottom 5% of everything logged lately (`deals.cheap_percentile`). | no |
+| `baseline` | ≥15% below this date pair's own recent median (`deals.pct_below_baseline`). | no |
 
-**It alerts on `threshold` alone, or on `percentile` alone** — anything under
-$250, or anything in the cheapest 5% the tracker has ever seen.
+**Only `threshold` sends a message.** Under $250, you hear about it. Nothing
+else pushes a notification.
 
-`baseline` never alerts by itself: a 15% drop from an absurd price is still an
-absurd price. It rides along in the "why" line so you can see when a fare is
-both cheap *and* falling.
-
-A 5% cutoff needs real history before it means anything — computed from 20
-observations it's just "the cheapest thing we've seen", which would fire on
-every new low. So it stays dormant until there are enough samples for ~3 to sit
-below the cutoff: **60 observations for 5%** (`min_route_samples`). Until then
-you get threshold alerts only, which is the right behavior for a cold start.
+The other two still run: they mark cheap days in the `days` report and explain
+*why* an alerting fare is good ("$238 — under your $250 threshold; in the
+cheapest 5% of fares we've logged"). They just don't wake your phone on their
+own, because a relative bargain is still whatever the route happens to cost
+that week.
 
 A fare is scored *before* the current sweep is written to history, so it's never
 part of its own baseline.
@@ -222,27 +218,34 @@ this to your alert channels every morning.
 
 ### Running a scan on demand
 
-The scheduled sweep takes ~2.7 hours to walk the near band. To force one now:
-
 ```bash
-gh workflow run "watch fares"
+./scan
 ```
 
-For a **deep scan** — sweep 80 date pairs in one go instead of 20, covering
-most of the near horizon immediately:
+Sweeps 40 date pairs immediately. Pass a number for more: `./scan 120` for a
+deep scan across most of the horizon.
+
+The script runs the scan locally if you have a Python ≥ 3.10 with the scraper
+installed (see below), and otherwise dispatches the GitHub Actions workflow,
+waits for it, and prints the result. Either way it's the same code path as the
+cron, so alerts fire normally.
+
+The raw equivalents, if you'd rather:
 
 ```bash
 gh workflow run "watch fares" -f pairs=80
 ```
 
-Watch it and read the result:
+You can also hit **Run workflow** on the
+[watch fares](https://github.com/Joe-433/flight-tracker/actions/workflows/watch.yml)
+page — useful from a phone.
+
+**To make `./scan` run locally** (instant, no GitHub round trip) you need a
+Python ≥ 3.10, which macOS doesn't ship:
 
 ```bash
-gh run watch $(gh run list --workflow="watch fares" --limit 1 --json databaseId --jq '.[0].databaseId')
+brew install python@3.12 && python3.12 -m venv .venv-live && .venv-live/bin/pip install -r requirements.txt
 ```
-
-Manual runs alert exactly like scheduled ones, cooldown and all. Locally,
-`--pairs N` does the same thing, though live backends need Python ≥ 3.10.
 
 ### Alert spam control
 

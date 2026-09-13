@@ -62,8 +62,8 @@ class TestAssess(unittest.TestCase):
         self.assertEqual(result.deals[0].reasons, ["baseline"])
         self.assertEqual(result.alerts, [])
 
-    def test_percentile_alone_alerts(self):
-        """Bottom 5% of the route is an alert on its own, no threshold needed."""
+    def test_percentile_alone_does_not_alert(self):
+        """Bottom 5% is recorded and explained, but never pushes a message."""
         cfg = make_config(
             alerts={"threshold_usd": 100}, deals={"cheap_percentile": 0.05}
         )
@@ -73,7 +73,25 @@ class TestAssess(unittest.TestCase):
             [NOW.isoformat(), 700 + i] for i in range(needed)
         ]
         result = analysis.assess([make_offer(300)], state, cfg, now=NOW)
-        self.assertEqual(result.alerts[0].reasons, ["percentile"])
+        self.assertEqual(result.deals[0].reasons, ["percentile"])
+        self.assertEqual(result.alerts, [])
+
+    def test_threshold_is_the_only_trigger(self):
+        """A cheap-percentile fare under the threshold alerts; over it doesn't."""
+        cfg = make_config(
+            alerts={"threshold_usd": 250}, deals={"cheap_percentile": 0.05}
+        )
+        state = State()
+        state.observations["2026-09-25|2026-09-29"] = [
+            [NOW.isoformat(), 700 + i]
+            for i in range(analysis.min_route_samples(0.05))
+        ]
+        over = analysis.assess([make_offer(300)], state, cfg, now=NOW)
+        self.assertEqual(over.alerts, [])
+        under = analysis.assess([make_offer(240)], state, cfg, now=NOW)
+        self.assertEqual(len(under.alerts), 1)
+        self.assertIn("threshold", under.alerts[0].reasons)
+        self.assertIn("percentile", under.alerts[0].reasons)
 
     def test_percentile_silent_until_enough_history(self):
         cfg = make_config(

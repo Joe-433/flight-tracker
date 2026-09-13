@@ -9,10 +9,11 @@ something fired:
   percentile -- relative to the route: bottom N% of everything we've logged
                 lately. Catches "this specific day is just a cheap day".
 
-A fare alerts on `threshold` alone, or on `percentile` alone. `baseline` never
-alerts by itself -- a 15% drop from an absurd price is still an absurd price --
-but it rides along in the "why" so you can see when a fare is both cheap in
-absolute terms and falling.
+ONLY `threshold` sends an alert. `percentile` and `baseline` are computed and
+recorded either way -- they mark cheap days in the `days` report and explain
+*why* an alerting fare is good -- but on their own they stay silent. A relative
+bargain is still whatever the route happens to cost that week; you asked to
+hear about $250, not about the best of a bad month.
 """
 
 from __future__ import annotations
@@ -72,7 +73,7 @@ class Deal:
 
     @property
     def alertworthy(self) -> bool:
-        return "threshold" in self.reasons or "percentile" in self.reasons
+        return "threshold" in self.reasons
 
     @property
     def score(self) -> float:
