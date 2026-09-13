@@ -150,6 +150,27 @@ the airline, and the stop count. Two things it's checking:
    for weeks. (The parser drops multi-segment legs as a second line of defense,
    but that only works when segment data comes back.)
 
+### 4. Pick a threshold that can actually fire
+
+The first live verify run, on 2026-09-13, returned **$793** for a JetBlue
+nonstop NY→LA roundtrip departing 6 days out (Sep 18 → Sep 21). One data point,
+but a telling one: `alerts.threshold_usd: 250` may be a number that never fires
+on a window of departures 0–14 days away, because that window is precisely the
+expensive last-minute one.
+
+Two ways to make the tracker useful:
+
+- **Raise the threshold** to something last-minute fares actually reach, and
+  lean on the `baseline` + `percentile` signals to catch relative drops. Those
+  two need history, so give it 2–3 days before judging.
+- **Shift the window out**: set `search.min_days_ahead: 14`. This reads "2 weeks
+  out" as *departures at least 14 days away* rather than *the next 14 days* —
+  the ambiguity flagged in the original spec. Advance fares are dramatically
+  cheaper, so a $250 threshold becomes plausible again.
+
+Run `python -m flight_tracker days` after a day or two and set the threshold
+just under what you actually see.
+
 ### 4. Turn on Google's own price tracking too
 
 Free, two clicks, and it's a completely independent safety net for the case
