@@ -1,7 +1,7 @@
 # Nonstop NY ↔ LA fare watcher
 
-Watches roundtrips between the NY metro and the LA metro for departures
-**7–105 days out**, and pings you when one is actually cheap. Nonstop under
+Watches **5–7 night** roundtrips between the NY metro and the LA metro for
+departures **7–105 days out**, and pings you when one is actually cheap. Nonstop under
 **$250**, or one layover under **$200**. Free to run:
 GitHub Actions on a public repo, a Discord webhook, no paid APIs.
 
@@ -66,15 +66,25 @@ money is in **30–75 days out**. Re-measure any time with
 The repo is public, so **Actions minutes are free and unlimited**. The only
 ceiling that matters is how hard you're willing to hit Google.
 
-495 date pairs (99 departure dates × 5 trip lengths), swept as a rotating
+297 date pairs (99 departure dates × 3 trip lengths), swept as a rotating
 slice split across bands, each with its own cursor:
 
 | Band | Pairs | Per run | Full pass every | Median fare |
 |---|---|---|---|---|
-| 7–21 days | 75 | 2 | ~9.4 h | $528 |
-| 22–45 days | 120 | 7 | ~4.3 h | $422 |
-| 46–75 days | 150 | 7 | ~5.4 h | $409 |
-| 76–105 days | 150 | 7 | ~5.4 h | **$393** |
+| 7–21 days | 45 | 2 | ~5.6 h | $528 |
+| 22–45 days | 72 | 7 | **~2.6 h** | $422 |
+| 46–75 days | 90 | 7 | ~3.2 h | $409 |
+| 76–105 days | 90 | 7 | ~3.2 h | **$393** |
+
+Narrowing to 5–7 night trips cut the search space by 40%, which nearly doubled
+how fast the window gets covered. A flat rotation with no bands at all would
+cover everything every 3.1 hours — which is why `bands: []` is a perfectly
+reasonable setting.
+
+**Coverage is set by pairs per hour, not by how often the cron fires.** Running
+every 5 minutes with 8 pairs covers exactly as much ground as every 15 minutes
+with 24. The dial that matters is `pairs_per_run` × runs per hour; the cron
+interval on its own changes nothing.
 
 Shares come from measured behaviour, not intuition. The first version gave
 76–105 days only 20% of the budget on the strength of a probe showing a flat
