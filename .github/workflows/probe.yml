@@ -19,6 +19,10 @@ on:
         description: "How many date pairs to sample"
         required: false
         default: "15"
+      dump:
+        description: "Instead of probing, dump one raw flight segment"
+        required: false
+        default: "false"
 
 jobs:
   probe:
@@ -31,7 +35,15 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - env:
+      - name: Dump a raw segment
+        if: github.event.inputs.dump == 'true'
+        env:
+          PYTHONPATH: src
+        run: python -m flight_tracker dump
+
+      - name: Probe
+        if: github.event.inputs.dump != 'true'
+        env:
           PYTHONPATH: src
         run: |
           python -m flight_tracker probe \

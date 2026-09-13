@@ -523,6 +523,46 @@ def cmd_report(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_dump(args: argparse.Namespace) -> int:
+    """Print one raw flight segment from Google's payload, index by index.
+
+    Diagnostic only. fast-flights' model exposes a fixed subset of each
+    segment; when we want a field it doesn't surface (a flight number, say),
+    this is how we find out whether the data is even there.
+    """
+    cfg = load_config(args.config)
+    pairs = date_pairs(cfg)
+    out_date, ret_date = pairs[len(pairs) // 2]
+
+    from fast_flights import fetch_flights_html  # noqa: PLC0415
+
+    source = get_source(cfg)
+    html = fetch_flights_html(source._query(out_date, ret_date))  # noqa: SLF001
+
+    import json
+
+    from selectolax.lexbor import LexborHTMLParser  # noqa: PLC0415
+
+    script = LexborHTMLParser(html).css_first(r"script.ds\:1")
+    raw = script.text().split("data:", 1)[1].rsplit(",", 1)[0]
+    payload = json.loads(raw)
+
+    itineraries = payload[3][0]
+    if not itineraries:
+        print("no itineraries returned")
+        return 1
+
+    segment = itineraries[0][0][2][0]
+    print("dates: %s -> %s" % (out_date, ret_date))
+    print("segment has %d fields\n" % len(segment))
+    for index, value in enumerate(segment):
+        text = repr(value)
+        if len(text) > 110:
+            text = text[:110] + "..."
+        print("  [%2d] %s" % (index, text))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -564,6 +604,9 @@ def build_parser() -> argparse.ArgumentParser:
     probe.add_argument("--pairs", type=int, default=15)
     probe.add_argument("--nights", type=int, nargs="+")
     probe.set_defaults(func=cmd_probe)
+
+    dump = sub.add_parser("dump", help="print a raw flight segment (diagnostic)")
+    dump.set_defaults(func=cmd_dump)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")
     verify.add_argument("--backend", choices=["pairs", "grid", "mock"])
