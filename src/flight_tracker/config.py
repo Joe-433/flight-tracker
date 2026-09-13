@@ -19,8 +19,8 @@ class Route:
 
 @dataclass
 class Search:
-    window_days: int = 83   # span of DEPARTURE dates, starting min_days_ahead out
-    min_days_ahead: int = 7
+    window_days: int = 91   # span of DEPARTURE dates, starting min_days_ahead out
+    min_days_ahead: int = 14
     trip_nights: List[int] = field(default_factory=lambda: [5, 6, 7])
     max_stops: int = 1
     carry_on_bags: int = 1
@@ -74,6 +74,7 @@ class History:
     max_points_per_pair: int = 40  # hard cap; state.json is committed every run
     resample_hours: float = 12.0   # log an unchanged price at most this often
     min_change_usd: float = 5.0    # ignore noise smaller than this
+    stale_hours: float = 24.0      # drop unrefreshed fares from the reports
 
 
 @dataclass

@@ -104,6 +104,20 @@ class TestScopePruning(unittest.TestCase):
         state.trim(30, now=NOW, allowed_nights=[5, 6, 7])
         self.assertEqual(state.observations, {})
 
+    def test_drops_fares_we_stopped_refreshing(self):
+        """Window moved past them, so they must leave the report."""
+        state = State()
+        for key, seen in (
+            ("2026-09-20|2026-09-25", NOW),
+            ("2026-09-21|2026-09-26", NOW - dt.timedelta(hours=30)),
+        ):
+            state.observations[key] = [[seen.isoformat(), 300]]
+            state.latest[key] = {"price": 300, "seen": seen.isoformat()}
+        state.trim(30, now=NOW, stale_hours=24)
+        self.assertEqual(list(state.latest), ["2026-09-20|2026-09-25"])
+        # History is kept -- it still feeds baselines.
+        self.assertEqual(len(state.observations), 2)
+
     def test_no_pruning_without_an_allowed_set(self):
         state = State()
         state.observations["2026-09-20|2026-09-23"] = [[NOW.isoformat(), 278]]

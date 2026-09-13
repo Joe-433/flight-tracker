@@ -164,6 +164,7 @@ class State:
         now: Optional[dt.datetime] = None,
         max_points_per_pair: Optional[int] = None,
         allowed_nights: Optional[Iterable[int]] = None,
+        stale_hours: Optional[float] = None,
     ) -> None:
         """Drop stale observations, past date pairs, and expired alert records.
 
@@ -216,6 +217,14 @@ class State:
         for key in list(self.latest):
             if key.split("|", 1)[0] < today or key not in self.observations:
                 del self.latest[key]
+                continue
+            # A fare we've stopped re-checking -- because the search window
+            # moved past it, or its band starved -- must not keep quoting a
+            # price that may no longer exist.
+            if stale_hours is not None:
+                age = hours_since(str(self.latest[key].get("seen") or ""), now)
+                if age is not None and age > stale_hours:
+                    del self.latest[key]
 
     def series(self, key: str) -> List[Tuple[str, float]]:
         return [(str(ts), float(price)) for ts, price in self.observations.get(key, [])]

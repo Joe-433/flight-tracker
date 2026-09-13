@@ -12,8 +12,9 @@ route:
   destination_label: "LA metro"
 
 search:
-  # Departures 7 to 105 days out. `window_days` is the span of DEPARTURE
-  # dates; the return leg may land past the end of it.
+  # Departures 14 to 105 days out. `window_days` is the span of DEPARTURE
+  # dates; the return leg may land past the end of it. The far end stops at
+  # 105 because the flat "nothing ever moves" wall starts around 115.
   #
   # Measured 2026-09-13 on 385 real fares, cheapest nonstop per date pair:
   #     7-14 days   median $625      <- last-minute premium
@@ -27,8 +28,8 @@ search:
   #
   # The far end isn't a gradient, it's a wall: past ~105 days Google returns
   # base-fare inventory that doesn't move, so sweeping it buys nothing.
-  min_days_ahead: 7
-  window_days: 98
+  min_days_ahead: 14
+  window_days: 91
   trip_nights: [5, 6, 7]
   max_stops: 1           # allow one layover -- but see the lower threshold
   carry_on_bags: 1
@@ -60,7 +61,7 @@ source:
   # The flat "nothing ever moves" wall starts around 115 days, NOT 76, so the
   # far band gets a full share rather than the scraps it had at first.
   bands:
-    - {within_days: 21,  share: 0.10}  # last-minute: expensive, kept as a toehold
+    - {within_days: 21,  share: 0.10}  # 14-21 days: still pricey, small share
     - {within_days: 45,  share: 0.30}
     - {within_days: 75,  share: 0.30}
     - {within_days: 105, share: 0.30}
@@ -82,6 +83,11 @@ history:
   max_points_per_pair: 40  # state.json is committed every run; keep it small
   resample_hours: 12       # log an unchanged price at most this often
   min_change_usd: 5        # ignore noise smaller than this
+  # Drop a fare from the reports if it hasn't been re-checked this recently.
+  # A full cycle takes ~3 hours, so anything older than this is a fare we
+  # stopped tracking -- it must not sit at the top of the report forever
+  # quoting a price that may no longer exist.
+  stale_hours: 24
 
 deals:
   min_observations: 6    # per date pair, before its baseline is trusted

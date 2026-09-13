@@ -235,6 +235,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         now=now,
         max_points_per_pair=cfg.history.max_points_per_pair,
         allowed_nights=cfg.search.trip_nights,
+        stale_hours=cfg.history.stale_hours,
     )
 
     health = deadman.update(state, cfg, got_data=bool(offers), errors=errors, now=now)

@@ -1,7 +1,7 @@
 # Nonstop NY ↔ LA fare watcher
 
 Watches **5–7 night** roundtrips between the NY metro and the LA metro for
-departures **7–105 days out**, and pings you when one is actually cheap. Nonstop under
+departures **14–105 days out**, and pings you when one is actually cheap. Nonstop under
 **$250**, or one layover under **$200**. Free to run:
 GitHub Actions on a public repo, a Discord webhook, no paid APIs.
 
@@ -66,20 +66,25 @@ money is in **30–75 days out**. Re-measure any time with
 The repo is public, so **Actions minutes are free and unlimited**. The only
 ceiling that matters is how hard you're willing to hit Google.
 
-297 date pairs (99 departure dates × 3 trip lengths), swept as a rotating
+276 date pairs (92 departure dates × 3 trip lengths), swept as a rotating
 slice split across bands, each with its own cursor:
 
 | Band | Pairs | Per run | Full pass every | Median fare |
 |---|---|---|---|---|
-| 7–21 days | 45 | 2 | ~5.6 h | $528 |
-| 22–45 days | 72 | 7 | **~2.6 h** | $422 |
+| 14–21 days | 24 | 2 | ~3.0 h | $528 |
+| 22–45 days | 72 | 7 | ~2.6 h | $422 |
 | 46–75 days | 90 | 7 | ~3.2 h | $409 |
 | 76–105 days | 90 | 7 | ~3.2 h | **$393** |
 
-Narrowing to 5–7 night trips cut the search space by 40%, which nearly doubled
-how fast the window gets covered. A flat rotation with no bands at all would
-cover everything every 3.1 hours — which is why `bands: []` is a perfectly
-reasonable setting.
+With the window starting at 14 days the bands have nearly converged — a flat
+rotation would be 3.0 h for everything, versus 2.6–3.2 h banded. `bands: []`
+now costs essentially nothing and is simpler to reason about.
+
+A fare that stops being re-checked — the window moves past it, or a band
+starves — is dropped from the reports after `history.stale_hours` (24 h). A
+full cycle is ~3 hours, so anything older than that is something we stopped
+tracking, and it must not sit at the top of the report quoting a price that may
+no longer exist. Its price history is kept; only its claim to be current goes.
 
 **Coverage is set by pairs per hour, not by how often the cron fires.** Running
 every 5 minutes with 8 pairs covers exactly as much ground as every 15 minutes
