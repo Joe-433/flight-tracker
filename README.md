@@ -117,6 +117,9 @@ python -m flight_tracker test-alert    # do this before trusting it
 python -m flight_tracker verify
 ```
 
+Needs Python ≥ 3.10. If you only have 3.9, run it on Actions instead:
+`gh workflow run "verify scrape"`, then read the job log.
+
 This runs one live query and prints the resolved Google Flights URL, the price,
 the airline, and the stop count. Two things it's checking:
 
