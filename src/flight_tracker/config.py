@@ -19,8 +19,8 @@ class Route:
 
 @dataclass
 class Search:
-    window_days: int = 14
-    min_days_ahead: int = 0
+    window_days: int = 83   # span of DEPARTURE dates, starting min_days_ahead out
+    min_days_ahead: int = 7
     trip_nights: List[int] = field(default_factory=lambda: [3, 4, 5, 6, 7])
     max_stops: int = 0
     carry_on_bags: int = 1
@@ -32,11 +32,29 @@ class Search:
 
 
 @dataclass
+class Band:
+    """A slice of the horizon that gets its own share of the request budget.
+
+    Fares 3 months out barely move day to day; fares 10 days out move fast.
+    Sweeping both at the same rate wastes requests on the far end and starves
+    the near end, so each band rotates on its own cursor.
+    """
+
+    within_days: int
+    share: float = 1.0
+
+
+@dataclass
 class Source:
     backend: str = "pairs"
-    pairs_per_run: int = 10
-    jitter_seconds: List[float] = field(default_factory=lambda: [2, 6])
+    pairs_per_run: int = 20
+    jitter_seconds: List[float] = field(default_factory=lambda: [2, 5])
     retries: int = 2
+    bands: List[Band] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        self.bands = [b if isinstance(b, Band) else Band(**b) for b in self.bands]
+        self.bands.sort(key=lambda b: b.within_days)
 
 
 @dataclass
@@ -48,8 +66,15 @@ class Alerts:
 
 
 @dataclass
+class History:
+    days: int = 30
+    max_points_per_pair: int = 40  # hard cap; state.json is committed every run
+    resample_hours: float = 12.0   # log an unchanged price at most this often
+    min_change_usd: float = 5.0    # ignore noise smaller than this
+
+
+@dataclass
 class Deals:
-    history_days: int = 30
     min_observations: int = 6
     pct_below_baseline: float = 0.15
     cheap_percentile: float = 0.20
@@ -68,6 +93,7 @@ class Config:
     search: Search = field(default_factory=Search)
     source: Source = field(default_factory=Source)
     alerts: Alerts = field(default_factory=Alerts)
+    history: History = field(default_factory=History)
     deals: Deals = field(default_factory=Deals)
     deadman: Deadman = field(default_factory=Deadman)
 
@@ -96,6 +122,7 @@ def load_config(path: str) -> Config:
         search=_build(Search, raw.get("search")),
         source=_build(Source, raw.get("source")),
         alerts=_build(Alerts, raw.get("alerts")),
+        history=_build(History, raw.get("history")),
         deals=_build(Deals, raw.get("deals")),
         deadman=_build(Deadman, raw.get("deadman")),
     )

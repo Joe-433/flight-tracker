@@ -15,7 +15,7 @@ and we shouldn't make it do this job).
 from __future__ import annotations
 
 import datetime as dt
-from typing import Any, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from ..config import Config
 from .base import Offer, ScrapeError, Source
@@ -36,7 +36,9 @@ class GridSource(Source):
             ) from exc
         self._get_calendar_grid = get_calendar_grid
 
-    def sweep(self, cursor: int = 0) -> Tuple[List[Offer], int]:
+    def sweep(
+        self, cursors: Optional[Dict[str, int]] = None
+    ) -> Tuple[List[Offer], Dict[str, int]]:
         s = self.cfg.search
         start = dt.date.today() + dt.timedelta(days=s.min_days_ahead)
         end = start + dt.timedelta(days=s.window_days)
@@ -72,4 +74,4 @@ class GridSource(Source):
                     currency=getattr(entry, "currency", s.currency),
                 )
             )
-        return offers, cursor
+        return offers, dict(cursors or {})

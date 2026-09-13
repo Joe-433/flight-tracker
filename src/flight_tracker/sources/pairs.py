@@ -1,10 +1,9 @@
 """Date-pair backend: one Google Flights query per (outbound, return) pair.
 
 This is the backend that works against `fast-flights` as actually published
-(3.1.0). The full date space is ~45 pairs, which is too many to sweep every
-run, so each run walks a rotating slice of it (`source.pairs_per_run`) and
-stores a cursor in state. Full coverage takes a few runs; that's the trade we
-make for not hammering Google.
+(3.1.0). The full date space is several hundred pairs, far too many to sweep every
+run, so each run walks a rotating slice (`source.pairs_per_run`) split across
+`source.bands` and stores one cursor per band in state. See `plan_slice`.
 
 City MIDs (e.g. "/m/02_286") are passed straight through as the airport field,
 which is how one query covers every airport in the metro.
@@ -14,10 +13,10 @@ from __future__ import annotations
 
 import random
 import time
-from typing import Any, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from ..config import Config
-from .base import Offer, ScrapeError, Source, date_pairs, slice_for_run
+from .base import Offer, ScrapeError, Source, plan_slice
 
 
 class PairsSource(Source):
@@ -142,13 +141,12 @@ class PairsSource(Source):
 
     # -- sweep --------------------------------------------------------------
 
-    def sweep(self, cursor: int = 0) -> Tuple[List[Offer], int]:
-        pairs = date_pairs(self.cfg)
-        picked, next_cursor = slice_for_run(
-            pairs, cursor, self.cfg.source.pairs_per_run
-        )
+    def sweep(
+        self, cursors: Optional[Dict[str, int]] = None
+    ) -> Tuple[List[Offer], Dict[str, int]]:
+        picked, next_cursors = plan_slice(self.cfg, cursors)
 
-        lo, hi = (self.cfg.source.jitter_seconds + [0, 0])[:2]
+        lo, hi = (list(self.cfg.source.jitter_seconds) + [0, 0])[:2]
         offers: List[Offer] = []
         for i, (out_date, ret_date) in enumerate(picked):
             if i:
@@ -157,4 +155,4 @@ class PairsSource(Source):
             if offer is not None:
                 offers.append(offer)
 
-        return offers, next_cursor
+        return offers, next_cursors

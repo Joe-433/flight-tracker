@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import datetime as dt
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from ..config import Config
+from ..config import Band, Config
 
 
 class ScrapeError(RuntimeError):
@@ -46,34 +46,33 @@ class Source:
         self.cfg = cfg
         self.errors: List[str] = []
 
-    def sweep(self, cursor: int = 0) -> Tuple[List[Offer], int]:
-        """Return (offers, next_cursor).
+    def sweep(
+        self, cursors: Optional[Dict[str, int]] = None
+    ) -> Tuple[List[Offer], Dict[str, int]]:
+        """Return (offers, next_cursors).
 
-        `cursor` lets a backend cover a slice of the search space per run and
-        resume where it left off. Backends that cover everything in one shot
-        just return the cursor unchanged.
+        `cursors` lets a backend cover a slice of the search space per run and
+        resume where it left off, one cursor per band. Backends that cover
+        everything in one shot return the cursors unchanged.
         """
         raise NotImplementedError
 
 
 def date_pairs(cfg: Config, today: Optional[dt.date] = None) -> List[Tuple[str, str]]:
-    """Every (outbound, return) pair inside the rolling window.
+    """Every (outbound, return) pair in the horizon.
 
-    The window is `window_days` long starting `min_days_ahead` from today, and
-    the return leg must also land inside it.
+    `window_days` is the span of DEPARTURE dates, starting `min_days_ahead`
+    out. The return leg is free to land past the end of that span -- clamping
+    it would silently drop every trip departing in the final week.
     """
     today = today or dt.date.today()
     start = today + dt.timedelta(days=cfg.search.min_days_ahead)
-    end = start + dt.timedelta(days=cfg.search.window_days)
 
     pairs: List[Tuple[str, str]] = []
     for offset in range(cfg.search.window_days + 1):
         out = start + dt.timedelta(days=offset)
         for nights in sorted(cfg.search.trip_nights):
-            ret = out + dt.timedelta(days=nights)
-            if ret > end:
-                continue
-            pairs.append((out.isoformat(), ret.isoformat()))
+            pairs.append((out.isoformat(), (out + dt.timedelta(days=nights)).isoformat()))
     return pairs
 
 
@@ -87,3 +86,46 @@ def slice_for_run(
     cursor = cursor % len(pairs)
     picked = [pairs[(cursor + i) % len(pairs)] for i in range(budget)]
     return picked, (cursor + budget) % len(pairs)
+
+
+def plan_slice(
+    cfg: Config,
+    cursors: Optional[Dict[str, int]] = None,
+    today: Optional[dt.date] = None,
+) -> Tuple[List[Tuple[str, str]], Dict[str, int]]:
+    """Choose this run's date pairs, split across bands.
+
+    Over a 3-month horizon a flat rotation would take most of a day to come
+    back around, which is useless for the near-term dates where fares actually
+    move. Each band keeps its own cursor and gets its own share of
+    `pairs_per_run`, so the near horizon is revisited several times for every
+    one pass over the far horizon.
+    """
+    today = today or dt.date.today()
+    cursors = dict(cursors or {})
+    pairs = date_pairs(cfg, today)
+
+    bands = cfg.source.bands or [
+        Band(within_days=cfg.search.min_days_ahead + cfg.search.window_days)
+    ]
+    buckets: List[List[Tuple[str, str]]] = [[] for _ in bands]
+    for out_date, ret_date in pairs:
+        lead = (dt.date.fromisoformat(out_date) - today).days
+        for index, band in enumerate(bands):
+            if lead <= band.within_days:
+                buckets[index].append((out_date, ret_date))
+                break
+        else:
+            buckets[-1].append((out_date, ret_date))
+
+    total_share = sum(b.share for b in bands) or 1.0
+    picked: List[Tuple[str, str]] = []
+    for index, (band, bucket) in enumerate(zip(bands, buckets)):
+        if not bucket:
+            continue
+        budget = max(1, int(round(cfg.source.pairs_per_run * band.share / total_share)))
+        got, cursors[str(index)] = slice_for_run(
+            bucket, int(cursors.get(str(index), 0)), budget
+        )
+        picked.extend(got)
+    return picked, cursors

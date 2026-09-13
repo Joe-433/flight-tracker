@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import hashlib
 import os
-from typing import List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from ..config import Config
-from .base import Offer, Source, date_pairs, slice_for_run
+from .base import Offer, Source, plan_slice
 
 AIRLINES = [["JetBlue"], ["Delta"], ["American"], ["United"], ["Alaska"]]
 
@@ -24,15 +24,14 @@ def _hash_float(*parts: str) -> float:
 class MockSource(Source):
     name = "mock"
 
-    def sweep(self, cursor: int = 0) -> Tuple[List[Offer], int]:
+    def sweep(
+        self, cursors: Optional[Dict[str, int]] = None
+    ) -> Tuple[List[Offer], Dict[str, int]]:
         if os.getenv("FT_MOCK_EMPTY"):  # for exercising the dead man's switch
-            return [], cursor
+            return [], dict(cursors or {})
 
         seed = os.getenv("FT_MOCK_SEED", "0")
-        pairs = date_pairs(self.cfg)
-        picked, next_cursor = slice_for_run(
-            pairs, cursor, self.cfg.source.pairs_per_run
-        )
+        picked, next_cursors = plan_slice(self.cfg, cursors)
 
         offers: List[Offer] = []
         for out_date, ret_date in picked:
@@ -52,4 +51,4 @@ class MockSource(Source):
                     duration_minutes=355,
                 )
             )
-        return offers, next_cursor
+        return offers, next_cursors

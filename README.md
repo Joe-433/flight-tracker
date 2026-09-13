@@ -1,7 +1,8 @@
 # Nonstop NY ↔ LA fare watcher
 
-Watches nonstop roundtrips between the NY metro and the LA metro over a rolling
-14-day window, and pings you when something is actually cheap. Free to run:
+Watches nonstop roundtrips between the NY metro and the LA metro for
+departures from **1 week to 3 months out**, and pings you when something is
+actually cheap. Free to run:
 GitHub Actions on a public repo, a Discord webhook, no paid APIs.
 
 ```bash
@@ -42,28 +43,28 @@ below collapses to 1.
 The repo is public, so **Actions minutes are free and unlimited**. The only
 ceiling that matters is how hard you're willing to hit Google.
 
-The window is 14 days × trip lengths `[3,4,5,6,7]` ≈ **50 date pairs**.
-Sweeping all of them every 15 minutes would be ~4,800 requests/day — the kind
-of volume that gets you blocked. Instead each run walks a **rotating slice**
-(`source.pairs_per_run`, default 10) and stores a cursor in state, so
-consecutive runs pick up where the last left off.
+The horizon is 84 departure dates × trip lengths `[3,4,5,6,7]` = **420 date
+pairs**. Sweeping all of them even once an hour would be 10,000 requests/day —
+the kind of volume that gets you blocked. A flat rotation at a safe rate, on the
+other hand, takes most of a day to come back around, which is useless for the
+near-term dates where fares actually move.
 
-At the defaults — every 15 minutes, 10 pairs, 2–6s jitter:
+So the budget is **split across bands**, each rotating on its own cursor:
 
-| | |
-|---|---|
-| Requests per run | 10 |
-| Requests per day | ~960 |
-| Pairs covered per hour | 40 |
-| Full window covered every | ~75 minutes |
-| Runtime per run | ~1 minute |
+| Band | Pairs | Per run | Full pass every |
+|---|---|---|---|
+| 1 week – 1 month out | 120 | 11 | **~2.7 hours** |
+| 1 – 2 months out | 150 | 5 | ~7.5 hours |
+| 2 – 3 months out | 150 | 4 | ~9.4 hours |
 
-Both dials are independent: `pairs_per_run` trades requests-per-hour against
-per-run duration, the cron trades it against burstiness. Spreading the same
-volume over more, smaller runs looks less like scraping than fewer large ones,
-which is why the slice is small and the cron is frequent. GitHub's minimum
-interval is 5 minutes, but cron is best-effort and runs get delayed 15+ minutes
-under load anyway, so going below 15 buys less than it looks like.
+Fares three months out barely move day to day; fares ten days out move fast and
+are the time-sensitive ones. Banding spends the budget where it changes
+something. Totals: 20 requests per run, **~1,920 per day**, ~1 minute of
+runtime.
+
+Tune `source.bands` and `source.pairs_per_run` together — shares are
+normalized, so they don't have to sum to 1. Setting `bands: []` falls back to a
+single flat rotation over the whole horizon.
 
 If Google ever starts blocking datacenter IPs, the same code runs unchanged on
 a Raspberry Pi or an Oracle Cloud always-free VM under plain `cron`:
@@ -152,24 +153,22 @@ the airline, and the stop count. Two things it's checking:
 
 ### 4. Pick a threshold that can actually fire
 
-The first live verify run, on 2026-09-13, returned **$793** for a JetBlue
-nonstop NY→LA roundtrip departing 6 days out (Sep 18 → Sep 21). One data point,
-but a telling one: `alerts.threshold_usd: 250` may be a number that never fires
-on a window of departures 0–14 days away, because that window is precisely the
-expensive last-minute one.
+Two live data points from 2026-09-13, both nonstop NY→LA roundtrips departing
+within a week: **$852** and **$957**. That window is the expensive
+last-minute one, which is why the search starts 7 days out and runs to 90.
 
-Two ways to make the tracker useful:
+`alerts.threshold_usd` is still at the original **$250**. Whether that's
+reachable 1–3 months out is an open question — nobody has data on this route
+yet, including this tracker. Give it two or three days, then:
 
-- **Raise the threshold** to something last-minute fares actually reach, and
-  lean on the `baseline` + `percentile` signals to catch relative drops. Those
-  two need history, so give it 2–3 days before judging.
-- **Shift the window out**: set `search.min_days_ahead: 14`. This reads "2 weeks
-  out" as *departures at least 14 days away* rather than *the next 14 days* —
-  the ambiguity flagged in the original spec. Advance fares are dramatically
-  cheaper, so a $250 threshold becomes plausible again.
+```bash
+python -m flight_tracker days
+```
 
-Run `python -m flight_tracker days` after a day or two and set the threshold
-just under what you actually see.
+Set the threshold just under what you actually see. Too high and it cries wolf;
+too low and it never fires and you'll assume it's broken. The `baseline` and
+`percentile` signals cover you either way once history builds — they're
+relative, so they work without you guessing a number correctly.
 
 ### 4. Turn on Google's own price tracking too
 
@@ -290,6 +289,9 @@ movement between runs.
 - **LGA perimeter rule.** LaGuardia's 1,500-mile limit means LGA–LA nonstops are
   largely Saturday-only. City-MID search plus the nonstop filter handles this,
   but it explains sparse results.
+- **Partial sweep errors are normal.** A date pair with no nonstops at all
+  errors rather than returning zero. The run prints each one; a handful per
+  sweep is expected, all of them failing is what the dead man's switch is for.
 - **ToS.** Google discourages scraping. Personal use at this volume is low
   practical risk, but it isn't sanctioned. If datacenter IPs get blocked, the
   same code runs on a Raspberry Pi or an Oracle Cloud always-free VM via cron —

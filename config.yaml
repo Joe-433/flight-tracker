@@ -12,8 +12,10 @@ route:
   destination_label: "LA metro"
 
 search:
-  window_days: 14        # rolling window starting today
-  min_days_ahead: 0      # set to 14 if "2 weeks out" means "at least 14 days away"
+  # Departures from 1 week out to 3 months out. `window_days` is the span of
+  # DEPARTURE dates; the return leg may land past the end of it.
+  min_days_ahead: 7
+  window_days: 83
   trip_nights: [3, 4, 5, 6, 7]
   max_stops: 0           # 0 = nonstop only
   carry_on_bags: 1
@@ -30,9 +32,16 @@ source:
   #         actually implements get_calendar_grid; see README).
   # mock  = deterministic fake data, for testing the pipeline offline.
   backend: "pairs"
-  pairs_per_run: 10      # per run; see README "Request budget" for the math
-  jitter_seconds: [2, 6] # random pause between requests
+  pairs_per_run: 20      # per run; see README "Request budget" for the math
+  jitter_seconds: [2, 5] # random pause between requests
   retries: 2
+  # How the per-run budget is split across the horizon. Near-term fares move
+  # fast and are the time-sensitive ones; fares 3 months out barely move, so
+  # they get revisited less often. Each band rotates on its own cursor.
+  bands:
+    - {within_days: 30, share: 0.55}   # 1 week - 1 month out
+    - {within_days: 60, share: 0.25}   # 1 - 2 months out
+    - {within_days: 90, share: 0.20}   # 2 - 3 months out
 
 alerts:
   threshold_usd: 250     # hard "tell me now" price
@@ -40,8 +49,13 @@ alerts:
   rebeat_drop_usd: 15    # ...unless it dropped at least this much more
   max_per_run: 3         # spam guard
 
+history:
+  days: 30
+  max_points_per_pair: 40  # state.json is committed every run; keep it small
+  resample_hours: 12       # log an unchanged price at most this often
+  min_change_usd: 5        # ignore noise smaller than this
+
 deals:
-  history_days: 30
   min_observations: 6    # per date pair, before its baseline is trusted
   pct_below_baseline: 0.15   # 15% under its own median = notable
   cheap_percentile: 0.20     # bottom 20% of recent route-wide fares

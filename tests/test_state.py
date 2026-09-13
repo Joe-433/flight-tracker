@@ -13,13 +13,13 @@ from flight_tracker.state import State
 class TestPersistence(unittest.TestCase):
     def test_roundtrip(self):
         state = State()
-        state.record([make_offer(300)], now=NOW)
-        state.cursor = 7
+        state.record([make_offer(300)], None, now=NOW)
+        state.cursors = {"0": 7, "1": 3}
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "nested", "state.json")
             state.save(path)
             loaded = State.load(path)
-        self.assertEqual(loaded.cursor, 7)
+        self.assertEqual(loaded.cursors, {"0": 7, "1": 3})
         self.assertEqual(loaded.observations, state.observations)
 
     def test_missing_file_is_fresh_state(self):
@@ -29,25 +29,46 @@ class TestPersistence(unittest.TestCase):
 
 
 class TestRecord(unittest.TestCase):
+    def setUp(self):
+        self.history = make_config().history
+
     def test_skips_unchanged_price_within_resample_window(self):
         state = State()
         offer = make_offer(300)
-        self.assertEqual(state.record([offer], now=NOW), 1)
-        self.assertEqual(state.record([offer], now=NOW + dt.timedelta(hours=1)), 0)
+        self.assertEqual(state.record([offer], self.history, now=NOW), 1)
+        self.assertEqual(
+            state.record([offer], self.history, now=NOW + dt.timedelta(hours=1)), 0
+        )
         self.assertEqual(len(state.observations[offer.key]), 1)
 
     def test_records_changed_price_immediately(self):
         state = State()
-        state.record([make_offer(300)], now=NOW)
-        state.record([make_offer(280)], now=NOW + dt.timedelta(minutes=15))
+        state.record([make_offer(300)], self.history, now=NOW)
+        state.record([make_offer(280)], self.history, now=NOW + dt.timedelta(minutes=15))
         self.assertEqual(len(state.observations["2026-09-20|2026-09-24"]), 2)
+
+    def test_ignores_movement_below_min_change(self):
+        """$2 of noise on 400 tracked pairs is pure state-file churn."""
+        state = State()
+        state.record([make_offer(300)], self.history, now=NOW)
+        state.record([make_offer(298)], self.history, now=NOW + dt.timedelta(minutes=15))
+        self.assertEqual(len(state.observations["2026-09-20|2026-09-24"]), 1)
 
     def test_records_unchanged_price_after_resample_window(self):
         state = State()
         offer = make_offer(300)
-        state.record([offer], now=NOW)
-        state.record([offer], now=NOW + dt.timedelta(hours=7))
+        state.record([offer], self.history, now=NOW)
+        state.record([offer], self.history, now=NOW + dt.timedelta(hours=13))
         self.assertEqual(len(state.observations[offer.key]), 2)
+
+    def test_caps_points_per_pair(self):
+        state = State()
+        history = make_config(history={"max_points_per_pair": 5}).history
+        for i in range(20):
+            state.record(
+                [make_offer(300 + i * 10)], history, now=NOW + dt.timedelta(hours=i)
+            )
+        self.assertEqual(len(state.observations["2026-09-20|2026-09-24"]), 5)
 
 
 class TestTrim(unittest.TestCase):

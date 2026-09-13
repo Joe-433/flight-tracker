@@ -12,13 +12,12 @@ import json
 import os
 import tempfile
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .config import Config
 from .sources.base import Offer
 
-SCHEMA_VERSION = 1
-RESAMPLE_HOURS = 6.0  # log an unchanged price at most this often
+SCHEMA_VERSION = 2
 
 
 def utcnow() -> dt.datetime:
@@ -50,7 +49,7 @@ class State:
     last_run: Optional[str] = None
     last_data: Optional[str] = None
     consecutive_failures: int = 0
-    cursor: int = 0
+    cursors: Dict[str, int] = field(default_factory=dict)
     deadman: Dict[str, Optional[str]] = field(
         default_factory=lambda: {"down": False, "since": None, "last_notified": None}
     )
@@ -73,7 +72,7 @@ class State:
             "last_run",
             "last_data",
             "consecutive_failures",
-            "cursor",
+            "cursors",
             "deadman",
             "alerts",
             "observations",
@@ -90,7 +89,7 @@ class State:
             "last_run": self.last_run,
             "last_data": self.last_data,
             "consecutive_failures": self.consecutive_failures,
-            "cursor": self.cursor,
+            "cursors": self.cursors,
             "deadman": self.deadman,
             "alerts": self.alerts,
             "observations": self.observations,
@@ -110,23 +109,47 @@ class State:
 
     # -- history ------------------------------------------------------------
 
-    def record(self, offers: List[Offer], now: Optional[dt.datetime] = None) -> int:
-        """Append observations, skipping redundant repeats. Returns count added."""
+    def record(
+        self,
+        offers: List[Offer],
+        cfg: Optional[Any] = None,
+        now: Optional[dt.datetime] = None,
+    ) -> int:
+        """Append observations, skipping redundant repeats. Returns count added.
+
+        With hundreds of tracked date pairs and a commit every run, unfiltered
+        logging would bloat state.json into a multi-megabyte file that churns
+        constantly. So a point is kept only if the price actually moved by more
+        than `min_change_usd`, or enough time has passed to be worth a fresh
+        data point.
+        """
         now = now or utcnow()
         stamp = now.isoformat()
+        resample_hours = getattr(cfg, "resample_hours", 12.0) if cfg else 12.0
+        min_change = getattr(cfg, "min_change_usd", 5.0) if cfg else 5.0
+        cap = int(getattr(cfg, "max_points_per_pair", 40)) if cfg else 40
+
         added = 0
         for offer in offers:
             series = self.observations.setdefault(offer.key, [])
             if series:
                 last_ts, last_price = series[-1][0], float(series[-1][1])
                 elapsed = hours_since(str(last_ts), now) or 0.0
-                if last_price == offer.price and elapsed < RESAMPLE_HOURS:
+                moved = abs(last_price - offer.price) >= min_change
+                if not moved and elapsed < resample_hours:
                     continue
             series.append([stamp, offer.price])
+            if len(series) > cap:
+                del series[: len(series) - cap]
             added += 1
         return added
 
-    def trim(self, history_days: int, now: Optional[dt.datetime] = None) -> None:
+    def trim(
+        self,
+        history_days: int,
+        now: Optional[dt.datetime] = None,
+        max_points_per_pair: Optional[int] = None,
+    ) -> None:
         """Drop stale observations, past date pairs, and expired alert records."""
         now = now or utcnow()
         cutoff = now - dt.timedelta(days=history_days)
@@ -143,6 +166,8 @@ class State:
                 if (parse_ts(str(point[0])) or now) >= cutoff
             ]
             if kept:
+                if max_points_per_pair and len(kept) > max_points_per_pair:
+                    kept = kept[-max_points_per_pair:]
                 self.observations[key] = kept
             else:
                 del self.observations[key]

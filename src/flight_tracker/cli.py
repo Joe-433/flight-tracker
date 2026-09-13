@@ -128,10 +128,10 @@ def cmd_run(args: argparse.Namespace) -> int:
 
     offers: List[Offer] = []
     errors: List[str] = []
-    next_cursor = state.cursor
+    next_cursors = dict(state.cursors)
     try:
         source = get_source(cfg)
-        offers, next_cursor = source.sweep(state.cursor)
+        offers, next_cursors = source.sweep(state.cursors)
         errors = source.errors
     except ScrapeError as exc:
         errors = [str(exc)]
@@ -154,9 +154,11 @@ def cmd_run(args: argparse.Namespace) -> int:
     # Assess BEFORE recording, so a fare is never part of its own baseline.
     assessment = analysis.assess(offers, state, cfg, now=now)
 
-    state.record(offers, now=now)
-    state.cursor = next_cursor
-    state.trim(cfg.deals.history_days, now=now)
+    state.record(offers, cfg.history, now=now)
+    state.cursors = next_cursors
+    state.trim(
+        cfg.history.days, now=now, max_points_per_pair=cfg.history.max_points_per_pair
+    )
 
     health = deadman.update(state, cfg, got_data=bool(offers), errors=errors, now=now)
 
@@ -196,7 +198,10 @@ def cmd_run(args: argparse.Namespace) -> int:
         )
     if assessment.cheap_cutoff:
         print("cheap-day cutoff: %s" % _money(assessment.cheap_cutoff))
-    print("alerts sent: %d | next cursor: %d" % (sent, state.cursor))
+    print(
+        "alerts sent: %d | tracked pairs: %d | cursors: %s"
+        % (sent, len(state.observations), state.cursors)
+    )
 
     state.save(args.state)
     if health.down and args.fail_on_down:
