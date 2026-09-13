@@ -253,17 +253,28 @@ Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
 ```
- 1. $338   Wed Oct 14 -> Sat Oct 17 3n
-    7:05a  JFK>LAX  1 stop  JetBlue
- 2. $357   Tue Nov 3 -> Tue Nov 10 7n
-    8:00a  EWR>LAX  nonstop  Alaska
+ 1. $360   Thu Oct 29 -> Sun Nov 1 3n
+    8:00a  LGA>LAX  1 stop  WN 1288 +1
+ 2. $409   Thu Oct 29 -> Sun Nov 1 3n
+    9:50p  JFK>LAX  nonstop  AA 171
 ```
+
+The last column is the **flight number**, not the airline name — it's shorter,
+it still tells you the carrier, and it's what you paste into a booking site.
+`+1` means one connecting segment after it. `fast-flights` doesn't expose flight
+numbers, so they're pulled straight out of the same payload it already parses
+(segment field 22); if that ever stops lining up, the column falls back to the
+airline name rather than showing a wrong number.
 
 Any time, on demand:
 
 ```bash
 python -m flight_tracker report --limit 10
 ```
+
+Alert messages carry a tappable **[Book on Google Flights]** link in Discord
+rather than 400 characters of base64 deeplink — no URL shortener involved, just
+markdown. Email and SMS still get the raw URL, where markdown would be noise.
 
 Two things this report is honest about. Times and airports describe the
 **outbound leg only** — Google's roundtrip payload prices the whole trip but

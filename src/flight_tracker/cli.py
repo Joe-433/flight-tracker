@@ -73,7 +73,7 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
         % (cfg.route.origin_label, cfg.route.destination_label, offer.label),
         "%s out, %s back (%d nights)"
         % (_pretty_date(offer.out_date), _pretty_date(offer.ret_date), offer.nights),
-        "Airline: %s" % airlines,
+        "Flight: %s" % (offer.flight_no or airlines),
         "Why: %s" % (describe(deal, cfg) or "cheapest in this sweep"),
     ]
     if deal.baseline:
@@ -484,8 +484,13 @@ def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
             snap.get("dep_airport") or "???",
             snap.get("arr_airport") or "???",
         )
+        # The flight number is both shorter and more useful than the airline
+        # name -- "AA 171" already tells you the carrier, and it's what you
+        # type into a booking site. Fall back only when it's missing.
         airlines = snap.get("airlines") or []
-        airline = ", ".join(str(a) for a in airlines)[:18] or "?"
+        who = str(snap.get("flight_no") or "") or (
+            ", ".join(str(a) for a in airlines)[:18] or "?"
+        )
 
         lines.append(
             "%2d. %-6s %s -> %s%s"
@@ -499,7 +504,7 @@ def cheapest_report(state: State, cfg: Config, limit: int = 10) -> str:
         )
         lines.append(
             "    %-6s %s  %s  %s"
-            % (_clock12(snap.get("dep_time")), route, stops_text, airline)
+            % (_clock12(snap.get("dep_time")), route, stops_text, who)
         )
     lines.append("```")
     lines.append("Outbound times/airports; prices as last seen.")

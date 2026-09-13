@@ -8,6 +8,7 @@ from helpers import make_config
 from flight_tracker.config import Band
 from flight_tracker.sources.base import date_pairs, plan_slice, slice_for_run
 from flight_tracker.sources.mock import MockSource
+from flight_tracker.sources.pairs import _format_flight_no
 
 TODAY = dt.date(2026, 9, 12)
 
@@ -135,6 +136,22 @@ class TestMockSource(unittest.TestCase):
         offers, _ = MockSource(cfg).sweep({})
         self.assertEqual(len(offers), 5)
         self.assertTrue(all(o.stops == 0 for o in offers))
+
+
+class TestFlightNumberFormatting(unittest.TestCase):
+    def test_nonstop(self):
+        self.assertEqual(_format_flight_no(["AA 171"], 1), "AA 171")
+
+    def test_connection_counts_the_extra_legs(self):
+        self.assertEqual(_format_flight_no(["AA 171", "AA 2345"], 2), "AA 171 +1")
+
+    def test_partial_data_is_dropped(self):
+        self.assertIsNone(_format_flight_no(["AA 171", None], 2))
+        self.assertIsNone(_format_flight_no([], 1))
+
+    def test_misalignment_is_dropped_rather_than_guessed(self):
+        """Showing the wrong flight number is worse than showing none."""
+        self.assertIsNone(_format_flight_no(["AA 171"], 2))
 
 
 if __name__ == "__main__":

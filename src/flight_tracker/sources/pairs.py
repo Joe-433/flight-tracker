@@ -19,6 +19,56 @@ from ..config import Config
 from .base import Offer, ScrapeError, Source, plan_slice
 
 
+def _flight_numbers(html: str) -> List[List[Optional[str]]]:
+    """Per itinerary, the flight number of each segment.
+
+    fast-flights' model drops this field, but it's in the same payload the
+    library already parses -- segment index 22 is
+    ``[carrier, number, None, airline]``. We re-read the payload rather than
+    make a second request. Any shape surprise yields an empty list, which just
+    means the report falls back to the airline name.
+    """
+    try:
+        import json
+
+        from selectolax.lexbor import LexborHTMLParser
+
+        script = LexborHTMLParser(html).css_first(r"script.ds\:1")
+        raw = script.text().split("data:", 1)[1].rsplit(",", 1)[0]
+        payload = json.loads(raw)
+        itineraries = payload[3][0] or []
+    except Exception:
+        return []
+
+    out: List[List[Optional[str]]] = []
+    for itinerary in itineraries:
+        numbers: List[Optional[str]] = []
+        try:
+            segments = itinerary[0][2]
+        except (IndexError, TypeError):
+            out.append([])
+            continue
+        for segment in segments:
+            info = segment[22] if len(segment) > 22 else None
+            if isinstance(info, list) and len(info) >= 2 and info[0] and info[1]:
+                numbers.append("%s %s" % (info[0], info[1]))
+            else:
+                numbers.append(None)
+        out.append(numbers)
+    return out
+
+
+def _format_flight_no(numbers: List[Optional[str]], leg_count: int) -> Optional[str]:
+    """"AA 171" for a nonstop, "AA 171 +1" when it connects."""
+    if not numbers or None in numbers:
+        return None
+    if leg_count and len(numbers) != leg_count:
+        return None  # misaligned; better to show nothing than the wrong flight
+    if len(numbers) == 1:
+        return numbers[0]
+    return "%s +%d" % (numbers[0], len(numbers) - 1)
+
+
 def _clock(moment: Any) -> Optional[str]:
     """Pull "HH:MM" out of a fast-flights SimpleDatetime, tolerantly."""
     value = getattr(moment, "time", None)
@@ -54,8 +104,10 @@ class PairsSource(Source):
                 FlightQuery,
                 Passengers,
                 create_query,
+                fetch_flights_html,
                 get_flights,
             )
+            from fast_flights.parser import parse
         except ImportError as exc:  # pragma: no cover - environment problem
             # Two very different causes, so name them separately: a missing
             # fast_flights means it isn't installed (it needs Python >= 3.10);
@@ -75,6 +127,8 @@ class PairsSource(Source):
         self._Passengers = Passengers
         self._create_query = create_query
         self._get_flights = get_flights
+        self._fetch_html = fetch_flights_html
+        self._parse = parse
 
     # -- query construction -------------------------------------------------
 
@@ -139,19 +193,34 @@ class PairsSource(Source):
     def _offers(
         self, results: Any, out_date: str, ret_date: str, url: str
     ) -> List[Offer]:
+        # `parse` and `_flight_numbers` walk the same payload list in the same
+        # order, so index alignment holds. If the lengths ever disagree we drop
+        # the numbers entirely rather than risk labelling a flight wrongly.
+        numbers = getattr(self, "_numbers", []) or []
+        if len(numbers) != len(results):
+            numbers = []
+
         offers = []
-        for item in results:
+        for index, item in enumerate(results):
             offer = self._to_offer(item, out_date, ret_date, url)
-            if offer is not None:
-                offers.append(offer)
+            if offer is None:
+                continue
+            if index < len(numbers):
+                offer.flight_no = _format_flight_no(
+                    numbers[index], len(getattr(item, "flights", []) or [])
+                )
+            offers.append(offer)
         return offers
 
     def _fetch(self, query: Any, out_date: str, ret_date: str) -> Any:
         last_exc: Optional[Exception] = None
         results = None
+        self._numbers = []
         for attempt in range(self.cfg.source.retries + 1):
             try:
-                results = self._get_flights(query)
+                html = self._fetch_html(query)
+                results = self._parse(html)
+                self._numbers = _flight_numbers(html)
                 break
             except Exception as exc:  # the scraper fails in many creative ways
                 last_exc = exc

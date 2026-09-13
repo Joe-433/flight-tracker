@@ -34,6 +34,7 @@ class Offer:
     arr_airport: Optional[str] = None
     dep_time: Optional[str] = None   # "HH:MM", 24h
     arr_time: Optional[str] = None
+    flight_no: Optional[str] = None  # "AA 171", or "AA 171 +1" with a connection
 
     @property
     def key(self) -> str:
@@ -57,6 +58,7 @@ class Offer:
             "arr_airport": self.arr_airport,
             "dep_time": self.dep_time,
             "arr_time": self.arr_time,
+            "flight_no": self.flight_no,
             "out_date": self.out_date,
             "ret_date": self.ret_date,
             "url": self.url,

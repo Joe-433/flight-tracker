@@ -77,6 +77,17 @@ class TestCheapestReport(unittest.TestCase):
         body = cheapest_report(stocked([offer(200, stops=0)]), make_config())
         self.assertIn("nonstop", body)
 
+    def test_flight_number_replaces_airline_name(self):
+        body = cheapest_report(
+            stocked([offer(338, flight_no="AA 171")]), make_config()
+        )
+        self.assertIn("AA 171", body)
+        self.assertNotIn("JetBlue", body)
+
+    def test_falls_back_to_airline_when_number_missing(self):
+        body = cheapest_report(stocked([offer(338)]), make_config())
+        self.assertIn("JetBlue", body)
+
     def test_missing_details_render_placeholders(self):
         body = cheapest_report(
             stocked([offer(300, dep_airport=None, arr_airport=None, dep_time=None,

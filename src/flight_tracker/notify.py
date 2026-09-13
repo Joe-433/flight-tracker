@@ -44,6 +44,12 @@ class Message:
             parts += ["", self.url]
         return "\n".join(parts).strip()
 
+    def as_markdown(self) -> str:
+        parts = ["**%s**" % self.title, "", self.body]
+        if self.url:
+            parts += ["", "[Book on Google Flights](%s)" % self.url]
+        return "\n".join(parts).strip()
+
 
 class Channel:
     name = "channel"
@@ -68,7 +74,11 @@ class DiscordChannel(Channel):
         self.webhook_url = webhook_url
 
     def send(self, message: Message) -> None:
-        content = message.as_text()
+        # Discord renders markdown, so the Google Flights deeplink becomes a
+        # short tappable label rather than 400 characters of base64. Other
+        # channels (email, SMS gateways) still get the raw URL, since markdown
+        # would just be noise there.
+        content = message.as_markdown()
         if message.urgent:
             content = "@here " + content
         payload = json.dumps(
