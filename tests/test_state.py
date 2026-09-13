@@ -86,6 +86,31 @@ class TestTrim(unittest.TestCase):
         self.assertEqual(state.observations["2026-09-20|2026-09-24"], [[NOW.isoformat(), 380]])
 
 
+class TestScopePruning(unittest.TestCase):
+    def test_drops_trip_lengths_no_longer_searched(self):
+        """Narrowing trip_nights must not leave zombies in the report."""
+        state = State()
+        state.observations["2026-09-20|2026-09-23"] = [[NOW.isoformat(), 278]]  # 3n
+        state.observations["2026-09-20|2026-09-25"] = [[NOW.isoformat(), 400]]  # 5n
+        state.latest["2026-09-20|2026-09-23"] = {"price": 278}
+        state.latest["2026-09-20|2026-09-25"] = {"price": 400}
+        state.trim(30, now=NOW, allowed_nights=[5, 6, 7])
+        self.assertEqual(list(state.observations), ["2026-09-20|2026-09-25"])
+        self.assertEqual(list(state.latest), ["2026-09-20|2026-09-25"])
+
+    def test_connecting_keys_are_pruned_too(self):
+        state = State()
+        state.observations["2026-09-20|2026-09-23|1"] = [[NOW.isoformat(), 200]]
+        state.trim(30, now=NOW, allowed_nights=[5, 6, 7])
+        self.assertEqual(state.observations, {})
+
+    def test_no_pruning_without_an_allowed_set(self):
+        state = State()
+        state.observations["2026-09-20|2026-09-23"] = [[NOW.isoformat(), 278]]
+        state.trim(30, now=NOW)
+        self.assertIn("2026-09-20|2026-09-23", state.observations)
+
+
 class TestAlertDedup(unittest.TestCase):
     def setUp(self):
         self.cfg = make_config(

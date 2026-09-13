@@ -12,7 +12,7 @@ import json
 import os
 import tempfile
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .config import Config
 from .sources.base import Offer
@@ -163,15 +163,38 @@ class State:
         history_days: int,
         now: Optional[dt.datetime] = None,
         max_points_per_pair: Optional[int] = None,
+        allowed_nights: Optional[Iterable[int]] = None,
     ) -> None:
-        """Drop stale observations, past date pairs, and expired alert records."""
+        """Drop stale observations, past date pairs, and expired alert records.
+
+        `allowed_nights` prunes trip lengths that are no longer searched. Without
+        it, narrowing `trip_nights` would leave zombie entries: never refreshed
+        again, never expiring until their departure date passes, and sitting at
+        the top of the cheapest-fares report the whole time.
+        """
         now = now or utcnow()
         cutoff = now - dt.timedelta(days=history_days)
         today = now.date().isoformat()
+        nights = set(allowed_nights) if allowed_nights is not None else None
+
+        def out_of_scope(key: str) -> bool:
+            if nights is None:
+                return False
+            parts = key.split("|")
+            try:
+                span = (
+                    dt.date.fromisoformat(parts[1]) - dt.date.fromisoformat(parts[0])
+                ).days
+            except (IndexError, ValueError):
+                return False
+            return span not in nights
 
         for key in list(self.observations):
             out_date = key.split("|", 1)[0]
             if out_date < today:  # the trip already departed; history is dead weight
+                del self.observations[key]
+                continue
+            if out_of_scope(key):  # trip length is no longer searched
                 del self.observations[key]
                 continue
             kept = [

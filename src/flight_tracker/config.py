@@ -21,7 +21,7 @@ class Route:
 class Search:
     window_days: int = 83   # span of DEPARTURE dates, starting min_days_ahead out
     min_days_ahead: int = 7
-    trip_nights: List[int] = field(default_factory=lambda: [3, 4, 5, 6, 7])
+    trip_nights: List[int] = field(default_factory=lambda: [5, 6, 7])
     max_stops: int = 1
     carry_on_bags: int = 1
     checked_bags: int = 0

@@ -231,7 +231,10 @@ def cmd_run(args: argparse.Namespace) -> int:
     state.record(offers, cfg.history, now=now)
     state.cursors = next_cursors
     state.trim(
-        cfg.history.days, now=now, max_points_per_pair=cfg.history.max_points_per_pair
+        cfg.history.days,
+        now=now,
+        max_points_per_pair=cfg.history.max_points_per_pair,
+        allowed_nights=cfg.search.trip_nights,
     )
 
     health = deadman.update(state, cfg, got_data=bool(offers), errors=errors, now=now)

@@ -29,7 +29,7 @@ search:
   # base-fare inventory that doesn't move, so sweeping it buys nothing.
   min_days_ahead: 7
   window_days: 98
-  trip_nights: [3, 4, 5, 6, 7]
+  trip_nights: [5, 6, 7]
   max_stops: 1           # allow one layover -- but see the lower threshold
   carry_on_bags: 1
   checked_bags: 0
