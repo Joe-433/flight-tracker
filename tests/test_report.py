@@ -68,22 +68,35 @@ class TestCheapestReport(unittest.TestCase):
 
     def test_price_leads_then_date_then_time(self):
         table = cheapest_table(stocked([offer(338)]), make_config())
-        header, row = table.splitlines()[1], table.splitlines()[2]
-        self.assertLess(header.index("PRICE"), header.index("DEPART"))
-        self.assertLess(header.index("DEPART"), header.index("TIME"))
-        self.assertLess(header.index("TIME"), header.index("ROUTE"))
-        self.assertLess(header.index("ROUTE"), header.index("FLIGHT"))
+        header = table.splitlines()[1]
+        row = table.splitlines()[3]  # 0 fence, 1 header, 2 rule
+        for earlier, later in (
+            ("PRICE", "DEPART"),
+            ("DEPART", "LEAVES"),
+            ("LEAVES", "ROUTE"),
+            ("ROUTE", "FLIGHTS"),
+        ):
+            self.assertLess(header.index(earlier), header.index(later))
         self.assertIn("$338", row)
         self.assertIn("Wed Oct 14", row)
+
+    def test_has_a_rule_under_the_header(self):
+        table = cheapest_table(stocked([offer(338)]), make_config())
+        self.assertRegex(table.splitlines()[2], r"^-+[- ]*$")
 
     def test_columns_line_up(self):
         table = cheapest_table(
             stocked([offer(338, "2026-10-14"), offer(1200, "2026-11-02")]),
             make_config(),
         )
-        rows = table.splitlines()[1:-1]
-        starts = [line.index("$") for line in rows[1:]]
-        self.assertEqual(len(set(starts)), 1)
+        rows = [line for line in table.splitlines() if "$" in line]
+        self.assertEqual(len({line.index("$") for line in rows}), 1)
+
+    def test_arrival_time_is_shown(self):
+        table = cheapest_table(
+            stocked([offer(338, arr_time="22:20")]), make_config()
+        )
+        self.assertIn("10:20p", table)
 
     def test_layovers_are_labelled(self):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))

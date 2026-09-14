@@ -59,14 +59,24 @@ def _flight_numbers(html: str) -> List[List[Optional[str]]]:
 
 
 def _format_flight_no(numbers: List[Optional[str]], leg_count: int) -> Optional[str]:
-    """"AA 171" for a nonstop, "AA 171 +1" when it connects."""
+    """Every segment's flight number: "AA 171", or "WN 2536 / 1544".
+
+    The old form was "WN 2536 +1", which told you a connection existed but hid
+    the flight you'd actually be on for the second half. The carrier code is
+    dropped from later segments when it repeats, which it usually does.
+    """
     if not numbers or None in numbers:
         return None
     if leg_count and len(numbers) != leg_count:
         return None  # misaligned; better to show nothing than the wrong flight
-    if len(numbers) == 1:
-        return numbers[0]
-    return "%s +%d" % (numbers[0], len(numbers) - 1)
+
+    parts = [numbers[0]]
+    previous_carrier = str(numbers[0]).split(" ", 1)[0]
+    for number in numbers[1:]:
+        carrier, _, digits = str(number).partition(" ")
+        parts.append(digits if carrier == previous_carrier else str(number))
+        previous_carrier = carrier
+    return " / ".join(parts)
 
 
 def _clock(moment: Any) -> Optional[str]:

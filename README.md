@@ -299,11 +299,28 @@ Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
 ```
-#  PRICE  DEPART      RETURN      N  TIME    ROUTE    STOPS   FLIGHT      ALSO
-1  $278   Wed Oct 21  Tue Oct 27  6  3:05p   LGA→LAX  1 stop  WN 2536 +1
-2  $278   Wed Nov 4   Tue Nov 10  6  7:00a   LGA→LAX  1 stop  WN 264 +1   +3 dates
-3  $315   Fri Oct 30  Wed Nov 4   5  7:00a   LGA→LAX  1 stop  WN 2531 +1
+PRICE   DEPART       RETURN       N   LEAVES   LANDS    ROUTE     STOPS    FLIGHTS          ALSO
+-----   ----------   ----------   -   ------   ------   -------   ------   --------------   --------
+$278    Wed Oct 21   Tue Oct 27   6   3:05p    10:20p   LGA→LAX   1 stop   WN 2536 / 1544
+$278    Wed Nov 4    Tue Nov 10   6   7:00a    1:25p    LGA→LAX   1 stop   WN 264 / 1102    +3 dates
+$409    Thu Oct 29   Sun Nov 1    3   9:50p    1:05a    JFK→LAX   nonstop  AA 171
 ```
+
+One line per fare, wide rather than tall, with a rule under the header and
+three-space gutters. Columns run in decision order: price, dates, times,
+airports, flight.
+
+**`FLIGHTS` lists every segment**, not just the first — `WN 2536 / 1544` is a
+connection where you're on both of those. The carrier code is dropped from
+later segments when it repeats. An earlier version showed `WN 2536 +1`, which
+told you a connection existed but hid the flight you'd be on for the second
+half.
+
+This one message is sent as a **plain message rather than an embed**. Discord
+embeds cap at roughly 72 monospace characters before wrapping, and this table
+is ~95 — you can have the embed's coloured chrome or the width, not both, and
+for a table the width wins. Alerts stay as embeds, since a single fare is
+narrow enough.
 
 **Duplicates are collapsed.** The sweep checks every return date against every
 departure date, so one cheap outbound flight surfaces once per return date —

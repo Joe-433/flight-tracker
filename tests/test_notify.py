@@ -48,6 +48,14 @@ class TestDiscordPayload(unittest.TestCase):
         self.assertEqual(Message(title="deal", color=GREEN).accent(), GREEN)
 
 
+class TestPlainMode(unittest.TestCase):
+    """Wide tables give up the embed to get the width."""
+
+    def test_plain_flag_is_carried(self):
+        self.assertTrue(Message(title="wide", body="x", plain=True).plain)
+        self.assertFalse(Message(title="narrow", body="x").plain)
+
+
 class TestPlainTextRendering(unittest.TestCase):
     def test_fields_render_for_email_and_console(self):
         text = Message(

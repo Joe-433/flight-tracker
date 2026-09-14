@@ -162,8 +162,18 @@ class TestFlightNumberFormatting(unittest.TestCase):
     def test_nonstop(self):
         self.assertEqual(_format_flight_no(["AA 171"], 1), "AA 171")
 
-    def test_connection_counts_the_extra_legs(self):
-        self.assertEqual(_format_flight_no(["AA 171", "AA 2345"], 2), "AA 171 +1")
+    def test_connection_shows_both_numbers(self):
+        self.assertEqual(_format_flight_no(["AA 171", "AA 2345"], 2), "AA 171 / 2345")
+
+    def test_carrier_repeated_only_when_it_changes(self):
+        self.assertEqual(
+            _format_flight_no(["WN 2536", "UA 44"], 2), "WN 2536 / UA 44"
+        )
+
+    def test_three_segments(self):
+        self.assertEqual(
+            _format_flight_no(["B6 1", "B6 2", "B6 3"], 3), "B6 1 / 2 / 3"
+        )
 
     def test_partial_data_is_dropped(self):
         self.assertIsNone(_format_flight_no(["AA 171", None], 2))

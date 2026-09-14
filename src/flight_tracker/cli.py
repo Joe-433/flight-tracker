@@ -527,7 +527,7 @@ def _short_date(value: str) -> str:
     return dt.date.fromisoformat(value).strftime("%a %b %-d")
 
 
-def _row_parts(index: int, price: float, snap: dict, cfg: Config) -> List[str]:
+def _row_parts(price: float, snap: dict, cfg: Config) -> List[str]:
     out_date = str(snap.get("out_date", ""))
     ret_date = str(snap.get("ret_date", ""))
     nights = ""
@@ -552,21 +552,25 @@ def _row_parts(index: int, price: float, snap: dict, cfg: Config) -> List[str]:
     )
 
     return [
-        "%d" % index,
         _money(price, cfg.search.currency),
         _short_date(out_date) if out_date else "?",
         _short_date(ret_date) if ret_date else "?",
         nights,
         _clock12(snap.get("dep_time")).strip(),
+        _clock12(snap.get("arr_time")).strip(),
         "%s\u2192%s" % (snap.get("dep_airport") or "???", snap.get("arr_airport") or "???"),
         stops_text,
         who,
     ]
 
 
+# No "#" column: the ranking is the row order, and the width is better spent
+# on data. Wide beats tall -- one line per fare, generous gutters.
 HEADERS = [
-    "#", "PRICE", "DEPART", "RETURN", "N", "TIME", "ROUTE", "STOPS", "FLIGHT", "ALSO",
+    "PRICE", "DEPART", "RETURN", "N", "LEAVES", "LANDS", "ROUTE", "STOPS",
+    "FLIGHTS", "ALSO",
 ]
+GUTTER = "   "
 
 
 def _dedupe_key(snap: dict) -> tuple:
@@ -627,11 +631,11 @@ def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
         groups[key].append((price, snap))
 
     rows = []
-    for index, key in enumerate(order[:limit], start=1):
+    for key in order[:limit]:
         price, snap = groups[key][0]
         extras = len(groups[key]) - 1
         rows.append(
-            _row_parts(index, price, snap, cfg)
+            _row_parts(price, snap, cfg)
             + ["+%d %s" % (extras, "date" if extras == 1 else "dates") if extras else ""]
         )
     widths = [
@@ -640,9 +644,16 @@ def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
     ]
 
     def line(parts: List[str]) -> str:
-        return "  ".join(part.ljust(widths[i]) for i, part in enumerate(parts)).rstrip()
+        return GUTTER.join(
+            part.ljust(widths[i]) for i, part in enumerate(parts)
+        ).rstrip()
 
-    return "\n".join(["```", line(HEADERS)] + [line(row) for row in rows] + ["```"])
+    # A rule under the header, so the eye has something to rest on before the
+    # numbers start.
+    rule = GUTTER.join("-" * width for width in widths)
+    return "\n".join(
+        ["```", line(HEADERS), rule] + [line(row) for row in rows] + ["```"]
+    )
 
 
 def cmd_report(args: argparse.Namespace) -> int:
@@ -655,6 +666,7 @@ def cmd_report(args: argparse.Namespace) -> int:
         footer="Outbound times and airports \u00b7 prices as last seen \u00b7 "
         "%d date pairs tracked" % len(state.latest),
         color=GREEN,
+        plain=True,  # the table is wider than an embed can hold
     )
     if args.send:
         results = Notifier.from_env().send(message)
