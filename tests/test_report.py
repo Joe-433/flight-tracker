@@ -55,6 +55,35 @@ class TestCheapestReport(unittest.TestCase):
     def test_empty(self):
         self.assertIn("No fares tracked", cheapest_lines(State(), make_config()))
 
+    def test_selects_by_price_but_lists_by_departure(self):
+        """Cheapest five, read in trip order."""
+        state = stocked([
+            offer(300, "2026-12-01", flight_no="AA 1"),
+            offer(280, "2026-11-01", flight_no="AA 2"),
+            offer(260, "2026-10-01", flight_no="AA 3"),
+            offer(900, "2026-09-25", flight_no="AA 4"),
+        ])
+        body = cheapest_lines(state, make_config(), limit=3)
+        self.assertNotIn("$900", body)  # selection is by price
+        dates = [l for l in body.splitlines() if l.strip()]
+        self.assertIn("Oct 1", dates[0])
+        self.assertIn("Nov 1", dates[1])
+        self.assertIn("Dec 1", dates[2])
+
+    def test_airline_link_for_verified_carriers(self):
+        body = cheapest_lines(
+            stocked([offer(278, flight_no="WN 2536", dep_airport="LGA")]),
+            make_config(),
+        )
+        self.assertIn("southwest.com", body)
+
+    def test_no_airline_link_for_unverified_carriers(self):
+        body = cheapest_lines(
+            stocked([offer(278, flight_no="AA 171")]), make_config()
+        )
+        self.assertNotIn("aa.com", body)
+        self.assertIn("AA 171", body)
+
     def test_sorted_by_price_and_limited(self):
         state = stocked([
             offer(500, "2026-10-20"),
@@ -65,7 +94,6 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("$338", body)
         self.assertIn("$420", body)
         self.assertNotIn("$500", body)
-        self.assertLess(body.index("$338"), body.index("$420"))
 
     def test_reads_in_decision_order(self):
         line = cheapest_lines(stocked([offer(338)]), make_config()).splitlines()[0]

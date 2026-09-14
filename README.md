@@ -335,8 +335,9 @@ departure time, then airports, then airline.
 >
 > **$409**  ·  Thu Oct 29 → Sun Nov 1  ·  3n  ·  JFK→LAX  ·  nonstop  ·  AA 171
 
-One fare per line, in decision order: price, dates, length, airports, stops,
-flight.
+One fare per line. The **cheapest** fares are selected, then listed in
+**departure order** — ranking by price is what makes the list worth reading,
+reading it in date order is what makes it usable for planning a trip.
 
 **The price is a link** — tapping it reopens the exact Google Flights search
 that found that fare, with the dates, stop limit and bag filters already
@@ -353,6 +354,16 @@ characters, and past that it breaks every row mid-cell, destroying the exact
 alignment that justified the monospace font in the first place. Normal text
 reflows at a separator instead, so a narrow window costs a wrapped line rather
 than a mangled grid.
+
+**Two links per fare.** The price reopens the Google Flights search that found
+it. The flight number links straight to the airline's own booking search, dates
+prefilled — but only for carriers whose deep link was opened in a browser and
+confirmed to work: **Southwest, Delta, Frontier**. American and JetBlue answer
+automated requests with a bot challenge so their format couldn't be verified,
+and Alaska's parameters were confirmed *not* to work — it loads the form and
+reports the dates as missing. Those carriers get no airline link rather than a
+broken one. Airlines change these formats without warning, so treat a link that
+stops working as wear, not a surprise.
 
 **`FLIGHTS` lists every segment** — `WN 2536 / 1544` is a connection where
 you're on both of those. The carrier code is dropped from later segments when

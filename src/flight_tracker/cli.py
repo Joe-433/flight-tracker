@@ -16,6 +16,7 @@ import sys
 from typing import Dict, List, Optional, Tuple
 
 from . import analysis, deadman
+from .booking import airline_url, carrier_of
 from .config import Config, load_config
 from .notify import BLURPLE, GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
@@ -616,6 +617,20 @@ def _fare_line(
     out_date = str(snap.get("out_date", ""))
     ret_date = str(snap.get("ret_date", ""))
 
+    # Where the airline's own deep link is known to work, hang it off the
+    # flight identifier -- one tap to the carrier's checkout, skipping Google's
+    # handoff. Carriers whose format we couldn't verify simply aren't linked.
+    direct = airline_url(
+        carrier_of(str(snap.get("flight_no") or "")),
+        str(snap.get("dep_airport") or ""),
+        str(snap.get("arr_airport") or ""),
+        out_date,
+        ret_date,
+        cfg.search.adults,
+    )
+    if linked and direct:
+        who = "[%s](%s)" % (who, direct)
+
     # The price is the link. A flight number is a poor handle on a fare months
     # out -- schedules move and the number alone won't reconstruct the search --
     # whereas the deeplink reopens the exact query that found this price.
@@ -661,9 +676,16 @@ def cheapest_lines(state: State, cfg: Config, limit: int = 5) -> str:
             order.append(key)
         groups[key].append((price, snap))
 
+    # Pick the cheapest `limit` fares, then present them in departure order.
+    # Ranking by price is what makes the list worth reading; reading it in date
+    # order is what makes it usable for planning a trip.
+    chosen = sorted(
+        order[:limit], key=lambda k: str(groups[k][0][1].get("out_date") or "")
+    )
+
     def render(linked: bool) -> List[str]:
         out = []
-        for key in order[:limit]:
+        for key in chosen:
             price, snap = groups[key][0]
             out.append(_fare_line(price, snap, len(groups[key]) - 1, cfg, linked))
         return out
