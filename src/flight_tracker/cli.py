@@ -448,7 +448,14 @@ def cmd_probe(args: argparse.Namespace) -> int:
     cfg.search.window_days = args.window
     if args.nights:
         cfg.search.trip_nights = args.nights
+    if args.carry_on is not None:
+        cfg.search.carry_on_bags = args.carry_on
+    if args.max_stops is not None:
+        cfg.search.max_stops = args.max_stops
+    if args.to:
+        cfg.route.destination = args.to
     cfg.source.bands = []
+    cfg.route.also_check = []
 
     today = dt.date.today()
     pairs = date_pairs(cfg, today)
@@ -462,9 +469,10 @@ def cmd_probe(args: argparse.Namespace) -> int:
     sampled = pairs[::stride][: args.pairs]
 
     print(
-        "probing %d-%d days out: %d of %d pairs, nights=%s"
+        "probing %d-%d days out: %d of %d pairs | nights=%s carry_on=%d "
+        "max_stops=%d"
         % (args.min_days, args.min_days + args.window, len(sampled), len(pairs),
-           cfg.search.trip_nights)
+           cfg.search.trip_nights, cfg.search.carry_on_bags, cfg.search.max_stops)
     )
 
     try:
@@ -912,6 +920,9 @@ def build_parser() -> argparse.ArgumentParser:
     probe.add_argument("--window", type=int, default=30, help="span of departure dates")
     probe.add_argument("--pairs", type=int, default=15)
     probe.add_argument("--nights", type=int, nargs="+")
+    probe.add_argument("--carry-on", type=int, dest="carry_on")
+    probe.add_argument("--max-stops", type=int, dest="max_stops")
+    probe.add_argument("--to")
     probe.set_defaults(func=cmd_probe)
 
     dump = sub.add_parser(

@@ -23,6 +23,10 @@ on:
         description: "Instead of probing, dump one raw flight segment"
         required: false
         default: "false"
+      probe_args:
+        description: "Extra args for probe, e.g. --carry-on 0 --max-stops 2"
+        required: false
+        default: ""
       dump_args:
         description: "Extra args for dump, e.g. --to BUR"
         required: false
@@ -53,4 +57,5 @@ jobs:
           python -m flight_tracker probe \
             --min-days "${{ github.event.inputs.min_days }}" \
             --window "${{ github.event.inputs.window }}" \
-            --pairs "${{ github.event.inputs.pairs }}"
+            --pairs "${{ github.event.inputs.pairs }}" \
+            ${{ github.event.inputs.probe_args }}
