@@ -15,6 +15,7 @@ NOW = dt.datetime(2026, 9, 13, 12, 0, tzinfo=dt.timezone.utc)
 def offer(price, out="2026-10-14", nights=3, **kw):
     ret = (dt.date.fromisoformat(out) + dt.timedelta(days=nights)).isoformat()
     base = dict(
+        url="https://flights.test/x",
         stops=0,
         airlines=["JetBlue"],
         dep_airport="JFK",
@@ -68,13 +69,37 @@ class TestCheapestReport(unittest.TestCase):
 
     def test_reads_in_decision_order(self):
         line = cheapest_lines(stocked([offer(338)]), make_config()).splitlines()[0]
-        self.assertTrue(line.startswith("**$338**"))
+        self.assertTrue(line.startswith("**[$338]"))
         for earlier, later in (
             ("$338", "Wed Oct 14"),
             ("Wed Oct 14", "JFK"),
             ("JFK", "JetBlue"),
         ):
             self.assertLess(line.index(earlier), line.index(later))
+
+    def test_price_is_a_link(self):
+        """A flight number is a poor handle on a fare months out; the link isn't."""
+        line = cheapest_lines(
+            stocked([offer(338, url="https://flights.test/x")]), make_config()
+        ).splitlines()[0]
+        self.assertTrue(line.startswith("**[$338](https://flights.test/x)**"))
+
+    def test_price_without_a_url_still_renders(self):
+        line = cheapest_lines(
+            stocked([offer(338, url=None)]), make_config()
+        ).splitlines()[0]
+        self.assertTrue(line.startswith("**$338**"))
+
+    def test_links_dropped_rather_than_truncated_when_too_long(self):
+        """Better a linkless row than a row cut through the middle of a URL."""
+        offers = [
+            offer(300 + i, "2026-10-%02d" % (10 + i), url="https://x.test/" + "u" * 400)
+            for i in range(12)
+        ]
+        body = cheapest_lines(stocked(offers), make_config(), limit=12)
+        self.assertNotIn("](", body)
+        self.assertIn("$300", body)
+        self.assertLess(len(body), 4096)
 
     def test_no_code_fence(self):
         """Normal text reflows; a fixed-width table breaks mid-cell."""

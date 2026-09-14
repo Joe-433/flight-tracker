@@ -338,6 +338,15 @@ departure time, then airports, then airline.
 One fare per line, in decision order: price, dates, length, airports, stops,
 flight.
 
+**The price is a link** — tapping it reopens the exact Google Flights search
+that found that fare, with the dates, stop limit and bag filters already
+applied. A flight number is a poor handle on a fare three months out: schedules
+shift, and the number alone won't reconstruct the search. Masked links render
+inside embeds, which is one more reason the report is an embed rather than a
+plain message. If the links would push the description past Discord's 4096
+character cap, they're dropped wholesale rather than truncated mid-URL —
+better a linkless row than a row cut in half.
+
 **It's normal text, not a fixed-width table.** A monospace table is only
 readable while it fits the reader's window — Discord wraps at about 82
 characters, and past that it breaks every row mid-cell, destroying the exact

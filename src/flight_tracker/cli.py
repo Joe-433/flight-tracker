@@ -592,7 +592,9 @@ def _nights(snap: dict) -> int:
         return 99
 
 
-def _fare_line(price: float, snap: dict, extras: int, cfg: Config) -> str:
+def _fare_line(
+    price: float, snap: dict, extras: int, cfg: Config, linked: bool = True
+) -> str:
     """One fare as ordinary prose, not a table cell.
 
     A fixed-width table is only readable while it fits the reader's window; at
@@ -614,8 +616,15 @@ def _fare_line(price: float, snap: dict, extras: int, cfg: Config) -> str:
     out_date = str(snap.get("out_date", ""))
     ret_date = str(snap.get("ret_date", ""))
 
+    # The price is the link. A flight number is a poor handle on a fare months
+    # out -- schedules move and the number alone won't reconstruct the search --
+    # whereas the deeplink reopens the exact query that found this price.
+    # Masked links render in embeds; `linked=False` is the fallback for
+    # channels and sizes where they don't.
+    money = _money(price, cfg.search.currency)
+    url = str(snap.get("url") or "")
     bits = [
-        "**%s**" % _money(price, cfg.search.currency),
+        "**[%s](%s)**" % (money, url) if (linked and url) else "**%s**" % money,
         "%s \u2192 %s"
         % (
             _short_date(out_date) if out_date else "?",
@@ -652,10 +661,19 @@ def cheapest_lines(state: State, cfg: Config, limit: int = 5) -> str:
             order.append(key)
         groups[key].append((price, snap))
 
-    lines = []
-    for key in order[:limit]:
-        price, snap = groups[key][0]
-        lines.append(_fare_line(price, snap, len(groups[key]) - 1, cfg))
+    def render(linked: bool) -> List[str]:
+        out = []
+        for key in order[:limit]:
+            price, snap = groups[key][0]
+            out.append(_fare_line(price, snap, len(groups[key]) - 1, cfg, linked))
+        return out
+
+    lines = render(linked=True)
+    # An embed description is capped at 4096 characters and these deeplinks run
+    # ~200 each. Rather than truncate mid-link and break every row after it,
+    # drop the links and keep the fares readable.
+    if sum(len(line) for line in lines) + 2 * len(lines) > 3900:
+        lines = render(linked=False)
     # Blank line between fares: with wrapping, a bold price alone isn't enough
     # of a boundary.
     return "\n\n".join(lines)
