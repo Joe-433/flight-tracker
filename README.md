@@ -303,8 +303,8 @@ Thu Sep 24     Mon Sep 28         $310
 
 Cheapest fare per departure date, merged across history and the current sweep —
 so a rotating partial sweep still shows the whole window. `<- cheap day` marks
-days under the route-wide percentile cutoff. The daily digest workflow pushes
-this to your alert channels every morning.
+days under the route-wide percentile cutoff. Run it any time; nothing pushes it
+on a schedule.
 
 ### Record lows
 
@@ -459,9 +459,15 @@ ambiguous.
 
 **The gap it can't cover:** both triggers need a run to actually happen. If
 GitHub disables the cron (60 days of repo inactivity — committing state back
-each run prevents this) or Actions is down, nothing evaluates and nothing fires.
-That's what `digest.yml` is for: a daily message that also functions as a
-heartbeat. If the morning digest stops arriving, the tracker itself is dead.
+each run prevents this) or Actions is down, nothing evaluates and nothing
+fires. The Monday report is the canary for that: if it stops arriving, the
+tracker itself has stopped, not the fares.
+
+A daily digest used to fill that role, but it fired at the same hour as the
+Monday report and delivered two messages on Mondays. Weekly detection of a
+total outage is a fair price for not being messaged about the same fares twice.
+The repo itself is the faster signal anyway — `data/state.json` should carry a
+new commit every ten minutes.
 
 Exit code stays 0 when unhealthy so state still commits; pass `--fail-on-down`
 if you'd rather the workflow go red too.
