@@ -681,43 +681,96 @@ def cmd_report(args: argparse.Namespace) -> int:
 
 
 def cmd_dump(args: argparse.Namespace) -> int:
-    """Print one raw flight segment from Google's payload, index by index.
+    """Cross-check extracted flight numbers against the parsed itineraries.
 
-    Diagnostic only. fast-flights' model exposes a fixed subset of each
-    segment; when we want a field it doesn't surface (a flight number, say),
-    this is how we find out whether the data is even there.
+    The numbers come from a second read of the same payload, matched to
+    itineraries by list position. Position matching is the weak point: if the
+    two walks ever disagree about ordering, every flight number would be
+    attached to the wrong flight and nothing would look obviously broken.
+
+    The carrier code inside the flight-number field is the independent check.
+    `['WN', '2536', None, 'Southwest']` must agree with the airline the parser
+    reports for that same itinerary; if it doesn't, the lists are misaligned.
     """
     cfg = load_config(args.config)
     pairs = date_pairs(cfg)
     out_date, ret_date = pairs[len(pairs) // 2]
 
-    from fast_flights import fetch_flights_html  # noqa: PLC0415
+    from fast_flights import fetch_flights_html
+    from fast_flights.parser import parse
+
+    from .sources.pairs import _flight_numbers, _format_flight_no
 
     source = get_source(cfg)
     html = fetch_flights_html(source._query(out_date, ret_date))  # noqa: SLF001
+    results = parse(html)
+    numbers = _flight_numbers(html)
 
-    import json
-
-    from selectolax.lexbor import LexborHTMLParser  # noqa: PLC0415
-
-    script = LexborHTMLParser(html).css_first(r"script.ds\:1")
-    raw = script.text().split("data:", 1)[1].rsplit(",", 1)[0]
-    payload = json.loads(raw)
-
-    itineraries = payload[3][0]
-    if not itineraries:
-        print("no itineraries returned")
+    print("dates   : %s -> %s" % (out_date, ret_date))
+    print("parsed  : %d itineraries" % len(results))
+    print("numbers : %d itineraries" % len(numbers))
+    if len(results) != len(numbers):
+        print("MISALIGNED: counts differ, flight numbers would be suppressed")
         return 1
 
-    segment = itineraries[0][0][2][0]
-    print("dates: %s -> %s" % (out_date, ret_date))
-    print("segment has %d fields\n" % len(segment))
-    for index, value in enumerate(segment):
-        text = repr(value)
-        if len(text) > 110:
-            text = text[:110] + "..."
-        print("  [%2d] %s" % (index, text))
-    return 0
+    agree = disagree = unknown = 0
+    print("")
+    print("%-8s %-22s %-18s %-16s %s" % ("PRICE", "AIRLINE (parser)", "FLIGHT (payload)", "SEGMENTS", "MATCH"))
+    for item, segment_numbers in zip(results, numbers):
+        airlines = list(getattr(item, "airlines", []) or [])
+        legs = list(getattr(item, "flights", []) or [])
+        flight_no = _format_flight_no(segment_numbers, len(legs))
+        carrier = (segment_numbers[0] or "").split(" ")[0] if segment_numbers else ""
+
+        if not flight_no or not airlines:
+            verdict, unknown = "?", unknown + 1
+        else:
+            # The payload gives the airline name alongside the code; the
+            # parser reports names independently. They must describe the
+            # same carrier.
+            names = " ".join(airlines).lower()
+            initials = "".join(word[0] for word in names.split() if word)
+            verdict = "ok" if (
+                carrier.lower() in names
+                or carrier.lower() in initials
+                or names.startswith(carrier[:2].lower())
+                or _CARRIERS.get(carrier, "").lower() in names
+            ) else "MISMATCH"
+            if verdict == "ok":
+                agree += 1
+            else:
+                disagree += 1
+
+        print(
+            "%-8s %-22s %-18s %-16s %s"
+            % (
+                getattr(item, "price", "?"),
+                ", ".join(airlines)[:22],
+                flight_no or "-",
+                "%d leg(s)" % len(legs),
+                verdict,
+            )
+        )
+
+    print("")
+    print("agree %d | MISMATCH %d | unknown %d" % (agree, disagree, unknown))
+    return 1 if disagree else 0
+
+
+# Codes whose airline name shares no letters with the code.
+_CARRIERS = {
+    "WN": "Southwest",
+    "B6": "JetBlue",
+    "AS": "Alaska",
+    "AA": "American",
+    "DL": "Delta",
+    "UA": "United",
+    "NK": "Spirit",
+    "F9": "Frontier",
+    "HA": "Hawaiian",
+    "SY": "Sun Country",
+    "G4": "Allegiant",
+}
 
 
 def build_parser() -> argparse.ArgumentParser:
