@@ -125,6 +125,11 @@ def _clock(moment: Any) -> Optional[str]:
         return None
 
 
+def _label(dest: str) -> str:
+    """A MID is unreadable in a log line; an airport code is the label itself."""
+    return dest if not dest.startswith("/m/") else "primary"
+
+
 def _explain(exc: Exception) -> str:
     """Translate the scraper's failure modes into something actionable.
 
@@ -208,7 +213,7 @@ class PairsSource(Source):
         """Cheapest roundtrip for one date pair, or None."""
         query = self._query(out_date, ret_date, dest)
         url = query.url()
-        results = self._fetch(query, out_date, ret_date)
+        results = self._fetch(query, out_date, ret_date, dest)
         if not results:
             return None
 
@@ -229,7 +234,7 @@ class PairsSource(Source):
         """
         query = self._query(out_date, ret_date, dest)
         url = query.url()
-        results = self._fetch(query, out_date, ret_date)
+        results = self._fetch(query, out_date, ret_date, dest)
         if not results:
             return []
 
@@ -269,7 +274,9 @@ class PairsSource(Source):
             offers.append(offer)
         return offers
 
-    def _fetch(self, query: Any, out_date: str, ret_date: str) -> Any:
+    def _fetch(
+        self, query: Any, out_date: str, ret_date: str, dest: Optional[str] = None
+    ) -> Any:
         last_exc: Optional[Exception] = None
         results = None
         self._numbers = []
@@ -285,7 +292,13 @@ class PairsSource(Source):
                     time.sleep(1.5 * (attempt + 1))
 
         if last_exc is not None and not results:
-            self.errors.append("%s->%s: %s" % (out_date, ret_date, _explain(last_exc)))
+            # Name the destination: with several airports in play, "no flights
+            # found" is useless unless you know which airport found none.
+            self.errors.append(
+                "%s %s->%s: %s"
+                % (_label(dest or self.cfg.route.destination), out_date, ret_date,
+                   _explain(last_exc))
+            )
             return None
         return results
 
