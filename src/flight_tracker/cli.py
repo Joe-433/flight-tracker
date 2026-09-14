@@ -730,8 +730,12 @@ def cmd_dump(args: argparse.Namespace) -> int:
         return 1
 
     agree = disagree = unknown = 0
+    from collections import Counter
+
+    origins: "Counter[str]" = Counter()
+    arrivals: "Counter[str]" = Counter()
     print("")
-    print("%-8s %-22s %-18s %-16s %s" % ("PRICE", "AIRLINE (parser)", "FLIGHT (payload)", "SEGMENTS", "MATCH"))
+    print("%-8s %-10s %-20s %-18s %-10s %s" % ("PRICE", "ROUTE", "AIRLINE (parser)", "FLIGHT (payload)", "SEGMENTS", "MATCH"))
     for item, segment_numbers in zip(results, numbers):
         airlines = list(getattr(item, "airlines", []) or [])
         legs = list(getattr(item, "flights", []) or [])
@@ -757,11 +761,20 @@ def cmd_dump(args: argparse.Namespace) -> int:
             else:
                 disagree += 1
 
+        route = "?"
+        if legs:
+            route = "%s\u2192%s" % (
+                getattr(getattr(legs[0], "from_airport", None), "code", "?"),
+                getattr(getattr(legs[-1], "to_airport", None), "code", "?"),
+            )
+            arrivals[getattr(getattr(legs[-1], "to_airport", None), "code", "?")] += 1
+            origins[getattr(getattr(legs[0], "from_airport", None), "code", "?")] += 1
         print(
-            "%-8s %-22s %-18s %-16s %s"
+            "%-8s %-10s %-20s %-18s %-10s %s"
             % (
                 getattr(item, "price", "?"),
-                ", ".join(airlines)[:22],
+                route,
+                ", ".join(airlines)[:20],
                 flight_no or "-",
                 "%d leg(s)" % len(legs),
                 verdict,
@@ -770,6 +783,14 @@ def cmd_dump(args: argparse.Namespace) -> int:
 
     print("")
     print("agree %d | MISMATCH %d | unknown %d" % (agree, disagree, unknown))
+    print("")
+    print("ORIGIN airports offered      : %s"
+          % ", ".join("%s x%d" % kv for kv in origins.most_common()))
+    print("DESTINATION airports offered : %s"
+          % ", ".join("%s x%d" % kv for kv in arrivals.most_common()))
+    print("")
+    print("These are ALL itineraries Google returned, not just the cheapest --")
+    print("so this shows whether the city MIDs really search the whole metro.")
     return 1 if disagree else 0
 
 
