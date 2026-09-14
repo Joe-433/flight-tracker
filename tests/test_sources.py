@@ -107,6 +107,26 @@ class TestPlanSlice(unittest.TestCase):
             previous = (cursors["0"], cursors["2"])
         self.assertGreater(near_wraps, far_wraps)
 
+    def test_cursors_for_removed_bands_are_dropped(self):
+        """Switching to a flat rotation shouldn't leave orphan cursors in state."""
+        cfg = make_config(
+            search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},
+            source={"pairs_per_run": 4, "bands": []},
+        )
+        _, cursors = plan_slice(cfg, {"0": 2, "1": 9, "2": 4, "3": 7}, today=TODAY)
+        self.assertEqual(sorted(cursors), ["0"])
+
+    def test_existing_cursor_position_is_resumed(self):
+        cfg = make_config(
+            search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},
+            source={"pairs_per_run": 4, "bands": []},
+        )
+        picked, _ = plan_slice(cfg, {"0": 4}, today=TODAY)
+        expected, _ = plan_slice(cfg, {"0": 4}, today=TODAY)
+        self.assertEqual(picked, expected)
+        first, _ = plan_slice(cfg, {}, today=TODAY)
+        self.assertNotEqual(picked, first)
+
     def test_no_bands_falls_back_to_one_rotation(self):
         cfg = make_config(
             search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},

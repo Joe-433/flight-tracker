@@ -142,7 +142,7 @@ def plan_slice(
     one pass over the far horizon.
     """
     today = today or dt.date.today()
-    cursors = dict(cursors or {})
+    previous = dict(cursors or {})
     pairs = date_pairs(cfg, today)
 
     bands = cfg.source.bands or [
@@ -160,12 +160,15 @@ def plan_slice(
 
     total_share = sum(b.share for b in bands) or 1.0
     picked: List[Tuple[str, str]] = []
+    # Built fresh rather than copied, so cursors for bands that no longer exist
+    # don't linger in state forever confusing the logs.
+    cursors: Dict[str, int] = {}
     for index, (band, bucket) in enumerate(zip(bands, buckets)):
         if not bucket:
             continue
         budget = max(1, int(round(cfg.source.pairs_per_run * band.share / total_share)))
         got, cursors[str(index)] = slice_for_run(
-            bucket, int(cursors.get(str(index), 0)), budget
+            bucket, int(previous.get(str(index), 0)), budget
         )
         picked.extend(got)
     return picked, cursors
