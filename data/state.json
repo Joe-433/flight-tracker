@@ -28,15 +28,15 @@
   "consecutive_failures": 0,
   "cursors": {
     "0": 261,
-    "alt": 175
+    "alt": 180
   },
   "deadman": {
     "down": false,
     "last_notified": null,
     "since": null
   },
-  "last_data": "2026-09-14T10:50:32.095417+00:00",
-  "last_run": "2026-09-14T10:50:32.095417+00:00",
+  "last_data": "2026-09-14T11:11:56.208021+00:00",
+  "last_run": "2026-09-14T11:11:56.208021+00:00",
   "latest": {
     "2026-09-28|2026-10-03|BUR|1": {
       "airlines": [
@@ -66,7 +66,7 @@
       "out_date": "2026-09-28",
       "price": 522.0,
       "ret_date": "2026-10-03",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTAzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -82,7 +82,7 @@
       "out_date": "2026-09-28",
       "price": 427.0,
       "ret_date": "2026-10-03",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTAzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -178,7 +178,7 @@
       "out_date": "2026-09-28",
       "price": 577.0,
       "ret_date": "2026-10-04",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTA0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -194,7 +194,7 @@
       "out_date": "2026-09-28",
       "price": 449.0,
       "ret_date": "2026-10-04",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTA0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -274,7 +274,7 @@
       "out_date": "2026-09-28",
       "price": 542.0,
       "ret_date": "2026-10-05",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTA1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -290,7 +290,7 @@
       "out_date": "2026-09-28",
       "price": 453.0,
       "ret_date": "2026-10-05",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMDktMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTA1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -4790,6 +4790,22 @@
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTE4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
+    "2026-10-12|2026-10-18|LGB|1": {
+      "airlines": [
+        "Alaska"
+      ],
+      "arr_airport": "LGB",
+      "arr_time": "14:10",
+      "dep_airport": "JFK",
+      "dep_time": "20:25",
+      "flight_no": "AS 17 / 717",
+      "out_date": "2026-10-12",
+      "price": 865.0,
+      "ret_date": "2026-10-18",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDTEdCGiISCjIwMjYtMTAtMTgoAWoFEgNMR0JyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
     "2026-10-12|2026-10-18|ONT|1": {
       "airlines": [
         "American"
@@ -4838,6 +4854,22 @@
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMTgoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
     },
+    "2026-10-12|2026-10-19|BUR|1": {
+      "airlines": [
+        "Alaska"
+      ],
+      "arr_airport": "BUR",
+      "arr_time": "13:14",
+      "dep_airport": "EWR",
+      "dep_time": "06:30",
+      "flight_no": "AS 1399 / 318",
+      "out_date": "2026-10-12",
+      "price": 688.0,
+      "ret_date": "2026-10-19",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDQlVSGiISCjIwMjYtMTAtMTkoAWoFEgNCVVJyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
     "2026-10-12|2026-10-19|LAX|0": {
       "airlines": [
         "JetBlue"
@@ -4869,6 +4901,70 @@
       "seen": "2026-09-14T00:08:18.019941+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEwLTE5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-10-12|2026-10-19|LGB|1": {
+      "airlines": [
+        "Alaska"
+      ],
+      "arr_airport": "LGB",
+      "arr_time": "14:10",
+      "dep_airport": "JFK",
+      "dep_time": "20:25",
+      "flight_no": "AS 17 / 717",
+      "out_date": "2026-10-12",
+      "price": 830.0,
+      "ret_date": "2026-10-19",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDTEdCGiISCjIwMjYtMTAtMTkoAWoFEgNMR0JyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-12|2026-10-19|ONT|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "ONT",
+      "arr_time": "22:53",
+      "dep_airport": "EWR",
+      "dep_time": "17:27",
+      "flight_no": "AA 3041 / 1238",
+      "out_date": "2026-10-12",
+      "price": 598.0,
+      "ret_date": "2026-10-19",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDT05UGiISCjIwMjYtMTAtMTkoAWoFEgNPTlRyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-12|2026-10-19|SNA|0": {
+      "airlines": [
+        "United"
+      ],
+      "arr_airport": "SNA",
+      "arr_time": "17:20",
+      "dep_airport": "EWR",
+      "dep_time": "14:31",
+      "flight_no": "UA 2477",
+      "out_date": "2026-10-12",
+      "price": 754.0,
+      "ret_date": "2026-10-19",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMTkoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-12|2026-10-19|SNA|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "SNA",
+      "arr_time": "10:45",
+      "dep_airport": "LGA",
+      "dep_time": "21:16",
+      "flight_no": "AA 1689 / 699",
+      "out_date": "2026-10-12",
+      "price": 587.0,
+      "ret_date": "2026-10-19",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMTIoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMTkoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
     },
     "2026-10-13|2026-10-18|LAX|0": {
       "airlines": [
@@ -11248,7 +11344,7 @@
       "out_date": "2026-12-24",
       "price": 543.0,
       "ret_date": "2026-12-29",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11264,7 +11360,7 @@
       "out_date": "2026-12-24",
       "price": 418.0,
       "ret_date": "2026-12-29",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11280,7 +11376,7 @@
       "out_date": "2026-12-24",
       "price": 553.0,
       "ret_date": "2026-12-30",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11296,7 +11392,7 @@
       "out_date": "2026-12-24",
       "price": 418.0,
       "ret_date": "2026-12-30",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11312,7 +11408,7 @@
       "out_date": "2026-12-24",
       "price": 543.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11321,14 +11417,14 @@
         "American"
       ],
       "arr_airport": "LAX",
-      "arr_time": "19:16",
+      "arr_time": "14:29",
       "dep_airport": "EWR",
-      "dep_time": "13:30",
-      "flight_no": "AA 3204 / 2956",
+      "dep_time": "06:45",
+      "flight_no": "AA 2501 / 3161",
       "out_date": "2026-12-24",
       "price": 429.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11344,7 +11440,7 @@
       "out_date": "2026-12-25",
       "price": 553.0,
       "ret_date": "2026-12-30",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11360,7 +11456,7 @@
       "out_date": "2026-12-25",
       "price": 418.0,
       "ret_date": "2026-12-30",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11376,7 +11472,7 @@
       "out_date": "2026-12-25",
       "price": 543.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11392,7 +11488,7 @@
       "out_date": "2026-12-25",
       "price": 419.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11408,7 +11504,7 @@
       "out_date": "2026-12-25",
       "price": 553.0,
       "ret_date": "2027-01-01",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11424,7 +11520,7 @@
       "out_date": "2026-12-25",
       "price": 429.0,
       "ret_date": "2027-01-01",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjUoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11440,7 +11536,7 @@
       "out_date": "2026-12-26",
       "price": 582.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11456,7 +11552,7 @@
       "out_date": "2026-12-26",
       "price": 645.0,
       "ret_date": "2026-12-31",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11472,7 +11568,7 @@
       "out_date": "2026-12-26",
       "price": 592.0,
       "ret_date": "2027-01-01",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11488,7 +11584,7 @@
       "out_date": "2026-12-26",
       "price": 645.0,
       "ret_date": "2027-01-01",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAxKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11504,7 +11600,7 @@
       "out_date": "2026-12-26",
       "price": 745.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11520,7 +11616,7 @@
       "out_date": "2026-12-26",
       "price": 851.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjYoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11568,7 +11664,7 @@
       "out_date": "2026-12-27",
       "price": 801.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjcoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11584,7 +11680,7 @@
       "out_date": "2026-12-27",
       "price": 793.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjcoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11632,7 +11728,7 @@
       "out_date": "2026-12-28",
       "price": 736.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11648,7 +11744,7 @@
       "out_date": "2026-12-28",
       "price": 742.0,
       "ret_date": "2027-01-02",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAyKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11664,7 +11760,7 @@
       "out_date": "2026-12-28",
       "price": 633.0,
       "ret_date": "2027-01-03",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11680,7 +11776,7 @@
       "out_date": "2026-12-28",
       "price": 648.0,
       "ret_date": "2027-01-03",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTAzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11696,7 +11792,7 @@
       "out_date": "2026-12-28",
       "price": 583.0,
       "ret_date": "2027-01-04",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 0,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTA0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     },
@@ -11712,7 +11808,7 @@
       "out_date": "2026-12-28",
       "price": 554.0,
       "ret_date": "2027-01-04",
-      "seen": "2026-09-14T10:50:32.095417+00:00",
+      "seen": "2026-09-14T11:11:56.208021+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI3LTAxLTA0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     }
@@ -14214,6 +14310,12 @@
         512.0
       ]
     ],
+    "2026-10-12|2026-10-18|LGB|1": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        865.0
+      ]
+    ],
     "2026-10-12|2026-10-18|ONT|1": [
       [
         "2026-09-14T10:50:32.095417+00:00",
@@ -14230,6 +14332,12 @@
       [
         "2026-09-14T10:50:32.095417+00:00",
         753.0
+      ]
+    ],
+    "2026-10-12|2026-10-19|BUR|1": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        688.0
       ]
     ],
     "2026-10-12|2026-10-19|LAX|0": [
@@ -14250,6 +14358,30 @@
       [
         "2026-09-14T00:08:18.019941+00:00",
         437.0
+      ]
+    ],
+    "2026-10-12|2026-10-19|LGB|1": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        830.0
+      ]
+    ],
+    "2026-10-12|2026-10-19|ONT|1": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        598.0
+      ]
+    ],
+    "2026-10-12|2026-10-19|SNA|0": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        754.0
+      ]
+    ],
+    "2026-10-12|2026-10-19|SNA|1": [
+      [
+        "2026-09-14T11:11:56.208021+00:00",
+        587.0
       ]
     ],
     "2026-10-13|2026-10-18|LAX|0": [
