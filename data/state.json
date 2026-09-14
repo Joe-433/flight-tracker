@@ -27,16 +27,16 @@
   },
   "consecutive_failures": 0,
   "cursors": {
-    "0": 242,
-    "alt": 40
+    "0": 261,
+    "alt": 45
   },
   "deadman": {
     "down": false,
     "last_notified": null,
     "since": null
   },
-  "last_data": "2026-09-14T02:23:22.061905+00:00",
-  "last_run": "2026-09-14T02:23:22.061905+00:00",
+  "last_data": "2026-09-14T02:41:27.165441+00:00",
+  "last_run": "2026-09-14T02:41:27.165441+00:00",
   "latest": {
     "2026-09-28|2026-10-03|BUR|1": {
       "airlines": [
@@ -931,6 +931,118 @@
       "seen": "2026-09-14T02:23:22.061905+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMDYoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|BUR|1": {
+      "airlines": [
+        "Southwest"
+      ],
+      "arr_airport": "BUR",
+      "arr_time": "21:45",
+      "dep_airport": "LGA",
+      "dep_time": "14:00",
+      "flight_no": "WN 430 / 4390",
+      "out_date": "2026-10-01",
+      "price": 518.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDQlVSGiISCjIwMjYtMTAtMDcoAWoFEgNCVVJyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|LGB|1": {
+      "airlines": [
+        "Southwest"
+      ],
+      "arr_airport": "LGB",
+      "arr_time": "14:25",
+      "dep_airport": "LGA",
+      "dep_time": "07:15",
+      "flight_no": "WN 4430 / 3035",
+      "out_date": "2026-10-01",
+      "price": 625.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDTEdCGiISCjIwMjYtMTAtMDcoAWoFEgNMR0JyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|ONT|0": {
+      "airlines": [
+        "JetBlue"
+      ],
+      "arr_airport": "ONT",
+      "arr_time": "20:57",
+      "dep_airport": "JFK",
+      "dep_time": "17:59",
+      "flight_no": "B6 355",
+      "out_date": "2026-10-01",
+      "price": 607.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDT05UGiISCjIwMjYtMTAtMDcoAWoFEgNPTlRyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|ONT|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "ONT",
+      "arr_time": "13:25",
+      "dep_airport": "JFK",
+      "dep_time": "07:59",
+      "flight_no": "AA 2234 / 2635",
+      "out_date": "2026-10-01",
+      "price": 392.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDT05UGiISCjIwMjYtMTAtMDcoAWoFEgNPTlRyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|SNA|0": {
+      "airlines": [
+        "United"
+      ],
+      "arr_airport": "SNA",
+      "arr_time": "20:03",
+      "dep_airport": "EWR",
+      "dep_time": "17:01",
+      "flight_no": "UA 1690",
+      "out_date": "2026-10-01",
+      "price": 598.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMDcoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-07|SNA|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "SNA",
+      "arr_time": "19:59",
+      "dep_airport": "JFK",
+      "dep_time": "12:00",
+      "flight_no": "AA 493 / 358",
+      "out_date": "2026-10-01",
+      "price": 459.0,
+      "ret_date": "2026-10-07",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDU05BGiISCjIwMjYtMTAtMDcoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
+    },
+    "2026-10-01|2026-10-08|BUR|1": {
+      "airlines": [
+        "Southwest"
+      ],
+      "arr_airport": "BUR",
+      "arr_time": "21:45",
+      "dep_airport": "LGA",
+      "dep_time": "14:00",
+      "flight_no": "WN 430 / 4390",
+      "out_date": "2026-10-01",
+      "price": 649.0,
+      "ret_date": "2026-10-08",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTAtMDEoAWoLEgkvbS8wMl8yODZyBRIDQlVSGiISCjIwMjYtMTAtMDgoAWoFEgNCVVJyCxIJL20vMDJfMjg2QgEBSAFqBBABGACYAQE=&hl=&curr=USD"
     },
     "2026-10-02|2026-10-07|LAX|0": {
       "airlines": [
@@ -7713,6 +7825,614 @@
       "seen": "2026-09-14T02:23:22.061905+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTcoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTIzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-17|2026-12-24|LAX|0": {
+      "airlines": [
+        "JetBlue"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "10:19",
+      "dep_airport": "JFK",
+      "dep_time": "07:00",
+      "flight_no": "B6 523",
+      "out_date": "2026-12-17",
+      "price": 478.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTcoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-17|2026-12-24|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "15:35",
+      "dep_airport": "EWR",
+      "dep_time": "07:30",
+      "flight_no": "AA 2938 / 2966",
+      "out_date": "2026-12-17",
+      "price": 429.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTcoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-23|LAX|0": {
+      "airlines": [
+        "Alaska"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "21:49",
+      "dep_airport": "EWR",
+      "dep_time": "18:30",
+      "flight_no": "AS 276",
+      "out_date": "2026-12-18",
+      "price": 604.0,
+      "ret_date": "2026-12-23",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTIzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-23|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "14:29",
+      "dep_airport": "LGA",
+      "dep_time": "07:59",
+      "flight_no": "AA 1362 / 3161",
+      "out_date": "2026-12-18",
+      "price": 573.0,
+      "ret_date": "2026-12-23",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTIzKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-24|LAX|0": {
+      "airlines": [
+        "Alaska"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "21:49",
+      "dep_airport": "EWR",
+      "dep_time": "18:30",
+      "flight_no": "AS 276",
+      "out_date": "2026-12-18",
+      "price": 560.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-24|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "14:29",
+      "dep_airport": "LGA",
+      "dep_time": "07:59",
+      "flight_no": "AA 1362 / 3161",
+      "out_date": "2026-12-18",
+      "price": 573.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-25|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:50",
+      "dep_airport": "JFK",
+      "dep_time": "08:30",
+      "flight_no": "AA 1",
+      "out_date": "2026-12-18",
+      "price": 563.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-18|2026-12-25|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "14:29",
+      "dep_airport": "LGA",
+      "dep_time": "07:59",
+      "flight_no": "AA 1362 / 3161",
+      "out_date": "2026-12-18",
+      "price": 573.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-24|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-19",
+      "price": 562.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-24|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "LGA",
+      "dep_time": "07:32",
+      "flight_no": "AA 1362 / 3083",
+      "out_date": "2026-12-19",
+      "price": 605.0,
+      "ret_date": "2026-12-24",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI0KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-25|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-19",
+      "price": 562.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-25|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "LGA",
+      "dep_time": "07:32",
+      "flight_no": "AA 1362 / 3083",
+      "out_date": "2026-12-19",
+      "price": 605.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-26|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-19",
+      "price": 622.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-19|2026-12-26|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "LGA",
+      "dep_time": "07:32",
+      "flight_no": "AA 1362 / 3083",
+      "out_date": "2026-12-19",
+      "price": 709.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-25|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-20",
+      "price": 563.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-25|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "16:00",
+      "dep_airport": "LGA",
+      "dep_time": "06:00",
+      "flight_no": "AA 1417 / 1021",
+      "out_date": "2026-12-20",
+      "price": 593.0,
+      "ret_date": "2026-12-25",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI1KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-26|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-20",
+      "price": 623.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-26|LAX|1": {
+      "airlines": [
+        "United"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "07:17",
+      "dep_airport": "EWR",
+      "dep_time": "21:09",
+      "flight_no": "UA 2825 / 2039",
+      "out_date": "2026-12-20",
+      "price": 694.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-27|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "22:31",
+      "dep_airport": "JFK",
+      "dep_time": "19:00",
+      "flight_no": "AA 117",
+      "out_date": "2026-12-20",
+      "price": 623.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-20|2026-12-27|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "16:00",
+      "dep_airport": "LGA",
+      "dep_time": "06:00",
+      "flight_no": "AA 1417 / 1021",
+      "out_date": "2026-12-20",
+      "price": 697.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-26|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:50",
+      "dep_airport": "JFK",
+      "dep_time": "08:30",
+      "flight_no": "AA 1",
+      "out_date": "2026-12-21",
+      "price": 603.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-26|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "13:17",
+      "dep_airport": "LGA",
+      "dep_time": "06:00",
+      "flight_no": "AA 1417 / 1979",
+      "out_date": "2026-12-21",
+      "price": 553.0,
+      "ret_date": "2026-12-26",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI2KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-27|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-21",
+      "price": 648.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-27|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "23:49",
+      "dep_airport": "EWR",
+      "dep_time": "17:24",
+      "flight_no": "AA 1936 / 698",
+      "out_date": "2026-12-21",
+      "price": 563.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-28|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:21",
+      "dep_airport": "JFK",
+      "dep_time": "17:00",
+      "flight_no": "AA 306",
+      "out_date": "2026-12-21",
+      "price": 618.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-21|2026-12-28|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "23:49",
+      "dep_airport": "EWR",
+      "dep_time": "17:24",
+      "flight_no": "AA 1936 / 698",
+      "out_date": "2026-12-21",
+      "price": 513.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-27|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:50",
+      "dep_airport": "JFK",
+      "dep_time": "08:30",
+      "flight_no": "AA 1",
+      "out_date": "2026-12-22",
+      "price": 632.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-27|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:06",
+      "dep_airport": "EWR",
+      "dep_time": "05:07",
+      "flight_no": "AA 3185 / 2124",
+      "out_date": "2026-12-22",
+      "price": 563.0,
+      "ret_date": "2026-12-27",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI3KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-28|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "22:31",
+      "dep_airport": "JFK",
+      "dep_time": "19:00",
+      "flight_no": "AA 117",
+      "out_date": "2026-12-22",
+      "price": 562.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-28|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:06",
+      "dep_airport": "EWR",
+      "dep_time": "05:07",
+      "flight_no": "AA 3185 / 2124",
+      "out_date": "2026-12-22",
+      "price": 513.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-29|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "22:31",
+      "dep_airport": "JFK",
+      "dep_time": "19:00",
+      "flight_no": "AA 117",
+      "out_date": "2026-12-22",
+      "price": 532.0,
+      "ret_date": "2026-12-29",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-22|2026-12-29|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "14:29",
+      "dep_airport": "LGA",
+      "dep_time": "06:00",
+      "flight_no": "AA 1417 / 3161",
+      "out_date": "2026-12-22",
+      "price": 449.0,
+      "ret_date": "2026-12-29",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-28|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "11:50",
+      "dep_airport": "JFK",
+      "dep_time": "08:30",
+      "flight_no": "AA 1",
+      "out_date": "2026-12-23",
+      "price": 602.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-28|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "EWR",
+      "dep_time": "10:46",
+      "flight_no": "AA 1664 / 3083",
+      "out_date": "2026-12-23",
+      "price": 589.0,
+      "ret_date": "2026-12-28",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI4KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-29|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "22:31",
+      "dep_airport": "JFK",
+      "dep_time": "19:00",
+      "flight_no": "AA 117",
+      "out_date": "2026-12-23",
+      "price": 532.0,
+      "ret_date": "2026-12-29",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-29|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "EWR",
+      "dep_time": "10:46",
+      "flight_no": "AA 1664 / 3083",
+      "out_date": "2026-12-23",
+      "price": 524.0,
+      "ret_date": "2026-12-29",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTI5KAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-30|LAX|0": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "22:31",
+      "dep_airport": "JFK",
+      "dep_time": "19:00",
+      "flight_no": "AA 117",
+      "out_date": "2026-12-23",
+      "price": 542.0,
+      "ret_date": "2026-12-30",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 0,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
+    },
+    "2026-12-23|2026-12-30|LAX|1": {
+      "airlines": [
+        "American"
+      ],
+      "arr_airport": "LAX",
+      "arr_time": "20:44",
+      "dep_airport": "EWR",
+      "dep_time": "10:46",
+      "flight_no": "AA 1664 / 3083",
+      "out_date": "2026-12-23",
+      "price": 524.0,
+      "ret_date": "2026-12-30",
+      "seen": "2026-09-14T02:41:27.165441+00:00",
+      "stops": 1,
+      "url": "https://www.google.com/travel/flights/search?tfs=GikSCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyDBIKL20vMDMwcWIzdBopEgoyMDI2LTEyLTMwKAFqDBIKL20vMDMwcWIzdHILEgkvbS8wMl8yODZCAQFIAWoEEAEYAJgBAQ==&hl=&curr=USD"
     }
   },
   "observations": {
@@ -8472,6 +9192,12 @@
         459.0
       ]
     ],
+    "2026-10-01|2026-10-07|BUR|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        518.0
+      ]
+    ],
     "2026-10-01|2026-10-07|LAX|0": [
       [
         "2026-09-13T07:34:44.313322+00:00",
@@ -8484,6 +9210,42 @@
       [
         "2026-09-13T21:46:59.206113+00:00",
         557.0
+      ]
+    ],
+    "2026-10-01|2026-10-07|LGB|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        625.0
+      ]
+    ],
+    "2026-10-01|2026-10-07|ONT|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        607.0
+      ]
+    ],
+    "2026-10-01|2026-10-07|ONT|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        392.0
+      ]
+    ],
+    "2026-10-01|2026-10-07|SNA|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        598.0
+      ]
+    ],
+    "2026-10-01|2026-10-07|SNA|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        459.0
+      ]
+    ],
+    "2026-10-01|2026-10-08|BUR|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        649.0
       ]
     ],
     "2026-10-01|2026-10-08|LAX|0": [
@@ -12012,6 +12774,234 @@
       [
         "2026-09-14T02:23:22.061905+00:00",
         418.0
+      ]
+    ],
+    "2026-12-17|2026-12-24|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        478.0
+      ]
+    ],
+    "2026-12-17|2026-12-24|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        429.0
+      ]
+    ],
+    "2026-12-18|2026-12-23|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        604.0
+      ]
+    ],
+    "2026-12-18|2026-12-23|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        573.0
+      ]
+    ],
+    "2026-12-18|2026-12-24|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        560.0
+      ]
+    ],
+    "2026-12-18|2026-12-24|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        573.0
+      ]
+    ],
+    "2026-12-18|2026-12-25|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        563.0
+      ]
+    ],
+    "2026-12-18|2026-12-25|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        573.0
+      ]
+    ],
+    "2026-12-19|2026-12-24|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        562.0
+      ]
+    ],
+    "2026-12-19|2026-12-24|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        605.0
+      ]
+    ],
+    "2026-12-19|2026-12-25|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        562.0
+      ]
+    ],
+    "2026-12-19|2026-12-25|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        605.0
+      ]
+    ],
+    "2026-12-19|2026-12-26|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        622.0
+      ]
+    ],
+    "2026-12-19|2026-12-26|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        709.0
+      ]
+    ],
+    "2026-12-20|2026-12-25|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        563.0
+      ]
+    ],
+    "2026-12-20|2026-12-25|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        593.0
+      ]
+    ],
+    "2026-12-20|2026-12-26|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        623.0
+      ]
+    ],
+    "2026-12-20|2026-12-26|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        694.0
+      ]
+    ],
+    "2026-12-20|2026-12-27|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        623.0
+      ]
+    ],
+    "2026-12-20|2026-12-27|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        697.0
+      ]
+    ],
+    "2026-12-21|2026-12-26|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        603.0
+      ]
+    ],
+    "2026-12-21|2026-12-26|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        553.0
+      ]
+    ],
+    "2026-12-21|2026-12-27|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        648.0
+      ]
+    ],
+    "2026-12-21|2026-12-27|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        563.0
+      ]
+    ],
+    "2026-12-21|2026-12-28|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        618.0
+      ]
+    ],
+    "2026-12-21|2026-12-28|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        513.0
+      ]
+    ],
+    "2026-12-22|2026-12-27|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        632.0
+      ]
+    ],
+    "2026-12-22|2026-12-27|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        563.0
+      ]
+    ],
+    "2026-12-22|2026-12-28|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        562.0
+      ]
+    ],
+    "2026-12-22|2026-12-28|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        513.0
+      ]
+    ],
+    "2026-12-22|2026-12-29|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        532.0
+      ]
+    ],
+    "2026-12-22|2026-12-29|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        449.0
+      ]
+    ],
+    "2026-12-23|2026-12-28|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        602.0
+      ]
+    ],
+    "2026-12-23|2026-12-28|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        589.0
+      ]
+    ],
+    "2026-12-23|2026-12-29|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        532.0
+      ]
+    ],
+    "2026-12-23|2026-12-29|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        524.0
+      ]
+    ],
+    "2026-12-23|2026-12-30|LAX|0": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        542.0
+      ]
+    ],
+    "2026-12-23|2026-12-30|LAX|1": [
+      [
+        "2026-09-14T02:41:27.165441+00:00",
+        524.0
       ]
     ]
   },
