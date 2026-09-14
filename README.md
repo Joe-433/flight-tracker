@@ -475,6 +475,27 @@ if you'd rather the workflow go red too.
 
 ---
 
+### Concurrent runs
+
+`data/state.json` is a generated document that every run rewrites in full, so
+`git pull --rebase` can only ever conflict on it — and a failed rebase leaves
+the checkout on a detached HEAD that can't be pushed. That took a run down on
+2026-09-14.
+
+The commit step rebases nothing now. It resets to the remote, merges the remote
+state into its own **semantically**, and pushes that, retrying five times with
+backoff if it loses another race. The merge is well defined because the data
+says what the winner should be:
+
+| Field | Winner |
+|---|---|
+| observations | union, de-duplicated by timestamp, kept in time order |
+| latest | freshest snapshot — it's what the reports render |
+| alerts | most recent, so a cooldown is never silently reset |
+| records | lowest price, because a record low is a fact about the route |
+| cursors | furthest, so the losing run's ground isn't re-swept |
+| failure streak | a success anywhere clears it |
+
 ## Layout
 
 ```

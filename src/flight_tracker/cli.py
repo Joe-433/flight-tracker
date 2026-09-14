@@ -860,6 +860,27 @@ _CARRIERS = {
 }
 
 
+def cmd_merge(args: argparse.Namespace) -> int:
+    """Merge another state file into this one, in place.
+
+    Used by the workflow when a concurrent push beat this run to the remote.
+    """
+    if not os.path.exists(args.other):
+        print("nothing to merge: %s does not exist" % args.other)
+        return 0
+    mine = State.load(args.state)
+    theirs = State.load(args.other)
+    before = sum(len(v) for v in mine.observations.values())
+    mine.merge(theirs)
+    after = sum(len(v) for v in mine.observations.values())
+    mine.save(args.state)
+    print(
+        "merged %s: %d -> %d observations across %d date pairs"
+        % (args.other, before, after, len(mine.observations))
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -888,6 +909,12 @@ def build_parser() -> argparse.ArgumentParser:
     report.add_argument("--limit", type=int, default=10)
     report.add_argument("--send", action="store_true")
     report.set_defaults(func=cmd_report)
+
+    merge = sub.add_parser(
+        "merge", help="merge another state file into this one (for push races)"
+    )
+    merge.add_argument("other")
+    merge.set_defaults(func=cmd_merge)
 
     test = sub.add_parser("test-alert", help="send a test notification")
     test.add_argument("--console", action="store_true")

@@ -59,16 +59,41 @@ jobs:
         run: python -m flight_tracker run --console
 
       - name: Commit price history
+        env:
+          PYTHONPATH: src
         run: |
           git config user.name "flight-tracker"
           git config user.email "actions@users.noreply.github.com"
-          git add data/state.json
-          if git diff --staged --quiet; then
+
+          if git diff --quiet -- data/state.json; then
             echo "no price changes"
-          else
-            git commit -m "chore: price history $(date -u +%Y-%m-%dT%H:%MZ)"
-            # A concurrent push is unlikely (see `concurrency` above) but cheap
-            # to survive.
-            git pull --rebase --autostash || true
-            git push
+            exit 0
           fi
+
+          # state.json is a generated document: `git pull --rebase` can only
+          # ever conflict on it, and a failed rebase leaves a detached HEAD
+          # that cannot be pushed. So rebase nothing -- take whatever is on the
+          # remote, merge it into ours semantically, and push that.
+          for attempt in 1 2 3 4 5; do
+            cp data/state.json /tmp/ours.json
+            git fetch --quiet origin main
+            git reset --quiet --hard origin/main
+            git show origin/main:data/state.json > /tmp/theirs.json 2>/dev/null || echo '{}' > /tmp/theirs.json
+            cp /tmp/ours.json data/state.json
+            python -m flight_tracker merge /tmp/theirs.json
+
+            if git diff --quiet -- data/state.json; then
+              echo "remote already has this data"
+              exit 0
+            fi
+            git add data/state.json
+            git commit --quiet -m "chore: price history $(date -u +%Y-%m-%dT%H:%MZ)"
+            if git push --quiet; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push raced with another run; retrying"
+            sleep $((attempt * 5))
+          done
+          echo "could not push price history after 5 attempts" >&2
+          exit 1

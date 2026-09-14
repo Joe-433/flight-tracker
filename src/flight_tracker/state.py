@@ -144,6 +144,61 @@ class State:
                 os.unlink(tmp)
             raise
 
+    # -- merging ------------------------------------------------------------
+
+    def merge(self, other: "State") -> "State":
+        """Fold another copy of this state into this one. Returns self.
+
+        Two sweeps that overlap each write the whole file, so whoever pushes
+        second would otherwise discard the other's work -- and git can't
+        resolve it, because there is no meaningful line-level merge of a
+        generated JSON document. Union the data instead, which is well defined
+        here: observations are append-only, and every other field has an
+        obvious winner.
+        """
+        for key, points in other.observations.items():
+            if key not in self.observations:
+                self.observations[key] = list(points)
+                continue
+            seen = {str(point[0]) for point in self.observations[key]}
+            self.observations[key].extend(
+                point for point in points if str(point[0]) not in seen
+            )
+            self.observations[key].sort(key=lambda point: str(point[0]))
+
+        # Freshest snapshot wins; it's what the reports render.
+        for key, snapshot in other.latest.items():
+            mine = self.latest.get(key)
+            if not mine or str(snapshot.get("seen") or "") > str(mine.get("seen") or ""):
+                self.latest[key] = snapshot
+
+        # Most recent alert wins, so a cooldown is never accidentally reset.
+        for key, record in other.alerts.items():
+            mine = self.alerts.get(key)
+            if not mine or str(record.get("ts") or "") > str(mine.get("ts") or ""):
+                self.alerts[key] = record
+
+        # Lowest price wins: a record low is a fact about the route, not about
+        # which run happened to see it.
+        for name, record in other.records.items():
+            mine = self.records.get(name)
+            if not mine or float(record.get("price", 0)) < float(mine.get("price", 0)):
+                self.records[name] = record
+
+        # Furthest cursor wins, so the losing run's ground isn't re-swept.
+        for name, position in other.cursors.items():
+            self.cursors[name] = max(int(position), int(self.cursors.get(name, 0)))
+
+        self.last_run = max(self.last_run or "", other.last_run or "") or None
+        self.last_data = max(self.last_data or "", other.last_data or "") or None
+        # A success anywhere clears the failure streak.
+        self.consecutive_failures = min(
+            int(self.consecutive_failures or 0), int(other.consecutive_failures or 0)
+        )
+        if not other.deadman.get("down"):
+            self.deadman = other.deadman if not self.deadman.get("down") else self.deadman
+        return self
+
     # -- history ------------------------------------------------------------
 
     def record(
