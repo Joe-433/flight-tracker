@@ -8,7 +8,7 @@ from helpers import make_config
 from flight_tracker.config import Band
 from flight_tracker.sources.base import date_pairs, plan_slice, slice_for_run
 from flight_tracker.sources.mock import MockSource
-from flight_tracker.sources.pairs import _format_flight_no
+from flight_tracker.sources.pairs import _format_flight_no, carrier_matches
 
 TODAY = dt.date(2026, 9, 12)
 
@@ -182,6 +182,29 @@ class TestFlightNumberFormatting(unittest.TestCase):
     def test_misalignment_is_dropped_rather_than_guessed(self):
         """Showing the wrong flight number is worse than showing none."""
         self.assertIsNone(_format_flight_no(["AA 171"], 2))
+
+
+class TestCarrierMatch(unittest.TestCase):
+    """Guards against the two payload walks drifting out of alignment."""
+
+    def test_code_inside_the_name(self):
+        self.assertTrue(carrier_matches("AS 289", ["Alaska"]))
+
+    def test_code_unrelated_to_the_name(self):
+        self.assertTrue(carrier_matches("WN 2536", ["Southwest"]))
+        self.assertTrue(carrier_matches("B6 523", ["JetBlue"]))
+        self.assertTrue(carrier_matches("F9 4601", ["Frontier"]))
+
+    def test_mismatch_is_caught(self):
+        self.assertFalse(carrier_matches("WN 2536", ["American"]))
+        self.assertFalse(carrier_matches("AA 117", ["Delta"]))
+
+    def test_codeshare_lists_pass_if_any_airline_matches(self):
+        self.assertTrue(carrier_matches("AA 117", ["American", "Alaska"]))
+
+    def test_nothing_to_check_passes(self):
+        self.assertTrue(carrier_matches(None, ["Delta"]))
+        self.assertTrue(carrier_matches("DL 1", []))
 
 
 if __name__ == "__main__":

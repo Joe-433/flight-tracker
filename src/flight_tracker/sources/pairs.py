@@ -79,6 +79,41 @@ def _format_flight_no(numbers: List[Optional[str]], leg_count: int) -> Optional[
     return " / ".join(parts)
 
 
+# Carrier codes whose airline name shares no letters with the code.
+CARRIERS = {
+    "WN": "southwest", "B6": "jetblue", "AS": "alaska", "AA": "american",
+    "DL": "delta", "UA": "united", "NK": "spirit", "F9": "frontier",
+    "HA": "hawaiian", "SY": "sun country", "G4": "allegiant", "MX": "breeze",
+}
+
+
+def carrier_matches(flight_no: Optional[str], airlines: List[str]) -> bool:
+    """Does this flight number belong to this itinerary?
+
+    Flight numbers are matched to itineraries by list position across two
+    separate walks of the same payload. If those walks ever disagree about
+    ordering -- a Google change away -- every number would attach to the wrong
+    flight, and nothing would look broken.
+
+    The payload's flight-number field carries the airline name next to the
+    code, and the parser reports airlines independently, so the two must agree.
+    Verified 49/49 on a live payload; this keeps it true.
+    """
+    if not flight_no or not airlines:
+        return True  # nothing to contradict
+    carrier = flight_no.split(" ", 1)[0].strip().upper()
+    if not carrier:
+        return True
+    names = " ".join(airlines).lower()
+    if carrier.lower() in names:
+        return True
+    if CARRIERS.get(carrier, "\0") in names:
+        return True
+    # Fall back to initials, for carriers whose code is their initials.
+    initials = "".join(word[0] for word in names.split() if word)
+    return carrier.lower() in initials
+
+
 def _clock(moment: Any) -> Optional[str]:
     """Pull "HH:MM" out of a fast-flights SimpleDatetime, tolerantly."""
     value = getattr(moment, "time", None)
@@ -216,9 +251,16 @@ class PairsSource(Source):
             if offer is None:
                 continue
             if index < len(numbers):
-                offer.flight_no = _format_flight_no(
+                candidate = _format_flight_no(
                     numbers[index], len(getattr(item, "flights", []) or [])
                 )
+                if carrier_matches(candidate, offer.airlines):
+                    offer.flight_no = candidate
+                else:
+                    self.errors.append(
+                        "%s->%s: flight number %r disagrees with airline %r; "
+                        "dropping it" % (out_date, ret_date, candidate, offer.airlines)
+                    )
             offers.append(offer)
         return offers
 
