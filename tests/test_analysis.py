@@ -69,7 +69,7 @@ class TestAssess(unittest.TestCase):
         )
         state = State()
         needed = analysis.min_route_samples(0.05)
-        state.observations["2026-09-25|2026-09-29"] = [
+        state.observations["2026-09-25|2026-09-29|LAX|0"] = [
             [NOW.isoformat(), 700 + i] for i in range(needed)
         ]
         result = analysis.assess([make_offer(300)], state, cfg, now=NOW)
@@ -82,7 +82,7 @@ class TestAssess(unittest.TestCase):
             alerts={"threshold_usd": 250}, deals={"cheap_percentile": 0.05}
         )
         state = State()
-        state.observations["2026-09-25|2026-09-29"] = [
+        state.observations["2026-09-25|2026-09-29|LAX|0"] = [
             [NOW.isoformat(), 700 + i]
             for i in range(analysis.min_route_samples(0.05))
         ]
@@ -98,7 +98,7 @@ class TestAssess(unittest.TestCase):
             alerts={"threshold_usd": 100}, deals={"cheap_percentile": 0.05}
         )
         state = State()
-        state.observations["2026-09-25|2026-09-29"] = [
+        state.observations["2026-09-25|2026-09-29|LAX|0"] = [
             [NOW.isoformat(), 700 + i]
             for i in range(analysis.min_route_samples(0.05) - 1)
         ]
@@ -158,24 +158,24 @@ class TestStopThresholds(unittest.TestCase):
         direct = make_offer(390, stops=0)
         stopped = make_offer(210, stops=1)
         self.assertNotEqual(direct.key, stopped.key)
-        self.assertEqual(direct.key, "2026-09-20|2026-09-24")
-        self.assertEqual(stopped.key, "2026-09-20|2026-09-24|1")
+        self.assertEqual(direct.key, "2026-09-20|2026-09-24|LAX|0")
+        self.assertEqual(stopped.key, "2026-09-20|2026-09-24|LAX|1")
 
 
 class TestDayStats(unittest.TestCase):
     def test_reads_stop_count_from_the_key(self):
         state = State()
-        state.observations["2026-09-20|2026-09-24|1"] = [[NOW.isoformat(), 190]]
-        state.observations["2026-09-20|2026-09-24"] = [[NOW.isoformat(), 380]]
+        state.observations["2026-09-20|2026-09-24|LAX|1"] = [[NOW.isoformat(), 190]]
+        state.observations["2026-09-20|2026-09-24|LAX|0"] = [[NOW.isoformat(), 380]]
         stats = analysis.day_stats([], state, None, now=NOW)
         self.assertEqual(stats[0].price, 190)
         self.assertEqual(stats[0].stops, 1)
 
     def test_picks_cheapest_per_departure_day(self):
         state = State()
-        state.observations["2026-09-20|2026-09-24"] = [[NOW.isoformat(), 300]]
-        state.observations["2026-09-20|2026-09-25"] = [[NOW.isoformat(), 275]]
-        state.observations["2026-09-21|2026-09-25"] = [[NOW.isoformat(), 410]]
+        state.observations["2026-09-20|2026-09-24|LAX|0"] = [[NOW.isoformat(), 300]]
+        state.observations["2026-09-20|2026-09-25|LAX|0"] = [[NOW.isoformat(), 275]]
+        state.observations["2026-09-21|2026-09-25|LAX|0"] = [[NOW.isoformat(), 410]]
         stats = analysis.day_stats([], state, cheap_cutoff=280, now=NOW)
         self.assertEqual([s.out_date for s in stats], ["2026-09-20", "2026-09-21"])
         self.assertEqual(stats[0].price, 275)
@@ -185,12 +185,12 @@ class TestDayStats(unittest.TestCase):
 
     def test_past_departures_dropped(self):
         state = State()
-        state.observations["2026-09-01|2026-09-05"] = [[NOW.isoformat(), 99]]
+        state.observations["2026-09-01|2026-09-05|LAX|0"] = [[NOW.isoformat(), 99]]
         self.assertEqual(analysis.day_stats([], state, None, now=NOW), [])
 
     def test_fresh_offers_merge_with_history(self):
         state = State()
-        state.observations["2026-09-20|2026-09-24"] = [[NOW.isoformat(), 300]]
+        state.observations["2026-09-20|2026-09-24|LAX|0"] = [[NOW.isoformat(), 300]]
         stats = analysis.day_stats(
             [make_offer(210, "2026-09-20", nights=4)], state, None, now=NOW
         )

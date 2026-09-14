@@ -11,6 +11,17 @@ route:
   origin_label: "NY metro"
   destination_label: "LA metro"
 
+  # The NY MID expands to JFK/LGA/EWR on its own. The LA one does not -- it
+  # returns LAX and nothing else (verified: 49 of 49 itineraries in a raw
+  # payload). So the rest of the LA basin has to be named explicitly.
+  #
+  # They get a fifth of the budget, not an equal share: one probe put the
+  # cheapest BUR fare at $533 against ~$370 for LAX, all of them connections,
+  # since no one flies a transcon nonstop into Burbank. This is enough to find
+  # out whether that holds, and cheap enough not to care if it does.
+  also_check: ["BUR", "SNA", "ONT", "LGB"]
+  also_check_share: 0.2
+
 search:
   # Departures 14 to 105 days out. `window_days` is the span of DEPARTURE
   # dates; the return leg may land past the end of it. The far end stops at

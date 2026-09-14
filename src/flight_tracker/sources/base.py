@@ -9,6 +9,19 @@ from typing import Dict, List, Optional, Tuple
 from ..config import Band, Config
 
 
+def parse_key(key: str) -> Tuple[str, str, str, int]:
+    """(out_date, ret_date, arrival airport, stops) from a history key."""
+    parts = key.split("|")
+    out_date = parts[0] if parts else ""
+    ret_date = parts[1] if len(parts) > 1 else ""
+    airport = parts[2] if len(parts) > 2 else "?"
+    try:
+        stops = int(parts[3]) if len(parts) > 3 else 0
+    except ValueError:
+        stops = 0
+    return out_date, ret_date, airport, stops
+
+
 class ScrapeError(RuntimeError):
     """The scrape failed in a way the caller should treat as 'no data'."""
 
@@ -38,15 +51,18 @@ class Offer:
 
     @property
     def key(self) -> str:
-        """History key. Nonstop keeps the bare date-pair form.
+        """History key: dates, arrival airport, stop count.
 
-        Connecting fares get a `|<stops>` suffix so they track as their own
-        series -- a $210 one-stop and a $390 nonstop on the same dates are
-        different products and must not average into one price history.
+        All four matter. A $210 one-stop and a $390 nonstop on the same dates
+        are different products and must not average into one price history --
+        and neither must a fare into LAX and one into Burbank.
         """
-        if not self.stops:
-            return "%s|%s" % (self.out_date, self.ret_date)
-        return "%s|%s|%d" % (self.out_date, self.ret_date, self.stops)
+        return "%s|%s|%s|%d" % (
+            self.out_date,
+            self.ret_date,
+            self.arr_airport or "?",
+            self.stops or 0,
+        )
 
     def snapshot(self) -> dict:
         """Flat dict for state.json -- what the weekly report renders from."""
@@ -132,18 +148,32 @@ def plan_slice(
     cfg: Config,
     cursors: Optional[Dict[str, int]] = None,
     today: Optional[dt.date] = None,
-) -> Tuple[List[Tuple[str, str]], Dict[str, int]]:
-    """Choose this run's date pairs, split across bands.
+) -> Tuple[List[Tuple[str, str, str]], Dict[str, int]]:
+    """Choose this run's (outbound, return, destination) triples.
 
-    Over a 3-month horizon a flat rotation would take most of a day to come
-    back around, which is useless for the near-term dates where fares actually
-    move. Each band keeps its own cursor and gets its own share of
-    `pairs_per_run`, so the near horizon is revisited several times for every
-    one pass over the far horizon.
+    Two rotations, not one. The primary destination is a city MID that already
+    covers a whole metro; the secondary airports are a separate, much larger
+    space (every date pair times every extra airport) that gets only
+    `also_check_share` of the budget. Mixing them into one cursor would let the
+    secondaries, which are four times as numerous, crowd out the destination
+    that actually has the nonstops.
     """
     today = today or dt.date.today()
     previous = dict(cursors or {})
     pairs = date_pairs(cfg, today)
+    primary = cfg.route.destination
+    extras = list(cfg.route.also_check or [])
+
+    budget = cfg.source.pairs_per_run
+    extra_budget = (
+        min(budget - 1, max(1, int(round(budget * cfg.route.also_check_share))))
+        if extras
+        else 0
+    )
+    main_budget = budget - extra_budget
+
+    picked: List[Tuple[str, str, str]] = []
+    cursors_out: Dict[str, int] = {}
 
     bands = cfg.source.bands or [
         Band(within_days=cfg.search.min_days_ahead + cfg.search.window_days)
@@ -159,16 +189,27 @@ def plan_slice(
             buckets[-1].append((out_date, ret_date))
 
     total_share = sum(b.share for b in bands) or 1.0
-    picked: List[Tuple[str, str]] = []
-    # Built fresh rather than copied, so cursors for bands that no longer exist
-    # don't linger in state forever confusing the logs.
-    cursors: Dict[str, int] = {}
     for index, (band, bucket) in enumerate(zip(bands, buckets)):
         if not bucket:
             continue
-        budget = max(1, int(round(cfg.source.pairs_per_run * band.share / total_share)))
-        got, cursors[str(index)] = slice_for_run(
-            bucket, int(previous.get(str(index), 0)), budget
+        share = max(1, int(round(main_budget * band.share / total_share)))
+        got, cursors_out[str(index)] = slice_for_run(
+            bucket, int(previous.get(str(index), 0)), share
+        )
+        picked.extend((out_date, ret_date, primary) for out_date, ret_date in got)
+
+    if extra_budget and extras:
+        # Airport-major order, so one run's slice samples several airports
+        # rather than grinding through every date of one of them.
+        combos = [
+            (out_date, ret_date, airport)
+            for out_date, ret_date in pairs
+            for airport in extras
+        ]
+        got, cursors_out["alt"] = slice_for_run(
+            combos, int(previous.get("alt", 0)), extra_budget
         )
         picked.extend(got)
-    return picked, cursors
+
+    return picked, cursors_out
+

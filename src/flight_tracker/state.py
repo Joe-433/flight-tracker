@@ -15,9 +15,9 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .config import Config
-from .sources.base import Offer
+from .sources.base import Offer, parse_key
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 
 def utcnow() -> dt.datetime:
@@ -41,6 +41,31 @@ def hours_since(value: Optional[str], now: Optional[dt.datetime] = None) -> Opti
     if parsed is None:
         return None
     return ((now or utcnow()) - parsed).total_seconds() / 3600.0
+
+
+def _migrate_v2(raw: Dict[str, Any]) -> Dict[str, Any]:
+    """v2 keys were `out|ret` or `out|ret|stops`; v3 adds the arrival airport.
+
+    Every v2 observation came from the LA city MID, which returns LAX and
+    nothing else, so the airport is known. Worth migrating rather than
+    wiping: the record-low bars are the only alerting that's actually firing
+    on this route, and they live in this file.
+    """
+
+    def upgrade(key: str) -> str:
+        parts = key.split("|")
+        if len(parts) == 2:
+            return "%s|%s|LAX|0" % (parts[0], parts[1])
+        if len(parts) == 3:
+            return "%s|%s|LAX|%s" % (parts[0], parts[1], parts[2])
+        return key
+
+    for field_name in ("observations", "latest", "alerts"):
+        section = raw.get(field_name)
+        if isinstance(section, dict):
+            raw[field_name] = {upgrade(k): v for k, v in section.items()}
+    raw["version"] = SCHEMA_VERSION
+    return raw
 
 
 @dataclass
@@ -70,6 +95,8 @@ class State:
             return cls()
         with open(path, "r", encoding="utf-8") as fh:
             raw = json.load(fh)
+        if raw.get("version") == 2:
+            raw = _migrate_v2(raw)
         if raw.get("version") != SCHEMA_VERSION:
             # Forward-compatible enough: start clean rather than misread history.
             return cls()
@@ -181,12 +208,12 @@ class State:
         def out_of_scope(key: str) -> bool:
             if nights is None:
                 return False
-            parts = key.split("|")
+            out_date, ret_date, _airport, _stops = parse_key(key)
             try:
                 span = (
-                    dt.date.fromisoformat(parts[1]) - dt.date.fromisoformat(parts[0])
+                    dt.date.fromisoformat(ret_date) - dt.date.fromisoformat(out_date)
                 ).days
-            except (IndexError, ValueError):
+            except ValueError:
                 return False
             return span not in nights
 

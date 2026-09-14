@@ -15,6 +15,14 @@ class Route:
     destination: str
     origin_label: str = "origin"
     destination_label: str = "destination"
+    # Secondary destination airports the primary search doesn't reach. The NY
+    # city MID expands to JFK/LGA/EWR, but the LA one returns only LAX --
+    # verified 49/49 on a raw payload -- so these have to be asked for by name.
+    also_check: List[str] = field(default_factory=list)
+    # Share of each run's request budget spent on them. They're a background
+    # scan: enough to learn whether they ever beat LAX, not enough to catch a
+    # two-hour flash sale.
+    also_check_share: float = 0.2
 
 
 @dataclass

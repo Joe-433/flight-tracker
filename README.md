@@ -61,6 +61,37 @@ So: the near end is a last-minute premium, the far end is a wall, and the
 money is in **30–75 days out**. Re-measure any time with
 `gh workflow run "probe range" -f min_days=105 -f window=60`.
 
+### Which airports
+
+The origin is the NY city MID, which expands to **JFK, LGA and EWR** on its own
+— confirmed in the data (103 / 79 / 66 tracked fares).
+
+The LA city MID does **not** do the same. It returns LAX and nothing else:
+248 of 248 tracked fares, and 49 of 49 itineraries in a raw payload. So the
+rest of the basin is named explicitly in `route.also_check`:
+
+```yaml
+also_check: ["BUR", "SNA", "ONT", "LGB"]
+also_check_share: 0.2
+```
+
+They get a fifth of each run's budget rather than an equal share, because
+they're a background scan rather than a deal watch. A direct probe of Burbank
+put the cheapest fare at **$533 against ~$370 for LAX** on comparable dates,
+every option a two-leg connection, since nobody flies a transcon nonstop into
+BUR. The point of the 20% is to find out whether that holds over weeks, cheaply
+— not to catch a two-hour flash sale at Ontario.
+
+The cost is real and worth stating: the secondary space is 4× the primary
+(every date pair × four airports), so it cycles roughly **every 37 hours**
+while the primary cycles every 2.4. If the secondaries ever turn out to be
+competitive, raise the share; if they never are, set `also_check: []` and get
+the 2.4 back down to 1.9.
+
+Fares into different airports keep **separate price histories** — the history
+key is `date|date|airport|stops`, so a Burbank fare can never average into
+LAX's baseline or steal its record low.
+
 ### Request budget
 
 The repo is public, so **Actions minutes are free and unlimited**. The only

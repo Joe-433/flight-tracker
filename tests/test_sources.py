@@ -81,7 +81,7 @@ class TestPlanSlice(unittest.TestCase):
         picked, cursors = plan_slice(self.bands_config(), {}, today=TODAY)
         self.assertEqual(len(picked), 20)
         self.assertEqual(sorted(cursors), ["0", "1", "2"])
-        leads = [(dt.date.fromisoformat(o) - TODAY).days for o, _ in picked]
+        leads = [(dt.date.fromisoformat(o) - TODAY).days for o, _, _ in picked]
         self.assertEqual(sum(1 for d in leads if d <= 30), 11)
         self.assertEqual(sum(1 for d in leads if 30 < d <= 60), 5)
         self.assertEqual(sum(1 for d in leads if d > 60), 4)
@@ -89,7 +89,7 @@ class TestPlanSlice(unittest.TestCase):
     def test_never_returns_a_pair_inside_min_days_ahead(self):
         cfg = self.bands_config()
         picked, _ = plan_slice(cfg, {}, today=TODAY)
-        for out_date, _ in picked:
+        for out_date, _, _ in picked:
             self.assertGreaterEqual((dt.date.fromisoformat(out_date) - TODAY).days, 7)
 
     def test_near_band_cycles_faster_than_far_band(self):
@@ -182,6 +182,55 @@ class TestFlightNumberFormatting(unittest.TestCase):
     def test_misalignment_is_dropped_rather_than_guessed(self):
         """Showing the wrong flight number is worse than showing none."""
         self.assertIsNone(_format_flight_no(["AA 171"], 2))
+
+
+class TestSecondaryDestinations(unittest.TestCase):
+    """The LA city MID returns only LAX, so the rest are asked for by name."""
+
+    def config(self, share=0.2, extras=("BUR", "SNA", "ONT", "LGB")):
+        cfg = make_config(
+            search={"min_days_ahead": 7, "window_days": 20, "trip_nights": [5]},
+            source={"pairs_per_run": 20, "bands": []},
+        )
+        cfg.route.also_check = list(extras)
+        cfg.route.also_check_share = share
+        return cfg
+
+    def test_budget_is_split(self):
+        picked, cursors = plan_slice(self.config(), {}, today=TODAY)
+        self.assertEqual(len(picked), 20)
+        extras = [p for p in picked if p[2] != "/m/030qb3t"]
+        self.assertEqual(len(extras), 4)
+        self.assertIn("alt", cursors)
+
+    def test_primary_keeps_the_majority(self):
+        picked, _ = plan_slice(self.config(), {}, today=TODAY)
+        primary = [p for p in picked if p[2] == "/m/030qb3t"]
+        self.assertEqual(len(primary), 16)
+
+    def test_extras_rotate_across_airports_not_one_at_a_time(self):
+        picked, _ = plan_slice(self.config(), {}, today=TODAY)
+        airports = {p[2] for p in picked if p[2] != "/m/030qb3t"}
+        self.assertEqual(airports, {"BUR", "SNA", "ONT", "LGB"})
+
+    def test_extras_cursor_advances_independently(self):
+        cfg = self.config()
+        first, cursors = plan_slice(cfg, {}, today=TODAY)
+        second, _ = plan_slice(cfg, cursors, today=TODAY)
+        self.assertNotEqual(
+            [p for p in first if p[2] != "/m/030qb3t"],
+            [p for p in second if p[2] != "/m/030qb3t"],
+        )
+
+    def test_none_configured_means_all_primary(self):
+        picked, cursors = plan_slice(self.config(extras=()), {}, today=TODAY)
+        self.assertTrue(all(p[2] == "/m/030qb3t" for p in picked))
+        self.assertNotIn("alt", cursors)
+
+    def test_extras_never_take_the_whole_budget(self):
+        picked, _ = plan_slice(self.config(share=5.0), {}, today=TODAY)
+        primary = [p for p in picked if p[2] == "/m/030qb3t"]
+        self.assertGreaterEqual(len(primary), 1)
 
 
 class TestCarrierMatch(unittest.TestCase):

@@ -177,16 +177,17 @@ class PairsSource(Source):
 
     # -- query construction -------------------------------------------------
 
-    def _query(self, out_date: str, ret_date: str) -> Any:
+    def _query(self, out_date: str, ret_date: str, dest: Optional[str] = None) -> Any:
         s = self.cfg.search
         r = self.cfg.route
+        dest = dest or r.destination
         return self._create_query(
             flights=[
                 self._FlightQuery(
-                    date=out_date, from_airport=r.origin, to_airport=r.destination
+                    date=out_date, from_airport=r.origin, to_airport=dest
                 ),
                 self._FlightQuery(
-                    date=ret_date, from_airport=r.destination, to_airport=r.origin
+                    date=ret_date, from_airport=dest, to_airport=r.origin
                 ),
             ],
             trip="round-trip",
@@ -201,9 +202,11 @@ class PairsSource(Source):
 
     # -- fetching -----------------------------------------------------------
 
-    def fetch_pair(self, out_date: str, ret_date: str) -> Optional[Offer]:
+    def fetch_pair(
+        self, out_date: str, ret_date: str, dest: Optional[str] = None
+    ) -> Optional[Offer]:
         """Cheapest roundtrip for one date pair, or None."""
-        query = self._query(out_date, ret_date)
+        query = self._query(out_date, ret_date, dest)
         url = query.url()
         results = self._fetch(query, out_date, ret_date)
         if not results:
@@ -215,14 +218,16 @@ class PairsSource(Source):
                 best = offer
         return best
 
-    def fetch_pair_by_stops(self, out_date: str, ret_date: str) -> List[Offer]:
+    def fetch_pair_by_stops(
+        self, out_date: str, ret_date: str, dest: Optional[str] = None
+    ) -> List[Offer]:
         """Cheapest fare in each stop class for one date pair.
 
         Returning only the single cheapest would hide a nonstop that clears its
         own (higher) threshold whenever a connecting fare undercuts it without
         clearing the connecting threshold.
         """
-        query = self._query(out_date, ret_date)
+        query = self._query(out_date, ret_date, dest)
         url = query.url()
         results = self._fetch(query, out_date, ret_date)
         if not results:
@@ -337,9 +342,9 @@ class PairsSource(Source):
 
         lo, hi = (list(self.cfg.source.jitter_seconds) + [0, 0])[:2]
         offers: List[Offer] = []
-        for i, (out_date, ret_date) in enumerate(picked):
+        for i, (out_date, ret_date, dest) in enumerate(picked):
             if i:
                 time.sleep(random.uniform(float(lo), float(hi)))
-            offers.extend(self.fetch_pair_by_stops(out_date, ret_date))
+            offers.extend(self.fetch_pair_by_stops(out_date, ret_date, dest))
 
         return offers, next_cursors

@@ -34,7 +34,7 @@ class MockSource(Source):
         picked, next_cursors = plan_slice(self.cfg, cursors)
 
         offers: List[Offer] = []
-        for out_date, ret_date in picked:
+        for out_date, ret_date, _dest in picked:
             r = _hash_float(seed, out_date, ret_date)
             price = 240 + 180 * r
             if _hash_float("deal", seed, out_date) < 0.08:

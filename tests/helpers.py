@@ -41,4 +41,7 @@ def make_offer(
     price: float, out_date: str = "2026-09-20", nights: int = 4, stops: int = 0
 ) -> Offer:
     ret = (dt.date.fromisoformat(out_date) + dt.timedelta(days=nights)).isoformat()
-    return Offer(out_date=out_date, ret_date=ret, price=price, stops=stops)
+    return Offer(
+        out_date=out_date, ret_date=ret, price=price, stops=stops,
+        dep_airport="JFK", arr_airport="LAX",
+    )

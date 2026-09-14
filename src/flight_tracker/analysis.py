@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from .config import Config
-from .sources.base import Offer
+from .sources.base import Offer, parse_key
 from .state import State, hours_since, utcnow
 
 def min_route_samples(cheap_percentile: float) -> int:
@@ -275,9 +275,7 @@ def day_stats(
             current.stops = stops
 
     for key, points in state.observations.items():
-        parts = key.split("|")
-        out_date, ret_date = parts[0], parts[1]
-        stops = int(parts[2]) if len(parts) > 2 else 0
+        out_date, ret_date, _airport, stops = parse_key(key)
         for _, price in points:
             consider(out_date, ret_date, float(price), stops)
 

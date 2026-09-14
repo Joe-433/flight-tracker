@@ -182,8 +182,8 @@ class TestLatestSnapshot(unittest.TestCase):
         state.record(
             [offer(338, dep_time="09:30")], cfg, now=NOW + dt.timedelta(hours=1)
         )
-        self.assertEqual(len(state.observations["2026-10-14|2026-10-17"]), 1)
-        self.assertEqual(state.latest["2026-10-14|2026-10-17"]["dep_time"], "09:30")
+        self.assertEqual(len(state.observations["2026-10-14|2026-10-17|LAX|0"]), 1)
+        self.assertEqual(state.latest["2026-10-14|2026-10-17|LAX|0"]["dep_time"], "09:30")
 
     def test_trim_drops_departed_flights(self):
         state = stocked([offer(338, "2026-09-01")])
