@@ -66,19 +66,29 @@ money is in **30–75 days out**. Re-measure any time with
 The repo is public, so **Actions minutes are free and unlimited**. The only
 ceiling that matters is how hard you're willing to hit Google.
 
-276 date pairs (92 departure dates × 3 trip lengths), swept as a rotating
-slice split across bands, each with its own cursor:
+276 date pairs (92 departure dates × 3 trip lengths), swept 24 at a time on a
+flat rotating cursor — every pair gets equal treatment.
 
-| Band | Pairs | Per run | Full pass every | Median fare |
-|---|---|---|---|---|
-| 14–21 days | 24 | 2 | ~3.0 h | $528 |
-| 22–45 days | 72 | 7 | ~2.6 h | $422 |
-| 46–75 days | 90 | 7 | ~3.2 h | $409 |
-| 76–105 days | 90 | 7 | ~3.2 h | **$393** |
+| | |
+|---|---|
+| Cron | every 10 minutes |
+| Pairs per run | 24 |
+| Pairs per hour | 144 |
+| **Full cycle over every date** | **~1.9 hours** |
+| Requests per day | ~3,500 (≈1 every 25 s) |
 
-With the window starting at 14 days the bands have nearly converged — a flat
-rotation would be 3.0 h for everything, versus 2.6–3.2 h banded. `bands: []`
-now costs essentially nothing and is simpler to reason about.
+`source.bands` can weight some lead times over others, and it's currently
+**off** — there isn't enough history yet to justify a weighting, so nothing is
+privileged. Worth noting that equal *shares* across bands would not have been
+uniform: the four bands held 24/72/90/90 pairs, so an even split would cycle
+the smallest three times for every one pass over the largest. Uniform per date
+pair means no bands at all.
+
+An earlier weighting was set from one day of prices and got it wrong — it gave
+the 76–105 day range 20% of the budget on the strength of a probe showing a
+flat $409 wall, when that wall actually starts around 115 days and 76–105 turns
+out to have the *lowest* median of any range. That's the argument for staying
+uniform until the data is real.
 
 A fare that stops being re-checked — the window moves past it, or a band
 starves — is dropped from the reports after `history.stale_hours` (24 h). A

@@ -52,19 +52,19 @@ source:
   # How the per-run budget is split across the horizon. Near-term fares move
   # fast and are the time-sensitive ones; fares 3 months out barely move, so
   # they get revisited less often. Each band rotates on its own cursor.
-  # Shares are set from measured price behaviour, not intuition. Measured
-  # 2026-09-13 over 467 fares:
-  #     7-21 days    min $339   median $528   <- last-minute premium
-  #    22-45 days    min $338   median $422
-  #    46-75 days    min $297   median $409   <- the big outlier lows
-  #    76-105 days   min $357   median $393   <- most consistently cheap
-  # The flat "nothing ever moves" wall starts around 115 days, NOT 76, so the
-  # far band gets a full share rather than the scraps it had at first.
-  bands:
-    - {within_days: 21,  share: 0.10}  # 14-21 days: still pricey, small share
-    - {within_days: 45,  share: 0.30}
-    - {within_days: 75,  share: 0.30}
-    - {within_days: 105, share: 0.30}
+  # Bands would let some lead times be checked more often than others. They're
+  # off: every date pair is swept on one flat rotation, equal treatment.
+  #
+  # Note that equal SHARES across the old four bands would not have been
+  # uniform -- they held 24/72/90/90 pairs, so an even split would have cycled
+  # the smallest band three times for every one pass over the largest. Uniform
+  # per date pair means no bands at all.
+  #
+  # Turn them back on once there's enough history to justify a weighting, e.g.
+  #   bands:
+  #     - {within_days: 45,  share: 0.5}
+  #     - {within_days: 105, share: 0.5}
+  bands: []
 
 alerts:
   threshold_usd: 250              # nonstop: tell me now

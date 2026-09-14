@@ -2,11 +2,11 @@ name: watch fares
 
 on:
   schedule:
-    # Every 15 minutes. The repo is public, so Actions minutes are free and
+    # Every 10 minutes. The repo is public, so Actions minutes are free and
     # unlimited -- the only real ceiling is how hard we're willing to hit
-    # Google. See README "Request budget" before turning this up further;
-    # GitHub's own minimum interval is 5 minutes.
-    - cron: "*/15 * * * *"
+    # Google (~3,500 requests/day here). See README "Request budget" before
+    # turning this up further; GitHub's own minimum interval is 5 minutes.
+    - cron: "*/10 * * * *"
   workflow_dispatch:
     inputs:
       threshold:
