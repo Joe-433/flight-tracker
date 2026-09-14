@@ -289,11 +289,18 @@ Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
 ```
-#  PRICE  DEPART      RETURN     N  TIME   ROUTE    STOPS   FLIGHT
-1  $297   Thu Oct 29  Tue Nov 3  5  1:25p  LGA→LAX  1 stop  WN 3056 +1
-2  $315   Fri Oct 30  Tue Nov 3  4  7:00a  LGA→LAX  1 stop  WN 2531 +1
-3  $409   Thu Oct 29  Sun Nov 1  3  9:50p  JFK→LAX  nonstop AA 171
+#  PRICE  DEPART      RETURN      N  TIME    ROUTE    STOPS   FLIGHT      ALSO
+1  $278   Wed Oct 21  Tue Oct 27  6  3:05p   LGA→LAX  1 stop  WN 2536 +1
+2  $278   Wed Nov 4   Tue Nov 10  6  7:00a   LGA→LAX  1 stop  WN 264 +1   +3 dates
+3  $315   Fri Oct 30  Wed Nov 4   5  7:00a   LGA→LAX  1 stop  WN 2531 +1
 ```
+
+**Duplicates are collapsed.** The sweep checks every return date against every
+departure date, so one cheap outbound flight surfaces once per return date —
+three rows, same price, same plane, same seat. That's one option presented as
+three, and it crowds genuinely different fares out of a top-5. Rows sharing a
+price, flight, route and stop count collapse into the shortest trip, with
+`+N dates` marking the rest. The limit then counts distinct fares, not rows.
 
 Discord gets this as a real **embed** — coloured spine, title, footer — with
 the table in a monospace block inside it. The embed is what stops it reading

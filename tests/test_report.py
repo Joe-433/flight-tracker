@@ -106,6 +106,64 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("$300", body)
 
 
+class TestDeduplication(unittest.TestCase):
+    """One cheap outbound shows up once per return date; that's one option."""
+
+    def test_same_flight_same_price_collapses(self):
+        state = stocked([
+            offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
+            offer(278, "2026-10-21", nights=6, flight_no="WN 2536"),
+            offer(278, "2026-10-21", nights=7, flight_no="WN 2536"),
+        ])
+        table = cheapest_table(state, make_config(), limit=5)
+        rows = [r for r in table.splitlines() if "$278" in r]
+        self.assertEqual(len(rows), 1)
+        self.assertIn("+2 dates", rows[0])
+
+    def test_singular_wording(self):
+        state = stocked([
+            offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
+            offer(278, "2026-10-21", nights=6, flight_no="WN 2536"),
+        ])
+        self.assertIn("+1 date", cheapest_table(state, make_config()))
+
+    def test_shortest_trip_represents_the_group(self):
+        state = stocked([
+            offer(278, "2026-10-21", nights=7, flight_no="WN 2536"),
+            offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
+        ])
+        row = [r for r in cheapest_table(state, make_config()).splitlines()
+               if "$278" in r][0]
+        self.assertIn("Mon Oct 26", row)  # the 5-night return
+
+    def test_different_flights_stay_separate(self):
+        state = stocked([
+            offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
+            offer(278, "2026-11-04", nights=5, flight_no="WN 264"),
+        ])
+        table = cheapest_table(state, make_config(), limit=5)
+        self.assertEqual(len([r for r in table.splitlines() if "$278" in r]), 2)
+
+    def test_different_prices_stay_separate(self):
+        state = stocked([
+            offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
+            offer(315, "2026-10-21", nights=6, flight_no="WN 2536"),
+        ])
+        table = cheapest_table(state, make_config(), limit=5)
+        self.assertIn("$278", table)
+        self.assertIn("$315", table)
+
+    def test_limit_counts_distinct_fares_not_rows(self):
+        """Dedupe must free up slots, not just hide rows."""
+        offers = []
+        for i in range(3):
+            offers += [offer(278, "2026-10-21", nights=n, flight_no="WN 2536")
+                       for n in (5, 6, 7)]
+        offers.append(offer(300, "2026-11-04", nights=5, flight_no="WN 999"))
+        table = cheapest_table(stocked(offers), make_config(), limit=2)
+        self.assertIn("$300", table)
+
+
 class TestLatestSnapshot(unittest.TestCase):
     def test_refreshes_even_when_the_price_point_is_skipped(self):
         """Redundant prices aren't logged, but the report must not go stale."""

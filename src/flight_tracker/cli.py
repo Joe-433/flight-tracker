@@ -12,7 +12,7 @@ import argparse
 import datetime as dt
 import os
 import sys
-from typing import List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from . import analysis, deadman
 from .config import Config, load_config
@@ -564,7 +564,36 @@ def _row_parts(index: int, price: float, snap: dict, cfg: Config) -> List[str]:
     ]
 
 
-HEADERS = ["#", "PRICE", "DEPART", "RETURN", "N", "TIME", "ROUTE", "STOPS", "FLIGHT"]
+HEADERS = [
+    "#", "PRICE", "DEPART", "RETURN", "N", "TIME", "ROUTE", "STOPS", "FLIGHT", "ALSO",
+]
+
+
+def _dedupe_key(snap: dict) -> tuple:
+    """What makes two rows the same fare rather than two options.
+
+    The sweep checks every return date against every departure date, so one
+    cheap outbound flight shows up once per return date -- three rows, same
+    price, same plane, same seat. That's one option presented as three, and it
+    crowds genuinely different fares out of a top-5.
+    """
+    return (
+        round(float(snap.get("price") or 0)),
+        str(snap.get("flight_no") or snap.get("dep_time") or ""),
+        str(snap.get("dep_airport") or ""),
+        str(snap.get("arr_airport") or ""),
+        snap.get("stops"),
+    )
+
+
+def _nights(snap: dict) -> int:
+    try:
+        return (
+            dt.date.fromisoformat(str(snap["ret_date"]))
+            - dt.date.fromisoformat(str(snap["out_date"]))
+        ).days
+    except (KeyError, TypeError, ValueError):
+        return 99
 
 
 def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
@@ -582,14 +611,29 @@ def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
             ranked.append((float(snap["price"]), snap))  # type: ignore[arg-type]
         except (KeyError, TypeError, ValueError):
             continue
-    ranked.sort(key=lambda r: r[0])
+    ranked.sort(key=lambda r: (r[0], _nights(r[1])))
     if not ranked:
         return "No fares tracked yet."
 
-    rows = [
-        _row_parts(index, price, snap, cfg)
-        for index, (price, snap) in enumerate(ranked[:limit], start=1)
-    ]
+    # Collapse the same fare repeated across return dates, keeping the shortest
+    # trip as the representative and counting the rest.
+    groups: Dict[tuple, List[Tuple[float, dict]]] = {}
+    order: List[tuple] = []
+    for price, snap in ranked:
+        key = _dedupe_key(snap)
+        if key not in groups:
+            groups[key] = []
+            order.append(key)
+        groups[key].append((price, snap))
+
+    rows = []
+    for index, key in enumerate(order[:limit], start=1):
+        price, snap = groups[key][0]
+        extras = len(groups[key]) - 1
+        rows.append(
+            _row_parts(index, price, snap, cfg)
+            + ["+%d %s" % (extras, "date" if extras == 1 else "dates") if extras else ""]
+        )
     widths = [
         max(len(HEADERS[column]), max(len(row[column]) for row in rows))
         for column in range(len(HEADERS))
