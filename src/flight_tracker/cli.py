@@ -16,7 +16,6 @@ import sys
 from typing import Dict, List, Optional, Tuple
 
 from . import analysis, deadman
-from .booking import airline_url, carrier_of
 from .config import Config, load_config
 from .notify import BLURPLE, GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
@@ -610,26 +609,12 @@ def _fare_line(
         if stops == 0
         else ("%s stop" % stops if isinstance(stops, int) else "? stops")
     )
+    # The airline, not the flight number. A flight number is a poor handle on a
+    # fare months out and it isn't how you find one again -- the price link is.
     airlines = snap.get("airlines") or []
-    who = str(snap.get("flight_no") or "") or (
-        ", ".join(str(a) for a in airlines)[:18] or "?"
-    )
+    who = ", ".join(str(a) for a in airlines)[:20] or "?"
     out_date = str(snap.get("out_date", ""))
     ret_date = str(snap.get("ret_date", ""))
-
-    # Where the airline's own deep link is known to work, hang it off the
-    # flight identifier -- one tap to the carrier's checkout, skipping Google's
-    # handoff. Carriers whose format we couldn't verify simply aren't linked.
-    direct = airline_url(
-        carrier_of(str(snap.get("flight_no") or "")),
-        str(snap.get("dep_airport") or ""),
-        str(snap.get("arr_airport") or ""),
-        out_date,
-        ret_date,
-        cfg.search.adults,
-    )
-    if linked and direct:
-        who = "[%s](%s)" % (who, direct)
 
     # The price is the link. A flight number is a poor handle on a fare months
     # out -- schedules move and the number alone won't reconstruct the search --

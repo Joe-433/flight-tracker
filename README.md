@@ -329,11 +329,11 @@ Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
 Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
-> **$278**  ·  Wed Oct 21 → Tue Oct 27  ·  6n  ·  LGA→LAX  ·  1 stop  ·  WN 2536 / 1544
+> **$278**  ·  Wed Oct 21 → Tue Oct 27  ·  6n  ·  LGA→LAX  ·  1 stop  ·  Southwest
 >
-> **$278**  ·  Wed Nov 4 → Tue Nov 10  ·  6n  ·  LGA→LAX  ·  1 stop  ·  WN 264 / 1102  ·  +3 more dates
+> **$278**  ·  Wed Nov 4 → Tue Nov 10  ·  6n  ·  LGA→LAX  ·  1 stop  ·  Southwest  ·  +4 more dates
 >
-> **$409**  ·  Thu Oct 29 → Sun Nov 1  ·  3n  ·  JFK→LAX  ·  nonstop  ·  AA 171
+> **$409**  ·  Thu Oct 29 → Sun Nov 1  ·  3n  ·  JFK→LAX  ·  nonstop  ·  American
 
 One fare per line. The **cheapest** fares are selected, then listed in
 **departure order** — ranking by price is what makes the list worth reading,
@@ -355,6 +355,23 @@ alignment that justified the monospace font in the first place. Normal text
 reflows at a separator instead, so a narrow window costs a wrapped line rather
 than a mangled grid.
 
+**The price is the link.** Tapping it reopens the exact Google Flights search
+that found the fare, with the dates, stop limit and bag filters already
+applied. That's the only link on the row: a flight number is a poor handle on a
+fare months out — schedules shift and the number alone won't reconstruct the
+search — so the row names the airline and lets the link do the finding. Masked
+links render inside embeds, which is one more reason the report is an embed
+rather than a plain message. If the links would push the description past
+Discord's 4096 character cap they're dropped wholesale rather than truncated
+mid-URL.
+
+**It's normal text, not a fixed-width table.** A monospace table is only
+readable while it fits the reader's window — Discord wraps at about 82
+characters, and past that it breaks every row mid-cell, destroying the exact
+alignment that justified the monospace font in the first place. Normal text
+reflows at a separator instead, so a narrow window costs a wrapped line rather
+than a mangled grid.
+
 **Two links per fare.** The price reopens the Google Flights search that found
 it. The flight number links straight to the airline's own booking search, dates
 prefilled — but only for carriers whose deep link was opened in a browser and
@@ -364,30 +381,6 @@ and Alaska's parameters were confirmed *not* to work — it loads the form and
 reports the dates as missing. Those carriers get no airline link rather than a
 broken one. Airlines change these formats without warning, so treat a link that
 stops working as wear, not a surprise.
-
-**`FLIGHTS` lists every segment** — `WN 2536 / 1544` is a connection where
-you're on both of those. The carrier code is dropped from later segments when
-it repeats. An earlier version showed `WN 2536 +1`, which told you a connection
-existed but hid the flight you'd be on for the second half.
-
-**Duplicates are collapsed.** The sweep checks every return date against every
-departure date, so one cheap outbound flight surfaces once per return date —
-three rows, same price, same plane, same seat. That's one option presented as
-three, and it crowds genuinely different fares out of a top-5. Rows sharing a
-price, flight, route and stop count collapse into the shortest trip, with
-`+N dates` marking the rest. The limit then counts distinct fares, not rows.
-
-Discord gets this as a real **embed** — coloured spine, title, footer — with
-the table in a monospace block inside it. The embed is what stops it reading
-like a dumped text file; the monospace block is what keeps the columns lined
-up. Columns run in decision order: price, dates, time, airports, flight.
-
-The last column is the **flight number**, not the airline name — it's shorter,
-it still tells you the carrier, and it's what you paste into a booking site.
-`+1` means one connecting segment after it. `fast-flights` doesn't expose flight
-numbers, so they're pulled straight out of the same payload it already parses
-(segment field 22); if that ever stops lining up, the column falls back to the
-airline name rather than showing a wrong number.
 
 Any time, on demand:
 

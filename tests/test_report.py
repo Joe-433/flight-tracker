@@ -70,19 +70,13 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("Nov 1", dates[1])
         self.assertIn("Dec 1", dates[2])
 
-    def test_airline_link_for_verified_carriers(self):
+    def test_price_is_the_only_link(self):
         body = cheapest_lines(
             stocked([offer(278, flight_no="WN 2536", dep_airport="LGA")]),
             make_config(),
         )
-        self.assertIn("southwest.com", body)
-
-    def test_no_airline_link_for_unverified_carriers(self):
-        body = cheapest_lines(
-            stocked([offer(278, flight_no="AA 171")]), make_config()
-        )
-        self.assertNotIn("aa.com", body)
-        self.assertIn("AA 171", body)
+        self.assertEqual(body.count("]("), 1)
+        self.assertNotIn("southwest.com", body)
 
     def test_sorted_by_price_and_limited(self):
         state = stocked([
@@ -151,13 +145,13 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))
         self.assertIn("nonstop", rendered(stocked([offer(200, stops=0)])))
 
-    def test_flight_number_replaces_airline_name(self):
-        body = rendered(stocked([offer(338, flight_no="AA 171")]))
-        self.assertIn("AA 171", body)
-        self.assertNotIn("JetBlue", body)
+    def test_shows_the_airline_not_the_flight_number(self):
+        body = rendered(stocked([offer(338, flight_no="AA 171", airlines=["American"])]))
+        self.assertIn("American", body)
+        self.assertNotIn("AA 171", body)
 
-    def test_falls_back_to_airline_when_number_missing(self):
-        self.assertIn("JetBlue", rendered(stocked([offer(338)])))
+    def test_missing_airline_does_not_break_the_row(self):
+        self.assertIn("$338", rendered(stocked([offer(338, airlines=[])])))
 
     def test_missing_details_render_placeholders(self):
         body = rendered(
