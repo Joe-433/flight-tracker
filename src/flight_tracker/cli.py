@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import os
+import time
 import sys
 from typing import Dict, List, Optional, Tuple
 
@@ -694,7 +695,6 @@ def cmd_dump(args: argparse.Namespace) -> int:
     """
     cfg = load_config(args.config)
     pairs = date_pairs(cfg)
-    out_date, ret_date = pairs[len(pairs) // 2]
 
     from fast_flights import fetch_flights_html
     from fast_flights.parser import parse
@@ -702,9 +702,25 @@ def cmd_dump(args: argparse.Namespace) -> int:
     from .sources.pairs import _flight_numbers, _format_flight_no
 
     source = get_source(cfg)
-    html = fetch_flights_html(source._query(out_date, ret_date))  # noqa: SLF001
-    results = parse(html)
-    numbers = _flight_numbers(html)
+
+    # Some date pairs come back in a shape the parser can't read. That's normal
+    # and the sweep just skips them; a diagnostic should walk on to the next.
+    results = numbers = None
+    for offset in range(args.attempts):
+        out_date, ret_date = pairs[(len(pairs) // 2 + offset * 7) % len(pairs)]
+        html = fetch_flights_html(source._query(out_date, ret_date))  # noqa: SLF001
+        try:
+            results = parse(html)
+        except Exception as exc:
+            print("skipping %s -> %s: %s" % (out_date, ret_date, _explain_dump(exc)))
+            time.sleep(3)
+            continue
+        numbers = _flight_numbers(html)
+        break
+
+    if not results:
+        print("no date pair returned a parsable payload in %d attempts" % args.attempts)
+        return 1
 
     print("dates   : %s -> %s" % (out_date, ret_date))
     print("parsed  : %d itineraries" % len(results))
@@ -755,6 +771,12 @@ def cmd_dump(args: argparse.Namespace) -> int:
     print("")
     print("agree %d | MISMATCH %d | unknown %d" % (agree, disagree, unknown))
     return 1 if disagree else 0
+
+
+def _explain_dump(exc: Exception) -> str:
+    if isinstance(exc, (IndexError, KeyError, TypeError)):
+        return "unparsable payload (%r)" % exc
+    return "%s: %s" % (type(exc).__name__, exc)
 
 
 # Codes whose airline name shares no letters with the code.
@@ -815,7 +837,10 @@ def build_parser() -> argparse.ArgumentParser:
     probe.add_argument("--nights", type=int, nargs="+")
     probe.set_defaults(func=cmd_probe)
 
-    dump = sub.add_parser("dump", help="print a raw flight segment (diagnostic)")
+    dump = sub.add_parser(
+        "dump", help="cross-check flight numbers against itineraries (diagnostic)"
+    )
+    dump.add_argument("--attempts", type=int, default=6)
     dump.set_defaults(func=cmd_dump)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")
