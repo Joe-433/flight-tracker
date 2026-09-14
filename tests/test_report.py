@@ -5,7 +5,7 @@ import unittest
 
 from helpers import make_config
 
-from flight_tracker.cli import _clock12, cheapest_table
+from flight_tracker.cli import _clock12, cheapest_lines
 from flight_tracker.sources.base import Offer
 from flight_tracker.state import State
 
@@ -27,7 +27,7 @@ def offer(price, out="2026-10-14", nights=3, **kw):
 
 
 def rendered(state, limit=10):
-    return cheapest_table(state, make_config(), limit)
+    return cheapest_lines(state, make_config(), limit)
 
 
 def stocked(offers) -> State:
@@ -52,7 +52,7 @@ class TestClock(unittest.TestCase):
 
 class TestCheapestReport(unittest.TestCase):
     def test_empty(self):
-        self.assertIn("No fares tracked", cheapest_table(State(), make_config()))
+        self.assertIn("No fares tracked", cheapest_lines(State(), make_config()))
 
     def test_sorted_by_price_and_limited(self):
         state = stocked([
@@ -66,37 +66,33 @@ class TestCheapestReport(unittest.TestCase):
         self.assertNotIn("$500", body)
         self.assertLess(body.index("$338"), body.index("$420"))
 
-    def test_price_leads_then_date_then_time(self):
-        table = cheapest_table(stocked([offer(338)]), make_config())
-        header = table.splitlines()[1]
-        row = table.splitlines()[3]  # 0 fence, 1 header, 2 rule
+    def test_reads_in_decision_order(self):
+        line = cheapest_lines(stocked([offer(338)]), make_config()).splitlines()[0]
+        self.assertTrue(line.startswith("**$338**"))
         for earlier, later in (
-            ("PRICE", "DEPART"),
-            ("DEPART", "LEAVES"),
-            ("LEAVES", "ROUTE"),
-            ("ROUTE", "FLIGHTS"),
+            ("$338", "Wed Oct 14"),
+            ("Wed Oct 14", "JFK"),
+            ("JFK", "JetBlue"),
         ):
-            self.assertLess(header.index(earlier), header.index(later))
-        self.assertIn("$338", row)
-        self.assertIn("Wed Oct 14", row)
+            self.assertLess(line.index(earlier), line.index(later))
 
-    def test_has_a_rule_under_the_header(self):
-        table = cheapest_table(stocked([offer(338)]), make_config())
-        self.assertRegex(table.splitlines()[2], r"^-+[- ]*$")
+    def test_no_code_fence(self):
+        """Normal text reflows; a fixed-width table breaks mid-cell."""
+        self.assertNotIn("```", cheapest_lines(stocked([offer(338)]), make_config()))
 
-    def test_columns_line_up(self):
-        table = cheapest_table(
-            stocked([offer(338, "2026-10-14"), offer(1200, "2026-11-02")]),
+    def test_times_are_not_shown(self):
+        body = cheapest_lines(
+            stocked([offer(338, dep_time="07:05", arr_time="22:20")]), make_config()
+        )
+        self.assertNotIn("7:05a", body)
+        self.assertNotIn("10:20p", body)
+
+    def test_one_line_per_fare(self):
+        body = cheapest_lines(
+            stocked([offer(338, "2026-10-14"), offer(400, "2026-11-02")]),
             make_config(),
         )
-        rows = [line for line in table.splitlines() if "$" in line]
-        self.assertEqual(len({line.index("$") for line in rows}), 1)
-
-    def test_arrival_time_is_shown(self):
-        table = cheapest_table(
-            stocked([offer(338, arr_time="22:20")]), make_config()
-        )
-        self.assertIn("10:20p", table)
+        self.assertEqual(len([x for x in body.splitlines() if x.strip()]), 2)
 
     def test_layovers_are_labelled(self):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))
@@ -128,24 +124,24 @@ class TestDeduplication(unittest.TestCase):
             offer(278, "2026-10-21", nights=6, flight_no="WN 2536"),
             offer(278, "2026-10-21", nights=7, flight_no="WN 2536"),
         ])
-        table = cheapest_table(state, make_config(), limit=5)
+        table = cheapest_lines(state, make_config(), limit=5)
         rows = [r for r in table.splitlines() if "$278" in r]
         self.assertEqual(len(rows), 1)
-        self.assertIn("+2 dates", rows[0])
+        self.assertIn("+2 more dates", rows[0])
 
     def test_singular_wording(self):
         state = stocked([
             offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
             offer(278, "2026-10-21", nights=6, flight_no="WN 2536"),
         ])
-        self.assertIn("+1 date", cheapest_table(state, make_config()))
+        self.assertIn("+1 more date", cheapest_lines(state, make_config()))
 
     def test_shortest_trip_represents_the_group(self):
         state = stocked([
             offer(278, "2026-10-21", nights=7, flight_no="WN 2536"),
             offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
         ])
-        row = [r for r in cheapest_table(state, make_config()).splitlines()
+        row = [r for r in cheapest_lines(state, make_config()).splitlines()
                if "$278" in r][0]
         self.assertIn("Mon Oct 26", row)  # the 5-night return
 
@@ -154,7 +150,7 @@ class TestDeduplication(unittest.TestCase):
             offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
             offer(278, "2026-11-04", nights=5, flight_no="WN 264"),
         ])
-        table = cheapest_table(state, make_config(), limit=5)
+        table = cheapest_lines(state, make_config(), limit=5)
         self.assertEqual(len([r for r in table.splitlines() if "$278" in r]), 2)
 
     def test_different_prices_stay_separate(self):
@@ -162,7 +158,7 @@ class TestDeduplication(unittest.TestCase):
             offer(278, "2026-10-21", nights=5, flight_no="WN 2536"),
             offer(315, "2026-10-21", nights=6, flight_no="WN 2536"),
         ])
-        table = cheapest_table(state, make_config(), limit=5)
+        table = cheapest_lines(state, make_config(), limit=5)
         self.assertIn("$278", table)
         self.assertIn("$315", table)
 
@@ -173,7 +169,7 @@ class TestDeduplication(unittest.TestCase):
             offers += [offer(278, "2026-10-21", nights=n, flight_no="WN 2536")
                        for n in (5, 6, 7)]
         offers.append(offer(300, "2026-11-04", nights=5, flight_no="WN 999"))
-        table = cheapest_table(stocked(offers), make_config(), limit=2)
+        table = cheapest_lines(stocked(offers), make_config(), limit=2)
         self.assertIn("$300", table)
 
 

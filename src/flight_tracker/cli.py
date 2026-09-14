@@ -564,15 +564,6 @@ def _row_parts(price: float, snap: dict, cfg: Config) -> List[str]:
     ]
 
 
-# No "#" column: the ranking is the row order, and the width is better spent
-# on data. Wide beats tall -- one line per fare, generous gutters.
-HEADERS = [
-    "PRICE", "DEPART", "RETURN", "N", "LEAVES", "LANDS", "ROUTE", "STOPS",
-    "FLIGHTS", "ALSO",
-]
-GUTTER = "   "
-
-
 def _dedupe_key(snap: dict) -> tuple:
     """What makes two rows the same fare rather than two options.
 
@@ -600,15 +591,47 @@ def _nights(snap: dict) -> int:
         return 99
 
 
-def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
-    """Top N cheapest fares as an aligned monospace table.
+def _fare_line(price: float, snap: dict, extras: int, cfg: Config) -> str:
+    """One fare as ordinary prose, not a table cell.
 
-    Columns are ordered the way the decision is made: price, then dates, then
-    departure time, then airports, then which flight. Rendered inside a code
-    fence so Discord keeps it fixed-width -- the embed around it supplies the
-    title and colour, so this stays a table rather than looking like a dumped
-    text file.
+    A fixed-width table is only readable while it fits the reader's window; at
+    ~82 characters Discord breaks every row mid-cell and the alignment that
+    justified the monospace font is exactly what's destroyed. Normal text
+    reflows at a separator instead, so a narrow window costs a wrapped line
+    rather than a mangled grid.
     """
+    stops = snap.get("stops")
+    stops_text = (
+        "nonstop"
+        if stops == 0
+        else ("%s stop" % stops if isinstance(stops, int) else "? stops")
+    )
+    airlines = snap.get("airlines") or []
+    who = str(snap.get("flight_no") or "") or (
+        ", ".join(str(a) for a in airlines)[:18] or "?"
+    )
+    out_date = str(snap.get("out_date", ""))
+    ret_date = str(snap.get("ret_date", ""))
+
+    bits = [
+        "**%s**" % _money(price, cfg.search.currency),
+        "%s \u2192 %s"
+        % (
+            _short_date(out_date) if out_date else "?",
+            _short_date(ret_date) if ret_date else "?",
+        ),
+        "%dn" % _nights(snap),
+        "%s\u2192%s" % (snap.get("dep_airport") or "???", snap.get("arr_airport") or "???"),
+        stops_text,
+        who,
+    ]
+    if extras:
+        bits.append("+%d more %s" % (extras, "date" if extras == 1 else "dates"))
+    return "  \u00b7  ".join(bits)
+
+
+def cheapest_lines(state: State, cfg: Config, limit: int = 5) -> str:
+    """Top N cheapest fares, one readable line each."""
     ranked = []
     for snap in state.latest.values():
         try:
@@ -619,8 +642,6 @@ def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
     if not ranked:
         return "No fares tracked yet."
 
-    # Collapse the same fare repeated across return dates, keeping the shortest
-    # trip as the representative and counting the rest.
     groups: Dict[tuple, List[Tuple[float, dict]]] = {}
     order: List[tuple] = []
     for price, snap in ranked:
@@ -630,30 +651,13 @@ def cheapest_table(state: State, cfg: Config, limit: int = 5) -> str:
             order.append(key)
         groups[key].append((price, snap))
 
-    rows = []
+    lines = []
     for key in order[:limit]:
         price, snap = groups[key][0]
-        extras = len(groups[key]) - 1
-        rows.append(
-            _row_parts(price, snap, cfg)
-            + ["+%d %s" % (extras, "date" if extras == 1 else "dates") if extras else ""]
-        )
-    widths = [
-        max(len(HEADERS[column]), max(len(row[column]) for row in rows))
-        for column in range(len(HEADERS))
-    ]
-
-    def line(parts: List[str]) -> str:
-        return GUTTER.join(
-            part.ljust(widths[i]) for i, part in enumerate(parts)
-        ).rstrip()
-
-    # A rule under the header, so the eye has something to rest on before the
-    # numbers start.
-    rule = GUTTER.join("-" * width for width in widths)
-    return "\n".join(
-        ["```", line(HEADERS), rule] + [line(row) for row in rows] + ["```"]
-    )
+        lines.append(_fare_line(price, snap, len(groups[key]) - 1, cfg))
+    # Blank line between fares: with wrapping, a bold price alone isn't enough
+    # of a boundary.
+    return "\n\n".join(lines)
 
 
 def cmd_report(args: argparse.Namespace) -> int:
@@ -662,11 +666,10 @@ def cmd_report(args: argparse.Namespace) -> int:
     message = Message(
         title="Cheapest %s \u2192 %s \u00b7 top %d"
         % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
-        body=cheapest_table(state, cfg, limit=args.limit),
-        footer="Outbound times and airports \u00b7 prices as last seen \u00b7 "
+        body=cheapest_lines(state, cfg, limit=args.limit),
+        footer="Outbound airports \u00b7 prices as last seen \u00b7 "
         "%d date pairs tracked" % len(state.latest),
         color=GREEN,
-        plain=True,  # the table is wider than an embed can hold
     )
     if args.send:
         results = Notifier.from_env().send(message)

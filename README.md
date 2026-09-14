@@ -298,29 +298,26 @@ Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
 Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
-```
-PRICE   DEPART       RETURN       N   LEAVES   LANDS    ROUTE     STOPS    FLIGHTS          ALSO
------   ----------   ----------   -   ------   ------   -------   ------   --------------   --------
-$278    Wed Oct 21   Tue Oct 27   6   3:05p    10:20p   LGA→LAX   1 stop   WN 2536 / 1544
-$278    Wed Nov 4    Tue Nov 10   6   7:00a    1:25p    LGA→LAX   1 stop   WN 264 / 1102    +3 dates
-$409    Thu Oct 29   Sun Nov 1    3   9:50p    1:05a    JFK→LAX   nonstop  AA 171
-```
+> **$278**  ·  Wed Oct 21 → Tue Oct 27  ·  6n  ·  LGA→LAX  ·  1 stop  ·  WN 2536 / 1544
+>
+> **$278**  ·  Wed Nov 4 → Tue Nov 10  ·  6n  ·  LGA→LAX  ·  1 stop  ·  WN 264 / 1102  ·  +3 more dates
+>
+> **$409**  ·  Thu Oct 29 → Sun Nov 1  ·  3n  ·  JFK→LAX  ·  nonstop  ·  AA 171
 
-One line per fare, wide rather than tall, with a rule under the header and
-three-space gutters. Columns run in decision order: price, dates, times,
-airports, flight.
+One fare per line, in decision order: price, dates, length, airports, stops,
+flight.
 
-**`FLIGHTS` lists every segment**, not just the first — `WN 2536 / 1544` is a
-connection where you're on both of those. The carrier code is dropped from
-later segments when it repeats. An earlier version showed `WN 2536 +1`, which
-told you a connection existed but hid the flight you'd be on for the second
-half.
+**It's normal text, not a fixed-width table.** A monospace table is only
+readable while it fits the reader's window — Discord wraps at about 82
+characters, and past that it breaks every row mid-cell, destroying the exact
+alignment that justified the monospace font in the first place. Normal text
+reflows at a separator instead, so a narrow window costs a wrapped line rather
+than a mangled grid.
 
-This one message is sent as a **plain message rather than an embed**. Discord
-embeds cap at roughly 72 monospace characters before wrapping, and this table
-is ~95 — you can have the embed's coloured chrome or the width, not both, and
-for a table the width wins. Alerts stay as embeds, since a single fare is
-narrow enough.
+**`FLIGHTS` lists every segment** — `WN 2536 / 1544` is a connection where
+you're on both of those. The carrier code is dropped from later segments when
+it repeats. An earlier version showed `WN 2536 +1`, which told you a connection
+existed but hid the flight you'd be on for the second half.
 
 **Duplicates are collapsed.** The sweep checks every return date against every
 departure date, so one cheap outbound flight surfaces once per return date —
