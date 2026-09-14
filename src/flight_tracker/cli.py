@@ -694,6 +694,10 @@ def cmd_dump(args: argparse.Namespace) -> int:
     reports for that same itinerary; if it doesn't, the lists are misaligned.
     """
     cfg = load_config(args.config)
+    if args.to:
+        cfg.route.destination = args.to
+    if getattr(args, "from_", None):
+        cfg.route.origin = args.from_
     pairs = date_pairs(cfg)
 
     from fast_flights import fetch_flights_html
@@ -862,6 +866,8 @@ def build_parser() -> argparse.ArgumentParser:
         "dump", help="cross-check flight numbers against itineraries (diagnostic)"
     )
     dump.add_argument("--attempts", type=int, default=6)
+    dump.add_argument("--to", help="override destination (MID or IATA code)")
+    dump.add_argument("--from", dest="from_", help="override origin")
     dump.set_defaults(func=cmd_dump)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")

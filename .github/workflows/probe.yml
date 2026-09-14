@@ -23,6 +23,10 @@ on:
         description: "Instead of probing, dump one raw flight segment"
         required: false
         default: "false"
+      dump_args:
+        description: "Extra args for dump, e.g. --to BUR"
+        required: false
+        default: ""
 
 jobs:
   probe:
@@ -39,7 +43,7 @@ jobs:
         if: github.event.inputs.dump == 'true'
         env:
           PYTHONPATH: src
-        run: python -m flight_tracker dump
+        run: python -m flight_tracker dump ${{ github.event.inputs.dump_args }}
 
       - name: Probe
         if: github.event.inputs.dump != 'true'
