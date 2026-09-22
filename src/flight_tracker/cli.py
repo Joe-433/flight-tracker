@@ -13,7 +13,7 @@ import datetime as dt
 import os
 import time
 import sys
-from typing import Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 from . import analysis, deadman
 from .config import Config, load_config
@@ -648,17 +648,19 @@ def _fare_line(
     return "  \u00b7  ".join(bits)
 
 
-def cheapest_lines(state: State, cfg: Config, limit: int = 5) -> str:
-    """Top N cheapest fares, one readable line each."""
+def _grouped(
+    state: State, cfg: Config, keep: Callable[[dict], bool]
+) -> List[List[Tuple[float, dict]]]:
+    """Fares matching `keep`, de-duplicated, cheapest group first."""
     ranked = []
     for snap in state.latest.values():
+        if not keep(snap):
+            continue
         try:
             ranked.append((float(snap["price"]), snap))  # type: ignore[arg-type]
         except (KeyError, TypeError, ValueError):
             continue
     ranked.sort(key=lambda r: (r[0], _nights(r[1])))
-    if not ranked:
-        return "No fares tracked yet."
 
     groups: Dict[tuple, List[Tuple[float, dict]]] = {}
     order: List[tuple] = []
@@ -668,37 +670,68 @@ def cheapest_lines(state: State, cfg: Config, limit: int = 5) -> str:
             groups[key] = []
             order.append(key)
         groups[key].append((price, snap))
+    return [groups[key] for key in order]
 
-    # Pick the cheapest `limit` fares, then present them in departure order.
-    # Ranking by price is what makes the list worth reading; reading it in date
-    # order is what makes it usable for planning a trip.
+
+def _render(
+    groups: List[List[Tuple[float, dict]]], limit: int, cfg: Config, linked: bool
+) -> List[str]:
+    """Cheapest `limit` fares, listed in departure order.
+
+    Ranking by price is what makes the list worth reading; reading it in date
+    order is what makes it usable for planning a trip.
+    """
     chosen = sorted(
-        order[:limit], key=lambda k: str(groups[k][0][1].get("out_date") or "")
+        groups[:limit], key=lambda g: str(g[0][1].get("out_date") or "")
     )
+    return [
+        _fare_line(group[0][0], group[0][1], len(group) - 1, cfg, linked)
+        for group in chosen
+    ]
 
-    def render(linked: bool) -> List[str]:
-        out = []
-        for key in chosen:
-            price, snap = groups[key][0]
-            out.append(_fare_line(price, snap, len(groups[key]) - 1, cfg, linked))
-        return out
 
-    lines = render(linked=True)
+def _stops_of(snap: dict) -> int:
+    value = snap.get("stops")
+    return int(value) if isinstance(value, int) else 1
+
+
+def cheapest_lines(state: State, cfg: Config, limit: int = 3) -> str:
+    """Cheapest nonstops and cheapest one-stops, as separate lists.
+
+    One ranked list doesn't work on this route: connecting fares are reliably
+    cheaper, so they take every slot and the nonstops -- the reason the tracker
+    exists -- never appear. Splitting the two means the cheap connection is
+    still visible without it hiding what a direct flight costs.
+    """
+    nonstop = _grouped(state, cfg, lambda snap: _stops_of(snap) == 0)
+    connecting = _grouped(state, cfg, lambda snap: _stops_of(snap) >= 1)
+    if not nonstop and not connecting:
+        return "No fares tracked yet."
+
+    def compose(linked: bool) -> str:
+        blocks = []
+        for title, groups in (("Nonstop", nonstop), ("One layover", connecting)):
+            lines = _render(groups, limit, cfg, linked)
+            blocks.append(
+                "**%s**\n%s"
+                % (title, "\n\n".join(lines) if lines else "_none tracked yet_")
+            )
+        return "\n\n".join(blocks)
+
+    body = compose(linked=True)
     # An embed description is capped at 4096 characters and these deeplinks run
     # ~200 each. Rather than truncate mid-link and break every row after it,
     # drop the links and keep the fares readable.
-    if sum(len(line) for line in lines) + 2 * len(lines) > 3900:
-        lines = render(linked=False)
-    # Blank line between fares: with wrapping, a bold price alone isn't enough
-    # of a boundary.
-    return "\n\n".join(lines)
+    if len(body) > 3900:
+        body = compose(linked=False)
+    return body
 
 
 def cmd_report(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     state = State.load(args.state)
     message = Message(
-        title="Cheapest %s \u2192 %s \u00b7 top %d"
+        title="Cheapest %s \u2192 %s \u00b7 top %d of each"
         % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
         body=cheapest_lines(state, cfg, limit=args.limit),
         footer="Outbound airports \u00b7 prices as last seen \u00b7 "
@@ -899,7 +932,7 @@ def build_parser() -> argparse.ArgumentParser:
     days.set_defaults(func=cmd_days)
 
     report = sub.add_parser("report", help="top N cheapest fares, formatted")
-    report.add_argument("--limit", type=int, default=10)
+    report.add_argument("--limit", type=int, default=3, help="per section")
     report.add_argument("--send", action="store_true")
     report.set_defaults(func=cmd_report)
 

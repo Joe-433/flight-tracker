@@ -329,13 +329,20 @@ Every **Monday at 6:00am Pacific**, the top 10 cheapest tracked fares land in
 Discord, ordered the way you'd actually decide: price, then dates, then
 departure time, then airports, then airline.
 
-> **$278**  ·  Wed Oct 21 → Tue Oct 27  ·  6n  ·  LGA→LAX  ·  1 stop  ·  Southwest
+> **Nonstop**
+> **$357**  ·  Wed Nov 4 → Tue Nov 10  ·  6n  ·  EWR→LAX  ·  nonstop  ·  Alaska  ·  +3 more dates
+> **$367**  ·  Sat Dec 5 → Sat Dec 12  ·  7n  ·  EWR→LAX  ·  nonstop  ·  Alaska
 >
-> **$278**  ·  Wed Nov 4 → Tue Nov 10  ·  6n  ·  LGA→LAX  ·  1 stop  ·  Southwest  ·  +4 more dates
->
-> **$409**  ·  Thu Oct 29 → Sun Nov 1  ·  3n  ·  JFK→LAX  ·  nonstop  ·  American
+> **One layover**
+> **$230**  ·  Wed Nov 4 → Mon Nov 9  ·  5n  ·  LGA→ONT  ·  1 stop  ·  Southwest  ·  +2 more dates
+> **$230**  ·  Thu Dec 3 → Wed Dec 9  ·  6n  ·  LGA→ONT  ·  1 stop  ·  Southwest
 
-One fare per line. The **cheapest** fares are selected, then listed in
+**Two sections, three fares each.** Connecting fares are reliably cheaper on
+this route, so a single ranked list handed them every slot and the nonstops —
+the reason the tracker exists — never appeared at all. Splitting them keeps the
+cheap connection visible without letting it hide what a direct flight costs.
+
+Within each section the **cheapest** fares are selected, then listed in
 **departure order** — ranking by price is what makes the list worth reading,
 reading it in date order is what makes it usable for planning a trip.
 

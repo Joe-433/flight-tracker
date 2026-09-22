@@ -31,6 +31,15 @@ def rendered(state, limit=10):
     return cheapest_lines(state, make_config(), limit)
 
 
+def fare_rows(state, limit=10):
+    """Just the fare lines, without the section headers."""
+    return [
+        line
+        for line in cheapest_lines(state, make_config(), limit).splitlines()
+        if line.startswith("**[") or line.startswith("**$")
+    ]
+
+
 def stocked(offers) -> State:
     state = State()
     state.record(offers, make_config().history, now=NOW)
@@ -63,12 +72,11 @@ class TestCheapestReport(unittest.TestCase):
             offer(260, "2026-10-01", flight_no="AA 3"),
             offer(900, "2026-09-25", flight_no="AA 4"),
         ])
-        body = cheapest_lines(state, make_config(), limit=3)
-        self.assertNotIn("$900", body)  # selection is by price
-        dates = [l for l in body.splitlines() if l.strip()]
-        self.assertIn("Oct 1", dates[0])
-        self.assertIn("Nov 1", dates[1])
-        self.assertIn("Dec 1", dates[2])
+        rows = fare_rows(state, limit=3)
+        self.assertFalse(any("$900" in r for r in rows))  # selection is by price
+        self.assertIn("Oct 1", rows[0])
+        self.assertIn("Nov 1", rows[1])
+        self.assertIn("Dec 1", rows[2])
 
     def test_price_is_the_only_link(self):
         body = cheapest_lines(
@@ -90,7 +98,7 @@ class TestCheapestReport(unittest.TestCase):
         self.assertNotIn("$500", body)
 
     def test_reads_in_decision_order(self):
-        line = cheapest_lines(stocked([offer(338)]), make_config()).splitlines()[0]
+        line = fare_rows(stocked([offer(338)]))[0]
         self.assertTrue(line.startswith("**[$338]"))
         for earlier, later in (
             ("$338", "Wed Oct 14"),
@@ -101,15 +109,11 @@ class TestCheapestReport(unittest.TestCase):
 
     def test_price_is_a_link(self):
         """A flight number is a poor handle on a fare months out; the link isn't."""
-        line = cheapest_lines(
-            stocked([offer(338, url="https://flights.test/x")]), make_config()
-        ).splitlines()[0]
+        line = fare_rows(stocked([offer(338, url="https://flights.test/x")]))[0]
         self.assertTrue(line.startswith("**[$338](https://flights.test/x)**"))
 
     def test_price_without_a_url_still_renders(self):
-        line = cheapest_lines(
-            stocked([offer(338, url=None)]), make_config()
-        ).splitlines()[0]
+        line = fare_rows(stocked([offer(338, url=None)]))[0]
         self.assertTrue(line.startswith("**$338**"))
 
     def test_links_dropped_rather_than_truncated_when_too_long(self):
@@ -135,11 +139,10 @@ class TestCheapestReport(unittest.TestCase):
         self.assertNotIn("10:20p", body)
 
     def test_one_line_per_fare(self):
-        body = cheapest_lines(
-            stocked([offer(338, "2026-10-14"), offer(400, "2026-11-02")]),
-            make_config(),
+        rows = fare_rows(
+            stocked([offer(338, "2026-10-14"), offer(400, "2026-11-02")])
         )
-        self.assertEqual(len([x for x in body.splitlines() if x.strip()]), 2)
+        self.assertEqual(len(rows), 2)
 
     def test_layovers_are_labelled(self):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))
@@ -160,6 +163,45 @@ class TestCheapestReport(unittest.TestCase):
         )
         self.assertIn("???", body)
         self.assertIn("$300", body)
+
+
+class TestSections(unittest.TestCase):
+    """Connecting fares are reliably cheaper here, so one ranked list would
+    hand them every slot and the nonstops would never appear."""
+
+    def mixed(self):
+        return stocked([
+            offer(230, "2026-10-01", stops=1, flight_no="WN 1"),
+            offer(240, "2026-10-05", stops=1, flight_no="WN 2"),
+            offer(250, "2026-10-09", stops=1, flight_no="WN 3"),
+            offer(260, "2026-10-13", stops=1, flight_no="WN 4"),
+            offer(357, "2026-11-01", stops=0, flight_no="AS 1"),
+            offer(367, "2026-11-05", stops=0, flight_no="AS 2"),
+        ])
+
+    def test_both_sections_appear(self):
+        body = cheapest_lines(self.mixed(), make_config(), limit=3)
+        self.assertIn("**Nonstop**", body)
+        self.assertIn("**One layover**", body)
+
+    def test_nonstops_are_not_crowded_out(self):
+        body = cheapest_lines(self.mixed(), make_config(), limit=3)
+        self.assertIn("$357", body)
+        self.assertIn("$367", body)
+
+    def test_limit_applies_per_section(self):
+        rows = fare_rows(self.mixed(), limit=3)
+        self.assertEqual(len(rows), 5)  # 3 connecting + 2 nonstop available
+        self.assertFalse(any("$260" in r for r in rows))  # 4th connecting dropped
+
+    def test_empty_section_says_so(self):
+        body = cheapest_lines(
+            stocked([offer(230, stops=1)]), make_config(), limit=3
+        )
+        self.assertIn("none tracked yet", body)
+
+    def test_nothing_at_all(self):
+        self.assertIn("No fares tracked", cheapest_lines(State(), make_config()))
 
 
 class TestDeduplication(unittest.TestCase):
