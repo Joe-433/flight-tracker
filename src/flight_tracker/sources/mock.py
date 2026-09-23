@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import hashlib
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import List
 
 from ..config import Config
-from .base import Offer, Source, plan_slice
+from .base import Item, Offer, Source
 
 AIRLINES = [["JetBlue"], ["Delta"], ["American"], ["United"], ["Alaska"]]
 
@@ -24,18 +24,15 @@ def _hash_float(*parts: str) -> float:
 class MockSource(Source):
     name = "mock"
 
-    def sweep(
-        self, cursors: Optional[Dict[str, int]] = None
-    ) -> Tuple[List[Offer], Dict[str, int]]:
+    def drill(self, items: List[Item]) -> List[Offer]:
         if os.getenv("FT_MOCK_EMPTY"):  # for exercising the dead man's switch
-            return [], dict(cursors or {})
+            return []
 
         seed = os.getenv("FT_MOCK_SEED", "0")
-        picked, next_cursors = plan_slice(self.cfg, cursors)
 
         offers: List[Offer] = []
-        for out_date, ret_date, _dest in picked:
-            r = _hash_float(seed, out_date, ret_date)
+        for out_date, ret_date, dest in items:
+            r = _hash_float(seed, out_date, ret_date, dest)
             price = 240 + 180 * r
             if _hash_float("deal", seed, out_date) < 0.08:
                 price *= 0.55  # planted bargain
@@ -49,6 +46,9 @@ class MockSource(Source):
                     url="https://www.google.com/travel/flights",
                     stops=0,
                     duration_minutes=355,
+                    dep_airport="JFK",
+                    arr_airport=dest,
+                    flight_no="B6 %d" % (100 + int(r * 800)),
                 )
             )
             if self.cfg.search.max_stops >= 1:
@@ -63,6 +63,9 @@ class MockSource(Source):
                         url="https://www.google.com/travel/flights",
                         stops=1,
                         duration_minutes=480,
+                        dep_airport="LGA",
+                        arr_airport=dest,
+                        flight_no="WN %d / %d" % (1000 + int(r * 900), 2000 + int(r * 700)),
                     )
                 )
-        return offers, next_cursors
+        return offers

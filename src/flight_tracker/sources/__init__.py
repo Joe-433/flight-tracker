@@ -7,7 +7,7 @@ something -- and it will -- this is the only place that should need edits.
 from __future__ import annotations
 
 from ..config import Config
-from .base import Offer, ScrapeError, Source, date_pairs
+from .base import Item, Offer, ScrapeError, Source, date_pairs
 
 
 def get_source(cfg: Config) -> Source:
@@ -16,10 +16,6 @@ def get_source(cfg: Config) -> Source:
         from .pairs import PairsSource
 
         return PairsSource(cfg)
-    if backend == "grid":
-        from .grid import GridSource
-
-        return GridSource(cfg)
     if backend == "mock":
         from .mock import MockSource
 
@@ -27,4 +23,4 @@ def get_source(cfg: Config) -> Source:
     raise ValueError("unknown source backend: %r" % backend)
 
 
-__all__ = ["Offer", "ScrapeError", "Source", "date_pairs", "get_source"]
+__all__ = ["Item", "Offer", "ScrapeError", "Source", "date_pairs", "get_source"]
