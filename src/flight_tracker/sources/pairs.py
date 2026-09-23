@@ -1,12 +1,13 @@
-"""Date-pair backend: one Google Flights query per (outbound, return) pair.
+"""Full searches: one Google Flights query per (dates, destination) item.
 
-This is the backend that works against `fast-flights` as actually published
-(3.1.0). The full date space is several hundred pairs, far too many to sweep every
-run, so each run walks a rotating slice (`source.pairs_per_run`) split across
-`source.bands` and stores one cursor per band in state. See `plan_slice`.
+This is the exact source -- flight numbers, airports, the price a booking page
+will show -- and the expensive one: a request per item, against 1,380 items in
+the search space. So it never decides what to search. The planner does
+(planner.py), steered by the calendar grid, and hands this module a short list.
 
-City MIDs (e.g. "/m/02_286") are passed straight through as the airport field,
-which is how one query covers every airport in the metro.
+The origin is a city MID ("/m/02_286"), which covers every NY airport in one
+request; excluded airports are dropped per itinerary so the cheapest remaining
+option still wins. Destinations are searched by airport code.
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from ..config import Config
-from .base import Offer, ScrapeError, Source, plan_slice
+from .base import Item, Offer, ScrapeError, Source
 
 
 def _flight_numbers(html: str) -> List[List[Optional[str]]]:
@@ -127,7 +128,7 @@ def _clock(moment: Any) -> Optional[str]:
 
 def _label(dest: str) -> str:
     """A MID is unreadable in a log line; an airport code is the label itself."""
-    return dest if not dest.startswith("/m/") else "primary"
+    return dest if not dest.startswith("/m/") else "metro"
 
 
 def _explain(exc: Exception) -> str:
@@ -185,7 +186,7 @@ class PairsSource(Source):
     def _query(self, out_date: str, ret_date: str, dest: Optional[str] = None) -> Any:
         s = self.cfg.search
         r = self.cfg.route
-        dest = dest or r.destination
+        dest = dest or r.destinations[0]
         return self._create_query(
             flights=[
                 self._FlightQuery(
@@ -296,7 +297,7 @@ class PairsSource(Source):
             # found" is useless unless you know which airport found none.
             self.errors.append(
                 "%s %s->%s: %s"
-                % (_label(dest or self.cfg.route.destination), out_date, ret_date,
+                % (_label(dest or self.cfg.route.destinations[0]), out_date, ret_date,
                    _explain(last_exc))
             )
             return None
@@ -355,16 +356,11 @@ class PairsSource(Source):
 
     # -- sweep --------------------------------------------------------------
 
-    def sweep(
-        self, cursors: Optional[Dict[str, int]] = None
-    ) -> Tuple[List[Offer], Dict[str, int]]:
-        picked, next_cursors = plan_slice(self.cfg, cursors)
-
+    def drill(self, items: List[Item]) -> List[Offer]:
         lo, hi = (list(self.cfg.source.jitter_seconds) + [0, 0])[:2]
         offers: List[Offer] = []
-        for i, (out_date, ret_date, dest) in enumerate(picked):
+        for i, (out_date, ret_date, dest) in enumerate(items):
             if i:
                 time.sleep(random.uniform(float(lo), float(hi)))
             offers.extend(self.fetch_pair_by_stops(out_date, ret_date, dest))
-
-        return offers, next_cursors
+        return offers

@@ -23,6 +23,10 @@ on:
         description: "Instead of probing, dump one raw flight segment"
         required: false
         default: "false"
+      command:
+        description: "Run `python -m flight_tracker <command>` instead, e.g. `grid --limit 4`"
+        required: false
+        default: ""
       probe_args:
         description: "Extra args for probe, e.g. --carry-on 0 --max-stops 2"
         required: false
@@ -43,14 +47,23 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Diagnostic command
+        if: github.event.inputs.command != ''
+        env:
+          PYTHONPATH: src
+          # Passed through the environment, not interpolated into the script,
+          # so the input can't inject shell.
+          ARGS: ${{ github.event.inputs.command }}
+        run: python -m flight_tracker $ARGS
+
       - name: Dump a raw segment
-        if: github.event.inputs.dump == 'true'
+        if: github.event.inputs.command == '' && github.event.inputs.dump == 'true'
         env:
           PYTHONPATH: src
         run: python -m flight_tracker dump ${{ github.event.inputs.dump_args }}
 
       - name: Probe
-        if: github.event.inputs.dump != 'true'
+        if: github.event.inputs.command == '' && github.event.inputs.dump != 'true'
         env:
           PYTHONPATH: src
         run: |

@@ -3,29 +3,19 @@
 # ---------------------------------------------------------------------------
 
 route:
-  # Google "MID" knowledge-graph ids. A city MID covers the whole metro area,
-  # which is how we collapse 3 NY airports x 5 LA airports into one query.
-  # VERIFY THESE ONCE: `python -m flight_tracker verify --config config.yaml`
+  # Full searches use Google's city MID for the origin: one request covers
+  # JFK, LGA and EWR, and unwanted airports are filtered out of the results.
   origin: "/m/02_286"
-  destination: "/m/030qb3t"
+  origin_airports: ["JFK", "LGA", "EWR"]
+  exclude_origins: ["EWR"]
+
+  # Destinations are named one by one. The LA city MID returns LAX and nothing
+  # else (verified 49/49 on a raw payload), so the basin has to be spelled out.
+  # Worth it: after a week of data, ONT, BUR and SNA all undercut LAX.
+  destinations: ["LAX", "BUR", "SNA", "ONT", "LGB"]
+
   origin_label: "NY metro"
   destination_label: "LA metro"
-
-  # The NY MID expands to JFK/LGA/EWR on its own. The LA one does not -- it
-  # returns LAX and nothing else (verified: 49 of 49 itineraries in a raw
-  # payload). So the rest of the LA basin has to be named explicitly.
-  #
-  # They get a fifth of the budget, not an equal share: one probe put the
-  # cheapest BUR fare at $533 against ~$370 for LAX, all of them connections,
-  # since no one flies a transcon nonstop into Burbank. This is enough to find
-  # out whether that holds, and cheap enough not to care if it does.
-  also_check: ["BUR", "SNA", "ONT", "LGB"]
-  also_check_share: 0.55
-
-  # Newark is excluded by name: the NY city MID returns JFK, LGA and EWR, and
-  # there is no way to ask it for fewer, so unwanted origins are filtered out
-  # of the results instead. The cheapest remaining itinerary still wins.
-  exclude_origins: ["EWR"]
 
 search:
   # Departures 14 to 105 days out. `window_days` is the span of DEPARTURE
@@ -56,31 +46,38 @@ search:
   exclude_basic_economy: false
 
 source:
-  # pairs = one request per date pair, rotating slice per run (works with
-  #         fast-flights 3.1.0 as published).
-  # grid  = one request for the whole calendar matrix (needs a fork that
-  #         actually implements get_calendar_grid; see README).
-  # mock  = deterministic fake data, for testing the pipeline offline.
-  backend: "pairs"
-  pairs_per_run: 120     # per run; see README "Request budget" for the math
-  jitter_seconds: [1, 3] # random pause between requests
+  backend: "pairs"        # pairs | mock
+  # Full searches per run, split across shards. Each shard is a separate
+  # GitHub runner -- a separate machine and usually a separate IP.
+  drills_per_run: 60
+  shards: 4
+  jitter_seconds: [1, 3]  # random pause between requests on one runner
   retries: 2
-  # How the per-run budget is split across the horizon. Near-term fares move
-  # fast and are the time-sensitive ones; fares 3 months out barely move, so
-  # they get revisited less often. Each band rotates on its own cursor.
-  # Bands would let some lead times be checked more often than others. They're
-  # off: every date pair is swept on one flat rotation, equal treatment.
-  #
-  # Note that equal SHARES across the old four bands would not have been
-  # uniform -- they held 24/72/90/90 pairs, so an even split would have cycled
-  # the smallest band three times for every one pass over the largest. Uniform
-  # per date pair means no bands at all.
-  #
-  # Turn them back on once there's enough history to justify a weighting, e.g.
-  #   bands:
-  #     - {within_days: 45,  share: 0.5}
-  #     - {within_days: 105, share: 0.5}
-  bands: []
+
+grid:
+  # Calendar scans (sources/grid.py): one request prices every departure date
+  # in a 61-day window. 5 destinations x 3 trip lengths x 2 stop classes x 2
+  # windows = 60 requests to price all 1,380 date pairs, against 1,380 for full
+  # searches. The grid decides where full searches go; it never alerts alone.
+  enabled: true
+  refresh_minutes: 25
+  jitter_seconds: [1, 2]
+  notify_after_failures: 3
+  # Off so the calendar prices trips the same way full searches do -- which
+  # is without bag fees, because fast-flights' bag filter has no effect.
+  # Measured: bags on, 0 of 74 prices matched (median +$90); bags off, 19
+  # exact and 34 within $15.
+  include_bags: false
+
+schedule:
+  # How often a date pair earns a full search (planner.py). A pair is due when
+  # the time since its last search exceeds its interval; the most overdue go
+  # first, so nothing starves -- it just waits longer if it's unremarkable.
+  base_hours: 24          # unremarkable fares
+  cheap_hours: 3          # bottom 20% of their stop class
+  cheapest_hours: 1       # bottom 5%, or the calendar says the price moved
+  urgent_hours: 0.25      # under an alert threshold, or a new low
+  moved_usd: 10           # calendar this far below the last full search
 
 alerts:
   threshold_usd: 250              # nonstop: tell me now

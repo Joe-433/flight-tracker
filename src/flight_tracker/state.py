@@ -74,7 +74,6 @@ class State:
     last_run: Optional[str] = None
     last_data: Optional[str] = None
     consecutive_failures: int = 0
-    cursors: Dict[str, int] = field(default_factory=dict)
     deadman: Dict[str, Optional[str]] = field(
         default_factory=lambda: {"down": False, "since": None, "last_notified": None}
     )
@@ -86,6 +85,19 @@ class State:
     latest: Dict[str, Dict[str, object]] = field(default_factory=dict)
     # Cheapest fare ever seen, per stop class. The bar for record-low alerts.
     records: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # When each (outbound|return|destination) last had a full search, whatever
+    # it found. The planner's memory: without it, a date pair with no flights
+    # would look never-searched and win a slot every run.
+    checked: Dict[str, str] = field(default_factory=dict)
+    # Calendar scans: "DEST|nights|stops" -> {"seen": ts, "prices": {date: $}}
+    grid: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # Start times of recent runs, so the report can say whether the trigger is
+    # actually firing.
+    runs: List[str] = field(default_factory=list)
+    # Consecutive runs where every calendar scan failed.
+    grid_health: Dict[str, object] = field(
+        default_factory=lambda: {"failures": 0, "down": False}
+    )
 
     # -- io -----------------------------------------------------------------
 
@@ -105,12 +117,15 @@ class State:
             "last_run",
             "last_data",
             "consecutive_failures",
-            "cursors",
             "deadman",
             "alerts",
             "observations",
             "latest",
             "records",
+            "checked",
+            "grid",
+            "runs",
+            "grid_health",
         ):
             if key in raw:
                 setattr(state, key, raw[key])
@@ -124,12 +139,15 @@ class State:
             "last_run": self.last_run,
             "last_data": self.last_data,
             "consecutive_failures": self.consecutive_failures,
-            "cursors": self.cursors,
             "deadman": self.deadman,
             "alerts": self.alerts,
             "observations": self.observations,
             "latest": self.latest,
             "records": self.records,
+            "checked": self.checked,
+            "grid": self.grid,
+            "runs": self.runs,
+            "grid_health": self.grid_health,
         }
         # Atomic write: a half-written state file would look like a fresh start
         # and silently wipe price history.
@@ -185,9 +203,25 @@ class State:
             if not mine or float(record.get("price", 0)) < float(mine.get("price", 0)):
                 self.records[name] = record
 
-        # Furthest cursor wins, so the losing run's ground isn't re-swept.
-        for name, position in other.cursors.items():
-            self.cursors[name] = max(int(position), int(self.cursors.get(name, 0)))
+        # Latest search wins, so the planner never re-spends a slot on an
+        # item the other run just covered.
+        for key, stamp in other.checked.items():
+            if str(stamp) > str(self.checked.get(key) or ""):
+                self.checked[key] = stamp
+
+        # Freshest calendar scan wins, per scan.
+        for key, entry in other.grid.items():
+            mine = self.grid.get(key)
+            if not mine or str(entry.get("seen") or "") > str(mine.get("seen") or ""):
+                self.grid[key] = entry
+
+        self.runs = sorted(set(self.runs) | set(other.runs))
+
+        # A working calendar anywhere clears the failure streak.
+        if int(other.grid_health.get("failures") or 0) < int(
+            self.grid_health.get("failures") or 0
+        ):
+            self.grid_health = dict(other.grid_health)
 
         self.last_run = max(self.last_run or "", other.last_run or "") or None
         self.last_data = max(self.last_data or "", other.last_data or "") or None
@@ -297,6 +331,23 @@ class State:
         for key in list(self.alerts):
             if key.split("|", 1)[0] < today:
                 del self.alerts[key]
+
+        for key in list(self.checked):
+            out_date = key.split("|", 1)[0]
+            if out_date < today or out_of_scope(key + "|0"):
+                del self.checked[key]
+
+        for entry in self.grid.values():
+            prices = entry.get("prices")
+            if isinstance(prices, dict):
+                for day in [d for d in prices if d < today]:
+                    del prices[day]
+
+        horizon = now - dt.timedelta(hours=48)
+        self.runs = [
+            stamp for stamp in self.runs
+            if (parse_ts(stamp) or now) >= horizon
+        ][-500:]
 
         for key in list(self.latest):
             if key.split("|", 1)[0] < today or key not in self.observations:

@@ -1,46 +1,112 @@
 # Nonstop NY ↔ LA fare watcher
 
-Watches **5–7 night** roundtrips between the NY metro and the LA metro for
-departures **14–105 days out**, and pings you when one is actually cheap. Nonstop under
-**$250**, or one layover under **$200**. Free to run:
-GitHub Actions on a public repo, a Discord webhook, no paid APIs.
+Watches **5–7 night** roundtrips from **JFK and LGA** to **LAX, BUR, SNA, ONT and
+LGB**, departing **14–105 days out**, and pings you when one is actually cheap:
+nonstop under **$250**, or one layover under **$200**. Free to run: GitHub
+Actions on a public repo, a Discord webhook, no paid APIs.
 
 ```bash
-python -m flight_tracker run          # one sweep + alerting
-python -m flight_tracker days         # cheapest departure days seen so far
-python -m flight_tracker test-alert   # prove notifications work
-python -m flight_tracker verify       # one live query, checked by hand
+./scan                                   # run a scan now
+python -m flight_tracker report          # cheapest 3 nonstop + 3 one-stop
+python -m flight_tracker grid            # calendar scans vs full searches
+python -m flight_tracker test-alert      # prove notifications work
+python -m flight_tracker verify          # one live query, checked by hand
 ```
 
 ---
 
-## Read this first: the calendar grid doesn't exist
+## How it works
 
-The original plan was built on `fast_flights.get_calendar_grid()` pulling the
-whole departure × return price matrix in **one request**. That function is not
-in upstream `fast-flights`. Verified against the published 3.1.0 wheel — the
-package exports exactly:
+The search space is **1,380 trips**: 92 departure dates × 3 trip lengths × 5
+airports. Searching each one fully costs a request, and one request per trip
+per run is exactly what gets an IP blocked. So a run has three stages:
 
 ```
-get_flights, fetch_flights_html, create_query, FlightQuery, Passengers, Query, ResultList
+plan    calendar scans ── 60 requests price all 1,380 trips, approximately
+          │
+          └─ planner ──── picks the 60 trips most worth a full search
+                  │
+drill   ┌─────────┼─────────┬─────────┐
+        runner 1  runner 2  runner 3  runner 4    15 full searches each,
+        (own IP)  (own IP)  (own IP)  (own IP)    exact prices + flight codes
+        └─────────┴────┬────┴─────────┘
+apply           fold results in, alert, commit
 ```
 
-Zero hits for `calendar`, `grid`, or `graph` anywhere in the source. It only
-exists in forks of a much older v2, unreviewed and unmaintained.
+Every trip gets a fresh approximate price on every run, and the exact searches
+go where prices are low or moving. A run takes about three and a half minutes.
 
-So the sweep is built on what actually ships: **one query per date pair**, using
-city MIDs so a single query still covers every airport in both metros. The grid
-remains a supported backend (`source.backend: grid`) behind the same interface —
-if you vet a fork that provides it, flip one config line and the request budget
-below collapses to 1.
+### The calendar grid
 
-`fast-flights` 3.1.0 requires **Python ≥ 3.10**. Your Mac has system Python
-3.9.6 only, so the live backends won't run locally without a newer Python. The
-`mock` backend and the tests run fine on 3.9.
+Google Flights' calendar view is served by an internal call, `GetCalendarGraph`,
+that returns the cheapest round-trip price for **every departure date in a
+61-day window in one request**. The original plan was built on it and then
+shelved, because the `fast-flights` package this tracker uses for full searches
+doesn't expose it.
 
-### Why 7–105 days
+The [`flights`](https://github.com/punitarani/fli) package does. Measured live
+on 2026-09-23, from GitHub Actions:
 
-Measured on 2026-09-13 across 385 real fares — cheapest nonstop per date pair:
+| | |
+|---|---|
+| Scans (5 airports × 3 lengths × 2 stop classes) | 30 |
+| Requests | 60 (two 61-day windows each) |
+| Failures | 0 |
+| Time | ~75 seconds |
+| Agreement with full searches, same trips | 82 of 187 within $15; median −$17 |
+
+The calendar runs a little **below** full searches, and its biggest misses are
+near-term dates where prices move within hours. It's a first pass, not the
+source of truth: it decides where full searches go, and never sends an alert
+by itself.
+
+### Adaptive scheduling
+
+Each trip earns a full search on an interval set by what's known about it,
+and the most overdue trips go first (`src/flight_tracker/planner.py`):
+
+| Trip | Searched every |
+|---|---|
+| Under an alert line, or would beat the record low | 15 min |
+| Cheapest 5% of its stop class, or the calendar moved | 1 hour |
+| Cheapest 20% | 3 hours |
+| Everything else | 24 hours |
+
+Nothing starves. Overdue is *time since last search ÷ interval*, so a dull
+trip's number keeps climbing until it outranks cheap ones that were just
+checked. When there are more trips due than slots in a run, everything runs
+proportionally late rather than some trips never running.
+
+**Movement is measured calendar-to-calendar.** Comparing the calendar to the
+last full search directly would be wrong, because the calendar sits a median
+$17 lower. Dozens of trips would read as "dropped" permanently and get
+re-searched every hour forever. Instead every full search records what the
+calendar said at that moment, and a trip has moved when the calendar has
+fallen since then. The two readings share the same bias, so it cancels. The
+best price estimate is the last full search, shifted by however far the
+calendar has moved since.
+
+If the calendar stops working, the planner falls back to scheduling from
+full-search prices alone. The sweep keeps going, and after three failed runs
+you get a heads-up in Discord ("Calendar scans are failing"), not the dead
+man's switch.
+
+### Carry-on fees are not in these prices
+
+Your spec said carry-on only. `fast-flights` sends a carry-on bag filter with
+every search, and it has **no measurable effect** on the prices returned:
+identical with and without. The calendar *does* honour it. Turned on, the
+calendar ran a median **$90 above** full searches on the same trips, which is
+about a round trip of carry-on fees on basic fares. So both sources are set to
+price without bags (`grid.include_bags: false`), and every price here is a
+base fare, the same thing a default Google Flights search shows.
+
+That matters for basic-economy fares that charge for a carry-on. Southwest,
+which keeps producing the cheapest fares on this route, includes one free.
+
+### Why 14–105 days
+
+Measured on 2026-09-13 across 385 real fares, cheapest nonstop per date pair:
 
 | Lead time | n | min | median |
 |---|---|---|---|
@@ -52,69 +118,62 @@ Measured on 2026-09-13 across 385 real fares — cheapest nonstop per date pair:
 | 60–75 | 66 | $374 | $419 |
 | 75–95 | 80 | $357 | $391 |
 
-Past 90 days it stops being a market at all. A probe of 90–180 days returned
-**$409, every single sample, from one airline, for eleven consecutive
-samples** (115–150 days out). That's base-fare inventory sitting untouched
-until the date gets closer — sweeping it buys nothing.
-
-So: the near end is a last-minute premium, the far end is a wall, and the
-money is in **30–75 days out**. Re-measure any time with
-`gh workflow run "probe range" -f min_days=105 -f window=60`.
+Past about 105 days it stops being a market. A probe of 90–180 days returned
+**$409 from one airline for eleven consecutive samples** (115–150 days out):
+base-fare inventory sitting untouched until the date gets closer. The near
+end is a last-minute premium. The first two weeks are excluded entirely.
 
 ### Which airports
 
-The origin is the NY city MID, which expands to **JFK, LGA and EWR** on its own
-— confirmed in the data (103 / 79 / 66 tracked fares).
+**Origins:** the NY city MID covers JFK, LGA and EWR in one full search. EWR is
+excluded (`route.exclude_origins`), and its itineraries are dropped from the
+results so the cheapest JFK/LGA option still wins. The calendar can't take a
+MID, so it's given JFK and LGA explicitly.
 
-The LA city MID does **not** do the same. It returns LAX and nothing else:
-248 of 248 tracked fares, and 49 of 49 itineraries in a raw payload. So the
-rest of the basin is named explicitly in `route.also_check`:
+**Destinations** are named one by one. The LA city MID returns LAX and nothing
+else (248 of 248 tracked fares, 49 of 49 itineraries in a raw payload), so the
+basin has to be spelled out. It was worth it. An early six-fare sample made the
+secondary airports look $200 dearer; a week of data said the opposite:
 
-```yaml
-also_check: ["BUR", "SNA", "ONT", "LGB"]
-also_check_share: 0.2
-```
+| Airport | Cheapest (2026-09-22) |
+|---|---|
+| ONT | $230 |
+| BUR | $239 |
+| SNA | $272 |
+| LAX | $278 |
+| LGB | $332 |
 
-They get a fifth of each run's budget rather than an equal share, because
-they're a background scan rather than a deal watch. A direct probe of Burbank
-put the cheapest fare at **$533 against ~$370 for LAX** on comparable dates,
-every option a two-leg connection, since nobody flies a transcon nonstop into
-BUR. The point of the 20% is to find out whether that holds over weeks, cheaply
-— not to catch a two-hour flash sale at Ontario.
-
-The cost is real and worth stating: the secondary space is 4× the primary
-(every date pair × four airports), so it cycles roughly **every 37 hours**
-while the primary cycles every 2.4. If the secondaries ever turn out to be
-competitive, raise the share; if they never are, set `also_check: []` and get
-the 2.4 back down to 1.9.
-
-Fares into different airports keep **separate price histories** — the history
-key is `date|date|airport|stops`, so a Burbank fare can never average into
-LAX's baseline or steal its record low.
+Fares into different airports keep separate price histories. The history key
+is `date|date|airport|stops`, so a Burbank fare can never average into LAX's
+baseline or steal its record low.
 
 ### Request budget
 
-The repo is public, so Actions minutes are free. Two things actually bound the
-sweep, and one of them was a surprise.
+Two things bound the sweep.
 
-**GitHub throttles frequent schedules, hard.** A `*/10` cron is nominally 144
-runs a day. What it actually delivered: 41 runs, then 12, then 6, degrading
-over a week. Scheduled workflows are best-effort and GitHub deprioritises
-repos that ask for a lot, so the real cadence settled around one run every two
-to five hours. The fix is to stop relying on cadence: ask for every 30 minutes
-and make each run sweep a large batch, so throughput survives whatever
-fraction of runs actually fire.
+**GitHub throttles its own schedules, hard.** A `*/10` cron is nominally 144
+runs a day. It delivered 41, then 12, then 6, degrading over a week. Scheduled
+workflows are best-effort, and GitHub deprioritises repos that ask for a lot.
+That's why the primary trigger is external (see Setup): `workflow_dispatch`
+events run when they're sent. The built-in schedule remains as a backstop
+every two hours.
 
-**Google is the other bound**, unchanged: a steady trickle from one IP.
+**Google is the real ceiling**, and nobody publishes it. At a 30-minute
+external trigger:
 
-At 120 pairs per run, a run takes roughly seven minutes and the search space is
-1,380 combinations — 276 date pairs against LAX plus the same 276 against each
-of the four secondary airports. Around a dozen real runs a day covers it in
-just over a day.
+| | Per run | Per day |
+|---|---|---|
+| Calendar requests (skipped if <25 min old) | 60 | ≤2,880 |
+| Full searches, split across 4 runners | 60 | 2,880 |
+| Machines (and usually IPs) | 5 | 240 |
 
-This is why the report marks how old each price is. A fare nobody can
-reproduce is worse than no fare, and at this cycle length "as last seen" can
-mean yesterday.
+Each runner makes about 15 requests and then disappears. That's a far gentler
+pattern per IP than the old single-runner sweeps of 120.
+
+Rough demand, if every trip were searched exactly on its interval: ~4,400 full
+searches a day. Supply is 2,880, so the schedule runs about 1.5× slower than
+the table above, spread proportionally. Raise `source.drills_per_run` to 90 to
+meet it exactly, at the cost of more traffic.
 
 ---
 
@@ -175,7 +234,54 @@ the Actions log.
 python -m flight_tracker test-alert    # do this before trusting it
 ```
 
-### 3. Verify the scrape before you trust a single alert
+### 3. External trigger — every 30 minutes
+
+GitHub's own schedule can't be relied on (see Request budget), so a free
+external cron service calls the workflow's `workflow_dispatch` endpoint
+instead. Two parts, both of which need your accounts:
+
+**A GitHub token that can only start workflows.** GitHub → Settings → Developer
+settings → Personal access tokens → **Fine-grained tokens** → Generate new
+token:
+
+| Field | Value |
+|---|---|
+| Expiration | 1 year (set a calendar reminder) |
+| Repository access | Only select repositories → `Joe-433/flight-tracker` |
+| Repository permissions → **Actions** | **Read and write** |
+| Everything else | No access |
+
+That token can start, cancel and re-run this repo's workflows. It can't read
+or change code, and it can't see secrets. If it leaks, the worst case is
+someone triggering extra scans.
+
+**A cron job that calls GitHub.** On [cron-job.org](https://cron-job.org)
+(free), create a job:
+
+| Field | Value |
+|---|---|
+| URL | `https://api.github.com/repos/Joe-433/flight-tracker/actions/workflows/watch.yml/dispatches` |
+| Schedule | Every 30 minutes |
+| Advanced → Request method | `POST` |
+| Advanced → Headers | `Accept: application/vnd.github+json`<br>`Authorization: Bearer <your token>`<br>`X-GitHub-Api-Version: 2022-11-28`<br>`Content-Type: application/json` |
+| Advanced → Request body | `{"ref":"main"}` |
+
+Save it and press **Test run**. The answer should be **HTTP 204**, and a
+`watch fares` run should appear within seconds:
+
+```bash
+gh run list --workflow="watch fares" --event workflow_dispatch --limit 3
+```
+
+That exact request was verified against this repo on 2026-09-23: 204, with a
+run started 12 seconds later.
+
+**How you'll know it's working:** the Monday report's footer reads
+`N runs in the last 24h`. With the trigger healthy that's about 48. If it falls
+toward 12, the trigger has stopped (an expired token, most likely) and only
+the two-hour backstop is running.
+
+### 4. Verify the scrape before you trust a single alert
 
 ```bash
 python -m flight_tracker verify
@@ -197,7 +303,7 @@ the airline, and the stop count. Two things it's checking:
    for weeks. (The parser drops multi-segment legs as a second line of defense,
    but that only works when segment data comes back.)
 
-### 4. Pick a threshold that can actually fire
+### 5. Pick a threshold that can actually fire
 
 Two live data points from 2026-09-13, both nonstop NY→LA roundtrips departing
 within a week: **$852** and **$957**. That window is the expensive
@@ -216,7 +322,7 @@ too low and it never fires and you'll assume it's broken. The `baseline` and
 `percentile` signals cover you either way once history builds — they're
 relative, so they work without you guessing a number correctly.
 
-### 4. Turn on Google's own price tracking too
+### 6. Turn on Google's own price tracking too
 
 Free, two clicks, and it's a completely independent safety net for the case
 where this scraper breaks in a way even the dead man's switch misses.
@@ -270,8 +376,8 @@ Wed Sep 16     Wed Sep 23         $245  <- cheap day
 Thu Sep 24     Mon Sep 28         $310
 ```
 
-Cheapest fare per departure date, merged across history and the current sweep —
-so a rotating partial sweep still shows the whole window. `<- cheap day` marks
+Cheapest fare per departure date, merged across history and the current run,
+so a run that only fully searched some trips still shows the whole window. `<- cheap day` marks
 days under the route-wide percentile cutoff. Run it any time; nothing pushes it
 on a schedule.
 
@@ -371,8 +477,9 @@ shortener service. Email and SMS still get the raw URL.
 Two things this report is honest about. Times and airports describe the
 **outbound leg only** — Google's roundtrip payload prices the whole trip but
 only details the outbound, so the return leg's airports and times aren't in the
-response at all. And prices are **as last seen**, which for the far bands can
-be several hours old.
+response at all. And prices are **as last seen**. For routine trips that can
+be most of a day, which is why each row says how old its price is once it
+passes twelve hours.
 
 GitHub cron is UTC-only and DST-blind, so the workflow fires at both 13:00 and
 14:00 UTC and the job itself checks whether it's really 6am in Los Angeles.
@@ -381,29 +488,18 @@ Without that the report would drift an hour twice a year.
 ### Running a scan on demand
 
 ```bash
-./scan
+./scan            # calendar scans + the configured 60 full searches
+./scan 200        # a deep scan: 200 full searches across the 4 runners
 ```
 
-Sweeps 40 date pairs immediately. Pass a number for more: `./scan 120` for a
-deep scan across most of the horizon.
-
-The script runs the scan locally if you have a Python ≥ 3.10 with the scraper
-installed (see below), and otherwise dispatches the GitHub Actions workflow,
-waits for it, and prints the result. Either way it's the same code path as the
-cron, so alerts fire normally.
-
-The raw equivalents, if you'd rather:
-
-```bash
-gh workflow run "watch fares" -f pairs=80
-```
-
-You can also hit **Run workflow** on the
+The script runs locally if you have Python ≥ 3.10 with the dependencies
+installed. Otherwise it dispatches the workflow, waits, and prints the result.
+Either way it's the same code path as the scheduled runs, so alerts fire
+normally. From a phone, the **Run workflow** button on the
 [watch fares](https://github.com/Joe-433/flight-tracker/actions/workflows/watch.yml)
-page — useful from a phone.
+page does the same thing, with switches for alerts and calendar scans.
 
-**To make `./scan` run locally** (instant, no GitHub round trip) you need a
-Python ≥ 3.10, which macOS doesn't ship:
+To make `./scan` run locally, you need a Python macOS doesn't ship:
 
 ```bash
 brew install python@3.12 && python3.12 -m venv .venv-live && .venv-live/bin/pip install -r requirements.txt
@@ -468,28 +564,39 @@ says what the winner should be:
 | latest | freshest snapshot — it's what the reports render |
 | alerts | most recent, so a cooldown is never silently reset |
 | records | lowest price, because a record low is a fact about the route |
-| cursors | furthest, so the losing run's ground isn't re-swept |
-| failure streak | a success anywhere clears it |
+| checked | latest search time, so the planner never re-spends a slot the other run just used |
+| grid | freshest calendar scan, per scan |
+| runs | union |
+| failure streaks | a success anywhere clears them |
+
+After merging, the result is **pruned again** with the current config. The
+remote copy still holds everything this run just pruned, and a union can't
+tell "data you don't have" apart from "data you deliberately deleted". Without
+the re-prune, every stale fare was resurrected on every run. That's how
+eight-day-old prices ended up in the report.
 
 ## Layout
 
 ```
 src/flight_tracker/
+  pipeline.py       a run in three stages: plan, drill, apply
+  planner.py        which trips earn a full search this run
   sources/          EVERY call that touches Google lives here
-    base.py           Offer, date-pair math, rotating slice
-    pairs.py          one query per date pair  (works today)
-    grid.py           one query for the matrix (needs a fork)
+    grid.py           calendar scans: all dates, one request per window
+    pairs.py          full searches: one trip, exact price and flights
     mock.py           deterministic fakes, no network
-  analysis.py       threshold / baseline / percentile scoring, cheap days
-  state.py          JSON history, compaction, alert dedup
+    base.py           Offer, date-pair math
+  analysis.py       threshold / baseline / percentile scoring, record lows
+  state.py          JSON history, merging, pruning, alert dedup
   deadman.py        health counters
-  notify.py         Discord + SMTP/SMS, stdlib only
-  cli.py            run / days / test-alert / verify
+  notify.py         Discord embeds + SMTP/SMS, stdlib only
+  booking.py        airline deep links, where verified
+  cli.py            plan / sweep / apply / run / report / grid / verify / ...
 ```
 
-The scraping boundary is the whole point of that structure. When Google changes
-something — and it will — `sources/` is the only directory that should need to
-change. Everything else is tested offline against `mock`.
+`sources/` is the scraping boundary. When Google changes something (and it
+will), that directory is the only one that should need to change. Everything
+else is tested offline against the mocks.
 
 ## Development
 

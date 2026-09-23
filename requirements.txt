@@ -5,5 +5,9 @@ fast-flights==3.1.0
 # every scrape dies with ModuleNotFoundError. Upstream bug; keep this pin until
 # they fix it.
 typing_extensions>=4.7
+# Calendar grid (sources/grid.py): reverse-engineers Google Flights'
+# GetCalendarGraph call, which prices every departure date in a 61-day window
+# in one request. Pinned for the same reason as fast-flights.
+flights==0.9.0
 # Human-editable config.
 PyYAML>=6.0

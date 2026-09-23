@@ -11,20 +11,19 @@ import yaml
 
 @dataclass
 class Route:
+    # Query token for full searches. The NY city MID covers JFK, LGA and EWR
+    # in one request; unwanted origins are filtered out of the results.
     origin: str
-    destination: str
-    origin_label: str = "origin"
-    destination_label: str = "destination"
-    # Secondary destination airports the primary search doesn't reach. The NY
-    # city MID expands to JFK/LGA/EWR, but the LA one returns only LAX --
-    # verified 49/49 on a raw payload -- so these have to be asked for by name.
-    also_check: List[str] = field(default_factory=list)
-    # Share of each run's request budget spent on them. They're a background
-    # scan: enough to learn whether they ever beat LAX, not enough to catch a
-    # two-hour flash sale.
-    also_check_share: float = 0.55
+    # Destination airports, each searched by name. The LA city MID returns LAX
+    # and nothing else (verified 49/49), so the basin has to be spelled out.
+    destinations: List[str] = field(default_factory=list)
+    # The airports `origin` covers. The calendar grid can't take a MID, so it
+    # is given these explicitly, minus the exclusions.
+    origin_airports: List[str] = field(default_factory=list)
     # Origin airports to drop even though the city MID returns them.
     exclude_origins: List[str] = field(default_factory=list)
+    origin_label: str = "origin"
+    destination_label: str = "destination"
 
 
 @dataclass
@@ -42,29 +41,46 @@ class Search:
 
 
 @dataclass
-class Band:
-    """A slice of the horizon that gets its own share of the request budget.
-
-    Fares 3 months out barely move day to day; fares 10 days out move fast.
-    Sweeping both at the same rate wastes requests on the far end and starves
-    the near end, so each band rotates on its own cursor.
-    """
-
-    within_days: int
-    share: float = 1.0
+class Source:
+    backend: str = "pairs"
+    # Full searches per run, split evenly across shards. Each shard is its own
+    # GitHub runner with its own IP.
+    drills_per_run: int = 60
+    shards: int = 4
+    jitter_seconds: List[float] = field(default_factory=lambda: [1, 3])
+    retries: int = 2
 
 
 @dataclass
-class Source:
-    backend: str = "pairs"
-    pairs_per_run: int = 120
-    jitter_seconds: List[float] = field(default_factory=lambda: [1, 3])
-    retries: int = 2
-    bands: List[Band] = field(default_factory=list)
+class Grid:
+    """Calendar scans: every departure date priced in one request per window."""
 
-    def __post_init__(self) -> None:
-        self.bands = [b if isinstance(b, Band) else Band(**b) for b in self.bands]
-        self.bands.sort(key=lambda b: b.within_days)
+    enabled: bool = True
+    # Rescan a (destination, trip length, stop class) at most this often. With
+    # an external trigger every 30 minutes, 25 means "every run".
+    refresh_minutes: float = 25.0
+    jitter_seconds: List[float] = field(default_factory=lambda: [1, 2])
+    # Consecutive failed runs before sending a "grid is down" notice. The
+    # sweep carries on without it, so this is a warning, not the dead man.
+    notify_after_failures: int = 3
+    # Ask the calendar to fold carry-on/checked bag fees into its prices. Off,
+    # because full searches can't: fast-flights sends the same bag filter and
+    # it has no measurable effect on the prices it returns. With bags on, the
+    # calendar ran a median $90 above full searches on the same trips (0 of 74
+    # exact); with bags off, 19 of 74 exact and 34 within $15. The calendar is
+    # only useful for steering full searches if both price the same way.
+    include_bags: bool = False
+
+
+@dataclass
+class Schedule:
+    """How often a date pair earns a full search. See planner.py."""
+
+    base_hours: float = 24.0      # unremarkable fares
+    cheap_hours: float = 3.0      # bottom 20% of their stop class
+    cheapest_hours: float = 1.0   # bottom 5%, or the calendar says it moved
+    urgent_hours: float = 0.25    # under an alert threshold, or a new low
+    moved_usd: float = 10.0       # calendar this far under the last full search
 
 
 @dataclass
@@ -106,6 +122,8 @@ class Config:
     route: Route
     search: Search = field(default_factory=Search)
     source: Source = field(default_factory=Source)
+    grid: Grid = field(default_factory=Grid)
+    schedule: Schedule = field(default_factory=Schedule)
     alerts: Alerts = field(default_factory=Alerts)
     history: History = field(default_factory=History)
     deals: Deals = field(default_factory=Deals)
@@ -135,6 +153,8 @@ def load_config(path: str) -> Config:
         route=_build(Route, raw.get("route")),
         search=_build(Search, raw.get("search")),
         source=_build(Source, raw.get("source")),
+        grid=_build(Grid, raw.get("grid")),
+        schedule=_build(Schedule, raw.get("schedule")),
         alerts=_build(Alerts, raw.get("alerts")),
         history=_build(History, raw.get("history")),
         deals=_build(Deals, raw.get("deals")),
@@ -146,8 +166,13 @@ def load_config(path: str) -> Config:
         cfg.alerts.threshold_usd = float(os.environ["FT_THRESHOLD_USD"])
     if os.getenv("FT_BACKEND"):
         cfg.source.backend = os.environ["FT_BACKEND"]
-    if os.getenv("FT_PAIRS_PER_RUN"):
-        cfg.source.pairs_per_run = int(os.environ["FT_PAIRS_PER_RUN"])
+    if os.getenv("FT_DRILLS_PER_RUN"):
+        cfg.source.drills_per_run = int(os.environ["FT_DRILLS_PER_RUN"])
+    if os.getenv("FT_GRID") in ("0", "false", "off"):
+        cfg.grid.enabled = False
+
+    if not cfg.route.destinations:
+        raise ValueError("route.destinations must list at least one airport")
 
     if cfg.search.max_stops != 0 and (
         cfg.alerts.threshold_usd_with_stops >= cfg.alerts.threshold_usd
