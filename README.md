@@ -68,8 +68,8 @@ and the most overdue trips go first (`src/flight_tracker/planner.py`):
 | Trip | Searched every |
 |---|---|
 | Under an alert line, or would beat the record low | 15 min |
-| Cheapest 5% of its stop class, or the calendar moved | 1 hour |
-| Cheapest 20% | 3 hours |
+| Cheapest 5% of its stop class, or the calendar moved | 2 hours |
+| Cheapest 20% | 6 hours |
 | Everything else | 24 hours |
 
 Nothing starves. Overdue is *time since last search ÷ interval*, so a dull
@@ -170,12 +170,20 @@ external trigger:
 Each runner makes about 15 requests and then disappears. That's a far gentler
 pattern per IP than the old single-runner sweeps of 120.
 
-Measured demand on 2026-09-23 (100 trips in the cheapest tier, 235 cheap,
-1,045 routine): **5,325 full searches a day** to hit every interval exactly.
-Supply at 48 runs is 2,880, so the schedule runs about **1.8× slower** than the
-table above, spread proportionally. At 5 runs a day, which is what GitHub's own
-schedule was delivering, it's 18× slower: the cheapest trips get an exact
-search twice a week. That's why the external trigger matters.
+Measured on 2026-09-23 (100 trips in the cheapest tier, 235 cheap, 1,045
+routine), hitting every interval exactly takes **~3,200 full searches a day**
+against 2,880 available at 48 runs: about 1.1× slower than the table, spread
+proportionally.
+
+The cheap tiers started at 1h and 3h, which needed 5,325 a day and ran 1.8×
+late. They were loosened because they didn't buy anything. The calendar
+re-prices every trip on every run, and a trip that falls under an alert line
+jumps to the 15-minute tier regardless of where it was, so extra exact
+searches on merely-cheap trips were refreshing flight details, not catching
+deals.
+
+At 5 runs a day, which is what GitHub's own schedule was delivering, supply is
+300 and everything runs ~11× late. That's why the external trigger matters.
 
 ---
 

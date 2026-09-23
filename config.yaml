@@ -77,8 +77,13 @@ schedule:
   # the time since its last search exceeds its interval; the most overdue go
   # first, so nothing starves -- it just waits longer if it's unremarkable.
   base_hours: 24          # unremarkable fares
-  cheap_hours: 3          # bottom 20% of their stop class
-  cheapest_hours: 1       # bottom 5%, or the calendar says the price moved
+  cheap_hours: 6          # bottom 20% of their stop class
+  cheapest_hours: 2       # bottom 5%, or the calendar says the price moved
+  # Why these aren't tighter: the calendar re-prices every trip on every run,
+  # and a trip that falls under an alert line goes to the 15-minute tier no
+  # matter which tier it was in. Exact searches on cheap trips refresh details;
+  # they don't catch deals. At 1h/3h the schedule needed 5,325 searches a day
+  # against 2,880 available; at 2h/6h it needs ~3,200.
   urgent_hours: 0.25      # under an alert threshold, or a new low
   moved_usd: 10           # calendar this far below the last full search
 

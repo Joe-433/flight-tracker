@@ -77,8 +77,8 @@ class Schedule:
     """How often a date pair earns a full search. See planner.py."""
 
     base_hours: float = 24.0      # unremarkable fares
-    cheap_hours: float = 3.0      # bottom 20% of their stop class
-    cheapest_hours: float = 1.0   # bottom 5%, or the calendar says it moved
+    cheap_hours: float = 6.0      # bottom 20% of their stop class
+    cheapest_hours: float = 2.0   # bottom 5%, or the calendar says it moved
     urgent_hours: float = 0.25    # under an alert threshold, or a new low
     moved_usd: float = 10.0       # calendar this far under the last full search
 

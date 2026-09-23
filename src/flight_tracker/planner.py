@@ -9,9 +9,14 @@ Instead, each item has a due interval set by what we know about it, and the
 most overdue items go first:
 
     under an alert threshold, or a new record low       every 15 min
-    cheapest 5% of its stop class, or the price moved   every hour
-    cheapest 20%                                        every 3 hours
+    cheapest 5% of its stop class, or the price moved   every 2 hours
+    cheapest 20%                                        every 6 hours
     everything else                                     every 24 hours
+
+The cheap tiers are deliberately not tighter. The calendar re-prices every
+item on every run, and anything that falls under an alert line jumps to the
+15-minute tier regardless, so exact searches on merely-cheap items refresh
+details rather than catch deals.
 
 "What we know" comes from two sources. The calendar grid prices every item on
 every run, approximately. The last full search is exact, but it's only as
