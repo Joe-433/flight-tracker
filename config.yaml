@@ -20,7 +20,12 @@ route:
   # since no one flies a transcon nonstop into Burbank. This is enough to find
   # out whether that holds, and cheap enough not to care if it does.
   also_check: ["BUR", "SNA", "ONT", "LGB"]
-  also_check_share: 0.2
+  also_check_share: 0.55
+
+  # Newark is excluded by name: the NY city MID returns JFK, LGA and EWR, and
+  # there is no way to ask it for fewer, so unwanted origins are filtered out
+  # of the results instead. The cheapest remaining itinerary still wins.
+  exclude_origins: ["EWR"]
 
 search:
   # Departures 14 to 105 days out. `window_days` is the span of DEPARTURE
@@ -57,8 +62,8 @@ source:
   #         actually implements get_calendar_grid; see README).
   # mock  = deterministic fake data, for testing the pipeline offline.
   backend: "pairs"
-  pairs_per_run: 24      # per run; see README "Request budget" for the math
-  jitter_seconds: [2, 5] # random pause between requests
+  pairs_per_run: 120     # per run; see README "Request budget" for the math
+  jitter_seconds: [1, 3] # random pause between requests
   retries: 2
   # How the per-run budget is split across the horizon. Near-term fares move
   # fast and are the time-sensitive ones; fares 3 months out barely move, so
@@ -98,7 +103,7 @@ history:
   # A full cycle takes ~3 hours, so anything older than this is a fare we
   # stopped tracking -- it must not sit at the top of the report forever
   # quoting a price that may no longer exist.
-  stale_hours: 24
+  stale_hours: 36
 
 deals:
   min_observations: 6    # per date pair, before its baseline is trusted

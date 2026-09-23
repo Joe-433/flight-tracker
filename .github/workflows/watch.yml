@@ -2,11 +2,12 @@ name: watch fares
 
 on:
   schedule:
-    # Every 10 minutes. The repo is public, so Actions minutes are free and
-    # unlimited -- the only real ceiling is how hard we're willing to hit
-    # Google (~3,500 requests/day here). See README "Request budget" before
-    # turning this up further; GitHub's own minimum interval is 5 minutes.
-    - cron: "*/10 * * * *"
+    # Every 30 minutes -- nominally. GitHub throttles frequent schedules hard:
+    # a */10 cron here actually delivered 41 runs one day, then 12, then 6,
+    # against a nominal 144. Asking for less gets a larger share of what's
+    # asked, and each run now sweeps a big batch rather than relying on the
+    # cadence. See README "Request budget".
+    - cron: "0,30 * * * *"
   workflow_dispatch:
     inputs:
       threshold:

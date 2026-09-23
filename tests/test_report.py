@@ -78,13 +78,19 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("Nov 1", rows[1])
         self.assertIn("Dec 1", rows[2])
 
-    def test_price_is_the_only_link(self):
+    def test_flight_code_links_to_the_airline(self):
         body = cheapest_lines(
             stocked([offer(278, flight_no="WN 2536", dep_airport="LGA")]),
             make_config(),
         )
-        self.assertEqual(body.count("]("), 1)
-        self.assertNotIn("southwest.com", body)
+        self.assertIn("southwest.com", body)
+
+    def test_unverified_carrier_is_not_linked(self):
+        body = cheapest_lines(
+            stocked([offer(278, flight_no="AA 171")]), make_config()
+        )
+        self.assertNotIn("aa.com", body)
+        self.assertIn("AA 171", body)
 
     def test_sorted_by_price_and_limited(self):
         state = stocked([
@@ -148,13 +154,13 @@ class TestCheapestReport(unittest.TestCase):
         self.assertIn("1 stop", rendered(stocked([offer(200, stops=1)])))
         self.assertIn("nonstop", rendered(stocked([offer(200, stops=0)])))
 
-    def test_shows_the_airline_not_the_flight_number(self):
-        body = rendered(stocked([offer(338, flight_no="AA 171", airlines=["American"])]))
-        self.assertIn("American", body)
-        self.assertNotIn("AA 171", body)
+    def test_shows_the_flight_code(self):
+        body = rendered(stocked([offer(338, flight_no="AA 171")]))
+        self.assertIn("AA 171", body)
 
-    def test_missing_airline_does_not_break_the_row(self):
-        self.assertIn("$338", rendered(stocked([offer(338, airlines=[])])))
+    def test_falls_back_to_the_airline_when_no_code(self):
+        body = rendered(stocked([offer(338, flight_no=None, airlines=["JetBlue"])]))
+        self.assertIn("JetBlue", body)
 
     def test_missing_details_render_placeholders(self):
         body = rendered(
@@ -260,6 +266,25 @@ class TestDeduplication(unittest.TestCase):
         offers.append(offer(300, "2026-11-04", nights=5, flight_no="WN 999"))
         table = cheapest_lines(stocked(offers), make_config(), limit=2)
         self.assertIn("$300", table)
+
+
+class TestStalenessMarker(unittest.TestCase):
+    """A price nobody can reproduce is worse than no price."""
+
+    def aged(self, hours):
+        state = stocked([offer(278)])
+        key = next(iter(state.latest))
+        state.latest[key]["seen"] = (NOW - dt.timedelta(hours=hours)).isoformat()
+        return cheapest_lines(state, make_config(), now=NOW)
+
+    def test_fresh_prices_are_unmarked(self):
+        self.assertNotIn("seen", self.aged(2))
+
+    def test_old_prices_say_how_old(self):
+        self.assertIn("seen 20h ago", self.aged(20))
+
+    def test_very_old_prices_use_days(self):
+        self.assertIn("seen 8d ago", self.aged(195))
 
 
 class TestLatestSnapshot(unittest.TestCase):

@@ -22,7 +22,9 @@ class Route:
     # Share of each run's request budget spent on them. They're a background
     # scan: enough to learn whether they ever beat LAX, not enough to catch a
     # two-hour flash sale.
-    also_check_share: float = 0.2
+    also_check_share: float = 0.55
+    # Origin airports to drop even though the city MID returns them.
+    exclude_origins: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -55,8 +57,8 @@ class Band:
 @dataclass
 class Source:
     backend: str = "pairs"
-    pairs_per_run: int = 24
-    jitter_seconds: List[float] = field(default_factory=lambda: [2, 5])
+    pairs_per_run: int = 120
+    jitter_seconds: List[float] = field(default_factory=lambda: [1, 3])
     retries: int = 2
     bands: List[Band] = field(default_factory=list)
 
@@ -82,7 +84,7 @@ class History:
     max_points_per_pair: int = 40  # hard cap; state.json is committed every run
     resample_hours: float = 12.0   # log an unchanged price at most this often
     min_change_usd: float = 5.0    # ignore noise smaller than this
-    stale_hours: float = 24.0      # drop unrefreshed fares from the reports
+    stale_hours: float = 36.0      # drop unrefreshed fares from the reports
 
 
 @dataclass

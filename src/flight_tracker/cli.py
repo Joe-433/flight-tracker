@@ -16,6 +16,7 @@ import sys
 from typing import Callable, Dict, List, Optional, Tuple
 
 from . import analysis, deadman
+from .booking import airline_url, carrier_of
 from .config import Config, load_config
 from .notify import BLURPLE, GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
@@ -601,7 +602,12 @@ def _nights(snap: dict) -> int:
 
 
 def _fare_line(
-    price: float, snap: dict, extras: int, cfg: Config, linked: bool = True
+    price: float,
+    snap: dict,
+    extras: int,
+    cfg: Config,
+    linked: bool = True,
+    now: Optional[dt.datetime] = None,
 ) -> str:
     """One fare as ordinary prose, not a table cell.
 
@@ -617,12 +623,25 @@ def _fare_line(
         if stops == 0
         else ("%s stop" % stops if isinstance(stops, int) else "? stops")
     )
-    # The airline, not the flight number. A flight number is a poor handle on a
-    # fare months out and it isn't how you find one again -- the price link is.
     airlines = snap.get("airlines") or []
-    who = ", ".join(str(a) for a in airlines)[:20] or "?"
+    flight_no = str(snap.get("flight_no") or "")
+    who = flight_no or (", ".join(str(a) for a in airlines)[:20] or "?")
     out_date = str(snap.get("out_date", ""))
     ret_date = str(snap.get("ret_date", ""))
+
+    # Link the flight code to the airline's own booking search where the deep
+    # link is known to work. Carriers whose format couldn't be verified are
+    # left unlinked rather than sent somewhere broken.
+    direct = airline_url(
+        carrier_of(flight_no),
+        str(snap.get("dep_airport") or ""),
+        str(snap.get("arr_airport") or ""),
+        out_date,
+        ret_date,
+        cfg.search.adults,
+    )
+    if linked and direct:
+        who = "[%s](%s)" % (who, direct)
 
     # The price is the link. A flight number is a poor handle on a fare months
     # out -- schedules move and the number alone won't reconstruct the search --
@@ -645,6 +664,15 @@ def _fare_line(
     ]
     if extras:
         bits.append("+%d more %s" % (extras, "date" if extras == 1 else "dates"))
+
+    # A price nobody can reproduce is worse than no price. Say how old it is
+    # once it's old enough that the fare may well have moved.
+    age = _hours_since(str(snap.get("seen") or ""), now)
+    if age is not None and age >= 12:
+        bits.append(
+            "_seen %s ago_"
+            % ("%dh" % round(age) if age < 48 else "%dd" % round(age / 24))
+        )
     return "  \u00b7  ".join(bits)
 
 
@@ -674,7 +702,11 @@ def _grouped(
 
 
 def _render(
-    groups: List[List[Tuple[float, dict]]], limit: int, cfg: Config, linked: bool
+    groups: List[List[Tuple[float, dict]]],
+    limit: int,
+    cfg: Config,
+    linked: bool,
+    now: Optional[dt.datetime] = None,
 ) -> List[str]:
     """Cheapest `limit` fares, listed in departure order.
 
@@ -685,7 +717,7 @@ def _render(
         groups[:limit], key=lambda g: str(g[0][1].get("out_date") or "")
     )
     return [
-        _fare_line(group[0][0], group[0][1], len(group) - 1, cfg, linked)
+        _fare_line(group[0][0], group[0][1], len(group) - 1, cfg, linked, now)
         for group in chosen
     ]
 
@@ -695,7 +727,12 @@ def _stops_of(snap: dict) -> int:
     return int(value) if isinstance(value, int) else 1
 
 
-def cheapest_lines(state: State, cfg: Config, limit: int = 3) -> str:
+def cheapest_lines(
+    state: State,
+    cfg: Config,
+    limit: int = 3,
+    now: Optional[dt.datetime] = None,
+) -> str:
     """Cheapest nonstops and cheapest one-stops, as separate lists.
 
     One ranked list doesn't work on this route: connecting fares are reliably
@@ -711,7 +748,7 @@ def cheapest_lines(state: State, cfg: Config, limit: int = 3) -> str:
     def compose(linked: bool) -> str:
         blocks = []
         for title, groups in (("Nonstop", nonstop), ("One layover", connecting)):
-            lines = _render(groups, limit, cfg, linked)
+            lines = _render(groups, limit, cfg, linked, now)
             blocks.append(
                 "**%s**\n%s"
                 % (title, "\n\n".join(lines) if lines else "_none tracked yet_")
@@ -894,15 +931,28 @@ def cmd_merge(args: argparse.Namespace) -> int:
     if not os.path.exists(args.other):
         print("nothing to merge: %s does not exist" % args.other)
         return 0
+    cfg = load_config(args.config)
     mine = State.load(args.state)
     theirs = State.load(args.other)
     before = sum(len(v) for v in mine.observations.values())
     mine.merge(theirs)
+
+    # Re-trim after merging. The remote copy still holds everything this run
+    # just pruned, and a union can't tell "data you don't have" apart from
+    # "data you deliberately deleted" -- so without this, every stale fare is
+    # resurrected on every run and the reports quote week-old prices forever.
+    stale_before = len(mine.latest)
+    mine.trim(
+        cfg.history.days,
+        max_points_per_pair=cfg.history.max_points_per_pair,
+        allowed_nights=cfg.search.trip_nights,
+        stale_hours=cfg.history.stale_hours,
+    )
     after = sum(len(v) for v in mine.observations.values())
     mine.save(args.state)
     print(
-        "merged %s: %d -> %d observations across %d date pairs"
-        % (args.other, before, after, len(mine.observations))
+        "merged %s: %d -> %d observations | fresh fares %d -> %d"
+        % (args.other, before, after, stale_before, len(mine.latest))
     )
     return 0
 

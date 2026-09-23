@@ -327,6 +327,13 @@ class PairsSource(Source):
         dep_airport = arr_airport = dep_time = arr_time = None
         if legs:
             dep_airport = getattr(getattr(legs[0], "from_airport", None), "code", None)
+            # The city MID can't be asked for fewer airports, so unwanted
+            # origins are dropped here. Because this runs per itinerary rather
+            # than per query, the cheapest remaining option still wins instead
+            # of the whole date pair being lost.
+            excluded = {a.strip().upper() for a in self.cfg.route.exclude_origins}
+            if dep_airport and dep_airport.upper() in excluded:
+                return None
             arr_airport = getattr(getattr(legs[-1], "to_airport", None), "code", None)
             dep_time = _clock(getattr(legs[0], "departure", None))
             arr_time = _clock(getattr(legs[-1], "arrival", None))

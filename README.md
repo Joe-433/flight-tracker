@@ -94,58 +94,27 @@ LAX's baseline or steal its record low.
 
 ### Request budget
 
-The repo is public, so **Actions minutes are free and unlimited**. The only
-ceiling that matters is how hard you're willing to hit Google.
+The repo is public, so Actions minutes are free. Two things actually bound the
+sweep, and one of them was a surprise.
 
-276 date pairs (92 departure dates × 3 trip lengths), swept 24 at a time on a
-flat rotating cursor — every pair gets equal treatment.
+**GitHub throttles frequent schedules, hard.** A `*/10` cron is nominally 144
+runs a day. What it actually delivered: 41 runs, then 12, then 6, degrading
+over a week. Scheduled workflows are best-effort and GitHub deprioritises
+repos that ask for a lot, so the real cadence settled around one run every two
+to five hours. The fix is to stop relying on cadence: ask for every 30 minutes
+and make each run sweep a large batch, so throughput survives whatever
+fraction of runs actually fire.
 
-| | |
-|---|---|
-| Cron | every 10 minutes |
-| Pairs per run | 24 |
-| Pairs per hour | 144 |
-| **Full cycle over every date** | **~1.9 hours** |
-| Requests per day | ~3,500 (≈1 every 25 s) |
+**Google is the other bound**, unchanged: a steady trickle from one IP.
 
-`source.bands` can weight some lead times over others, and it's currently
-**off** — there isn't enough history yet to justify a weighting, so nothing is
-privileged. Worth noting that equal *shares* across bands would not have been
-uniform: the four bands held 24/72/90/90 pairs, so an even split would cycle
-the smallest three times for every one pass over the largest. Uniform per date
-pair means no bands at all.
+At 120 pairs per run, a run takes roughly seven minutes and the search space is
+1,380 combinations — 276 date pairs against LAX plus the same 276 against each
+of the four secondary airports. Around a dozen real runs a day covers it in
+just over a day.
 
-An earlier weighting was set from one day of prices and got it wrong — it gave
-the 76–105 day range 20% of the budget on the strength of a probe showing a
-flat $409 wall, when that wall actually starts around 115 days and 76–105 turns
-out to have the *lowest* median of any range. That's the argument for staying
-uniform until the data is real.
-
-A fare that stops being re-checked — the window moves past it, or a band
-starves — is dropped from the reports after `history.stale_hours` (24 h). A
-full cycle is ~3 hours, so anything older than that is something we stopped
-tracking, and it must not sit at the top of the report quoting a price that may
-no longer exist. Its price history is kept; only its claim to be current goes.
-
-**Coverage is set by pairs per hour, not by how often the cron fires.** Running
-every 5 minutes with 8 pairs covers exactly as much ground as every 15 minutes
-with 24. The dial that matters is `pairs_per_run` × runs per hour; the cron
-interval on its own changes nothing.
-
-Shares come from measured behaviour, not intuition. The first version gave
-76–105 days only 20% of the budget on the strength of a probe showing a flat
-$409 wall — but that wall starts at ~115 days, not 76, and the 76–105 band
-turns out to have the *lowest* median of any band. It now gets a full share.
-The near band keeps a toehold rather than a fair share: it's the worst value on
-the route, but it's the only place a last-minute mistake fare could appear.
-
-Totals: 24 requests per run, every 15 minutes, **~2,300 per day** — about one
-request every 37 seconds. Each request returns the cheapest fare in *both* stop
-classes at no extra cost.
-
-If Google ever starts blocking datacenter IPs, the same code runs unchanged on
-a Raspberry Pi or an Oracle Cloud always-free VM under plain `cron`:
-`PYTHONPATH=src python -m flight_tracker run`.
+This is why the report marks how old each price is. A fare nobody can
+reproduce is worse than no fare, and at this cycle length "as last seen" can
+mean yesterday.
 
 ---
 
