@@ -146,6 +146,20 @@ class TestScopePruning(unittest.TestCase):
         # History is kept -- it still feeds baselines.
         self.assertEqual(len(state.observations), 2)
 
+    def test_excluded_origins_are_dropped_from_reports(self):
+        """Excluding an airport must take effect now, not whenever it ages out."""
+        state = State()
+        for key, airport in (
+            ("2026-09-20|2026-09-25|LAX|0", "EWR"),
+            ("2026-09-21|2026-09-26|LAX|0", "JFK"),
+        ):
+            state.observations[key] = [[NOW.isoformat(), 300]]
+            state.latest[key] = {
+                "price": 300, "seen": NOW.isoformat(), "dep_airport": airport,
+            }
+        state.trim(30, now=NOW, exclude_origins=["EWR"])
+        self.assertEqual(list(state.latest), ["2026-09-21|2026-09-26|LAX|0"])
+
     def test_no_pruning_without_an_allowed_set(self):
         state = State()
         state.observations["2026-09-20|2026-09-23|LAX|0"] = [[NOW.isoformat(), 278]]

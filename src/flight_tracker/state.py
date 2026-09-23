@@ -247,6 +247,7 @@ class State:
         max_points_per_pair: Optional[int] = None,
         allowed_nights: Optional[Iterable[int]] = None,
         stale_hours: Optional[float] = None,
+        exclude_origins: Optional[Iterable[str]] = None,
     ) -> None:
         """Drop stale observations, past date pairs, and expired alert records.
 
@@ -259,6 +260,7 @@ class State:
         cutoff = now - dt.timedelta(days=history_days)
         today = now.date().isoformat()
         nights = set(allowed_nights) if allowed_nights is not None else None
+        banned = {a.strip().upper() for a in (exclude_origins or [])}
 
         def out_of_scope(key: str) -> bool:
             if nights is None:
@@ -306,6 +308,14 @@ class State:
             if stale_hours is not None:
                 age = hours_since(str(self.latest[key].get("seen") or ""), now)
                 if age is not None and age > stale_hours:
+                    del self.latest[key]
+                    continue
+            # Enforce the configured scope on cleanup too, not just at fetch
+            # time -- otherwise excluding an airport leaves its fares in the
+            # reports until they happen to age out.
+            if banned:
+                origin = str(self.latest[key].get("dep_airport") or "").upper()
+                if origin and origin in banned:
                     del self.latest[key]
 
     def series(self, key: str) -> List[Tuple[str, float]]:

@@ -238,6 +238,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         max_points_per_pair=cfg.history.max_points_per_pair,
         allowed_nights=cfg.search.trip_nights,
         stale_hours=cfg.history.stale_hours,
+        exclude_origins=cfg.route.exclude_origins,
     )
 
     health = deadman.update(state, cfg, got_data=bool(offers), errors=errors, now=now)
@@ -947,6 +948,7 @@ def cmd_merge(args: argparse.Namespace) -> int:
         max_points_per_pair=cfg.history.max_points_per_pair,
         allowed_nights=cfg.search.trip_nights,
         stale_hours=cfg.history.stale_hours,
+        exclude_origins=cfg.route.exclude_origins,
     )
     after = sum(len(v) for v in mine.observations.values())
     mine.save(args.state)
