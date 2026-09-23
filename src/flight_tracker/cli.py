@@ -450,8 +450,8 @@ def cmd_probe(args: argparse.Namespace) -> int:
     cfg.search.window_days = args.window
     if args.nights:
         cfg.search.trip_nights = args.nights
-    if args.carry_on is not None:
-        cfg.search.carry_on_bags = args.carry_on
+    if args.bags:
+        cfg.grid.include_bags = True
     if args.max_stops is not None:
         cfg.search.max_stops = args.max_stops
     if args.to:
@@ -969,8 +969,8 @@ def cmd_grid(args: argparse.Namespace) -> int:
     from .sources.grid import Combo, GridUnavailable, combos, get_grid
 
     cfg = load_config(args.config)
-    if args.carry_on is not None:
-        cfg.search.carry_on_bags = args.carry_on
+    if args.bags:
+        cfg.grid.include_bags = True
     state = State.load(args.state)
     try:
         scanner = get_grid(cfg)
@@ -990,8 +990,9 @@ def cmd_grid(args: argparse.Namespace) -> int:
         wanted = wanted[: args.limit]
 
     print(
-        "origins %s | %d scans | carry-on bags %d"
-        % ("+".join(scanner.origins()), len(wanted), cfg.search.carry_on_bags)
+        "origins %s | %d scans | bag fees %s"
+        % ("+".join(scanner.origins()), len(wanted),
+           "included" if cfg.grid.include_bags else "excluded")
     )
     print("")
     print("%-12s %6s %9s  %-12s" % ("SCAN", "DATES", "CHEAPEST", "ON"))
@@ -1113,7 +1114,7 @@ def build_parser() -> argparse.ArgumentParser:
     grid.add_argument("--dest")
     grid.add_argument("--nights", type=int)
     grid.add_argument("--limit", type=int)
-    grid.add_argument("--carry-on", type=int, dest="carry_on")
+    grid.add_argument("--bags", action="store_true", help="price in bag fees")
     grid.set_defaults(func=cmd_grid)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")

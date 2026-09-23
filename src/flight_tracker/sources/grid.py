@@ -217,7 +217,7 @@ class FliGridScanner(GridScanner):
                 self._BagsFilter(
                     checked_bags=s.checked_bags, carry_on=bool(s.carry_on_bags)
                 )
-                if (s.checked_bags or s.carry_on_bags)
+                if self.cfg.grid.include_bags
                 else None
             ),
             from_date=first.isoformat(),

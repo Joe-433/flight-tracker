@@ -63,6 +63,13 @@ class Grid:
     # Consecutive failed runs before sending a "grid is down" notice. The
     # sweep carries on without it, so this is a warning, not the dead man.
     notify_after_failures: int = 3
+    # Ask the calendar to fold carry-on/checked bag fees into its prices. Off,
+    # because full searches can't: fast-flights sends the same bag filter and
+    # it has no measurable effect on the prices it returns. With bags on, the
+    # calendar ran a median $90 above full searches on the same trips (0 of 74
+    # exact); with bags off, 19 of 74 exact and 34 within $15. The calendar is
+    # only useful for steering full searches if both price the same way.
+    include_bags: bool = False
 
 
 @dataclass

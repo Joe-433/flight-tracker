@@ -63,6 +63,11 @@ grid:
   refresh_minutes: 25
   jitter_seconds: [1, 2]
   notify_after_failures: 3
+  # Off so the calendar prices trips the same way full searches do -- which
+  # is without bag fees, because fast-flights' bag filter has no effect.
+  # Measured: bags on, 0 of 74 prices matched (median +$90); bags off, 19
+  # exact and 34 within $15.
+  include_bags: false
 
 schedule:
   # How often a date pair earns a full search (planner.py). A pair is due when
