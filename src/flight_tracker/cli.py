@@ -959,6 +959,92 @@ def cmd_merge(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_grid(args: argparse.Namespace) -> int:
+    """Run calendar scans and check them against full-search prices.
+
+    Diagnostic. Answers two questions before the grid is trusted to steer
+    anything: does the calendar endpoint answer at all, and when it names a
+    price for a date pair, does a full search for that pair agree?
+    """
+    from .sources.grid import Combo, GridUnavailable, combos, get_grid
+
+    cfg = load_config(args.config)
+    state = State.load(args.state)
+    try:
+        scanner = get_grid(cfg)
+    except GridUnavailable as exc:
+        print("FAIL: %s" % exc)
+        return 1
+    if scanner is None:
+        print("grid is disabled in config")
+        return 1
+
+    wanted = combos(cfg)
+    if args.dest:
+        wanted = [c for c in wanted if c.destination == args.dest.upper()]
+    if args.nights:
+        wanted = [c for c in wanted if c.nights == args.nights]
+    if args.limit:
+        wanted = wanted[: args.limit]
+
+    print("origins %s | %d scans" % ("+".join(scanner.origins()), len(wanted)))
+    print("")
+    print("%-12s %6s %9s  %-12s" % ("SCAN", "DATES", "CHEAPEST", "ON"))
+
+    matched = []
+    failed = 0
+    for combo in wanted:
+        prices = scanner.scan(combo)
+        if prices is None:
+            failed += 1
+            print("%-12s %6s" % (combo.key, "FAILED"))
+            continue
+        if not prices:
+            print("%-12s %6d" % (combo.key, 0))
+            continue
+        day = min(prices, key=prices.get)
+        print("%-12s %6d %9s  %-12s" % (combo.key, len(prices), _money(prices[day]), day))
+
+        # Pair every calendar price with a full search for the same trip.
+        for out_date, price in prices.items():
+            ret_date = (
+                dt.date.fromisoformat(out_date) + dt.timedelta(days=combo.nights)
+            ).isoformat()
+            key = "%s|%s|%s|%d" % (
+                out_date, ret_date, combo.destination, 0 if combo.nonstop else 1
+            )
+            snap = state.latest.get(key)
+            if snap:
+                matched.append((combo, out_date, price, float(snap["price"]), snap))
+
+    print("")
+    print("requests: %d | failed scans: %d/%d" % (scanner.requests, failed, len(wanted)))
+    for error in scanner.errors[:5]:
+        print("  ! %s" % error[:200])
+
+    if matched:
+        deltas = [grid - drill for _, _, grid, drill, _ in matched]
+        exact = sum(1 for d in deltas if abs(d) < 1)
+        close = sum(1 for d in deltas if abs(d) <= 15)
+        print("")
+        print(
+            "calendar vs full search on %d shared date pairs: %d exact, %d within $15"
+            % (len(matched), exact, close)
+        )
+        print("median gap %s | worst %s" % (
+            _money(analysis.median(deltas) or 0),
+            _money(max(deltas, key=abs)),
+        ))
+        worst = sorted(matched, key=lambda m: -abs(m[2] - m[3]))[:5]
+        for combo, out_date, grid, drill, snap in worst:
+            print(
+                "  %-12s %s  calendar %-6s full search %-6s (seen %s)"
+                % (combo.key, out_date, _money(grid), _money(drill),
+                   str(snap.get("seen", ""))[:16])
+            )
+    return 1 if failed == len(wanted) else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -1017,6 +1103,12 @@ def build_parser() -> argparse.ArgumentParser:
     dump.add_argument("--to", help="override destination (MID or IATA code)")
     dump.add_argument("--from", dest="from_", help="override origin")
     dump.set_defaults(func=cmd_dump)
+
+    grid = sub.add_parser("grid", help="calendar scans vs full searches (diagnostic)")
+    grid.add_argument("--dest")
+    grid.add_argument("--nights", type=int)
+    grid.add_argument("--limit", type=int)
+    grid.set_defaults(func=cmd_grid)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")
     verify.add_argument("--backend", choices=["pairs", "grid", "mock"])
