@@ -91,18 +91,18 @@ full-search prices alone. The sweep keeps going, and after three failed runs
 you get a heads-up in Discord ("Calendar scans are failing"), not the dead
 man's switch.
 
-### Carry-on fees are not in these prices
+### Prices are base fares, no bags
 
-Your spec said carry-on only. `fast-flights` sends a carry-on bag filter with
-every search, and it has **no measurable effect** on the prices returned:
-identical with and without. The calendar *does* honour it. Turned on, the
-calendar ran a median **$90 above** full searches on the same trips, which is
-about a round trip of carry-on fees on basic fares. So both sources are set to
-price without bags (`grid.include_bags: false`), and every price here is a
-base fare, the same thing a default Google Flights search shows.
+Every price is a base fare: no carry-on, no checked bag, the same thing a
+default Google Flights search shows. That's the intended setting, since the
+trips are bag-free.
 
-That matters for basic-economy fares that charge for a carry-on. Southwest,
-which keeps producing the cheapest fares on this route, includes one free.
+It would be the setting regardless. `fast-flights` sends a bag filter with
+every full search and it has **no measurable effect**: prices are identical
+with and without it. The calendar *does* honour a bag filter; turned on, it
+ran a median **$90 above** full searches on the same trips, about a round trip
+of carry-on fees on basic fares. So if bags ever matter, `grid.include_bags`
+can price them into the calendar, but full searches can't follow.
 
 ### Why 14–105 days
 
@@ -170,10 +170,12 @@ external trigger:
 Each runner makes about 15 requests and then disappears. That's a far gentler
 pattern per IP than the old single-runner sweeps of 120.
 
-Rough demand, if every trip were searched exactly on its interval: ~4,400 full
-searches a day. Supply is 2,880, so the schedule runs about 1.5× slower than
-the table above, spread proportionally. Raise `source.drills_per_run` to 90 to
-meet it exactly, at the cost of more traffic.
+Measured demand on 2026-09-23 (100 trips in the cheapest tier, 235 cheap,
+1,045 routine): **5,325 full searches a day** to hit every interval exactly.
+Supply at 48 runs is 2,880, so the schedule runs about **1.8× slower** than the
+table above, spread proportionally. At 5 runs a day, which is what GitHub's own
+schedule was delivering, it's 18× slower: the cheapest trips get an exact
+search twice a week. That's why the external trigger matters.
 
 ---
 

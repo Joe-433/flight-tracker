@@ -38,7 +38,10 @@ search:
   window_days: 91
   trip_nights: [5, 6, 7]
   max_stops: 1           # allow one layover -- but see the lower threshold
-  carry_on_bags: 1
+  # No bags: base fares are exactly what's wanted. (fast-flights ignores its
+  # bag filter anyway -- measured -- so these only matter to the calendar,
+  # and only if grid.include_bags is switched on.)
+  carry_on_bags: 0
   checked_bags: 0
   currency: "USD"
   adults: 1

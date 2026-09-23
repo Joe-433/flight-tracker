@@ -32,7 +32,7 @@ class Search:
     min_days_ahead: int = 14
     trip_nights: List[int] = field(default_factory=lambda: [5, 6, 7])
     max_stops: int = 1
-    carry_on_bags: int = 1
+    carry_on_bags: int = 0
     checked_bags: int = 0
     currency: str = "USD"
     adults: int = 1
