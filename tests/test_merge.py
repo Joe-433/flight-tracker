@@ -72,12 +72,38 @@ class TestMerge(unittest.TestCase):
         a.merge(b)
         self.assertEqual(a.alerts["k"]["ts"], stamped(2))
 
-    def test_furthest_cursor_wins(self):
+    def test_latest_search_time_wins(self):
+        """So the planner never re-spends a slot the other run just used."""
         a, b = State(), State()
-        a.cursors = {"0": 10, "alt": 3}
-        b.cursors = {"0": 40, "1": 7}
+        a.checked = {"k1": stamped(0), "k2": stamped(3)}
+        b.checked = {"k1": stamped(2), "k3": stamped(1)}
         a.merge(b)
-        self.assertEqual(a.cursors, {"0": 40, "alt": 3, "1": 7})
+        self.assertEqual(
+            a.checked, {"k1": stamped(2), "k2": stamped(3), "k3": stamped(1)}
+        )
+
+    def test_freshest_calendar_scan_wins(self):
+        a, b = State(), State()
+        a.grid = {"LAX|6|0": {"seen": stamped(0), "prices": {"d": 400}}}
+        b.grid = {"LAX|6|0": {"seen": stamped(1), "prices": {"d": 380}},
+                  "BUR|6|1": {"seen": stamped(1), "prices": {"d": 300}}}
+        a.merge(b)
+        self.assertEqual(a.grid["LAX|6|0"]["prices"], {"d": 380})
+        self.assertIn("BUR|6|1", a.grid)
+
+    def test_runs_are_unioned(self):
+        a, b = State(), State()
+        a.runs = [stamped(0), stamped(1)]
+        b.runs = [stamped(1), stamped(2)]
+        a.merge(b)
+        self.assertEqual(a.runs, [stamped(0), stamped(1), stamped(2)])
+
+    def test_working_calendar_anywhere_clears_the_streak(self):
+        a, b = State(), State()
+        a.grid_health = {"failures": 4, "down": True}
+        b.grid_health = {"failures": 0, "down": False}
+        a.merge(b)
+        self.assertEqual(a.grid_health["failures"], 0)
 
     def test_a_success_anywhere_clears_the_failure_streak(self):
         a, b = State(), State()

@@ -5,8 +5,7 @@ import unittest
 
 from helpers import make_config
 
-from flight_tracker.config import Band
-from flight_tracker.sources.base import date_pairs, plan_slice, slice_for_run
+from flight_tracker.sources.base import date_pairs
 from flight_tracker.sources.mock import MockSource
 from flight_tracker.sources.pairs import _format_flight_no, carrier_matches
 
@@ -43,119 +42,41 @@ class TestDatePairs(unittest.TestCase):
             self.assertEqual(delta.days, 4)
 
 
-class TestSliceForRun(unittest.TestCase):
-    def test_wraps_and_covers_everything(self):
-        pairs = [("d%d" % i, "r%d" % i) for i in range(10)]
-        seen = set()
-        cursor = 0
-        for _ in range(4):
-            picked, cursor = slice_for_run(pairs, cursor, 3)
-            seen.update(picked)
-        self.assertEqual(len(seen), 10)
-
-    def test_budget_larger_than_space(self):
-        pairs = [("a", "b"), ("c", "d")]
-        picked, cursor = slice_for_run(pairs, 0, 99)
-        self.assertEqual(len(picked), 2)
-        self.assertEqual(cursor, 0)
-
-    def test_empty(self):
-        self.assertEqual(slice_for_run([], 5, 3), ([], 0))
-
-
-class TestPlanSlice(unittest.TestCase):
-    def bands_config(self):
-        return make_config(
-            search={"min_days_ahead": 7, "window_days": 83, "trip_nights": [3, 4, 5, 6, 7]},
-            source={
-                "pairs_per_run": 20,
-                "bands": [
-                    Band(within_days=30, share=0.55),
-                    Band(within_days=60, share=0.25),
-                    Band(within_days=90, share=0.20),
-                ],
-            },
-        )
-
-    def test_budget_split_across_bands(self):
-        picked, cursors = plan_slice(self.bands_config(), {}, today=TODAY)
-        self.assertEqual(len(picked), 20)
-        self.assertEqual(sorted(cursors), ["0", "1", "2"])
-        leads = [(dt.date.fromisoformat(o) - TODAY).days for o, _, _ in picked]
-        self.assertEqual(sum(1 for d in leads if d <= 30), 11)
-        self.assertEqual(sum(1 for d in leads if 30 < d <= 60), 5)
-        self.assertEqual(sum(1 for d in leads if d > 60), 4)
-
-    def test_never_returns_a_pair_inside_min_days_ahead(self):
-        cfg = self.bands_config()
-        picked, _ = plan_slice(cfg, {}, today=TODAY)
-        for out_date, _, _ in picked:
-            self.assertGreaterEqual((dt.date.fromisoformat(out_date) - TODAY).days, 7)
-
-    def test_near_band_cycles_faster_than_far_band(self):
-        """The whole point of banding: near dates get revisited sooner."""
-        cfg = self.bands_config()
-        cursors = {}
-        near_wraps = far_wraps = 0
-        previous = (0, 0)
-        for _ in range(15):
-            _, cursors = plan_slice(cfg, cursors, today=TODAY)
-            if cursors["0"] < previous[0]:
-                near_wraps += 1
-            if cursors["2"] < previous[1]:
-                far_wraps += 1
-            previous = (cursors["0"], cursors["2"])
-        self.assertGreater(near_wraps, far_wraps)
-
-    def test_cursors_for_removed_bands_are_dropped(self):
-        """Switching to a flat rotation shouldn't leave orphan cursors in state."""
-        cfg = make_config(
-            search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},
-            source={"pairs_per_run": 4, "bands": []},
-        )
-        _, cursors = plan_slice(cfg, {"0": 2, "1": 9, "2": 4, "3": 7}, today=TODAY)
-        self.assertEqual(sorted(cursors), ["0"])
-
-    def test_existing_cursor_position_is_resumed(self):
-        cfg = make_config(
-            search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},
-            source={"pairs_per_run": 4, "bands": []},
-        )
-        picked, _ = plan_slice(cfg, {"0": 4}, today=TODAY)
-        expected, _ = plan_slice(cfg, {"0": 4}, today=TODAY)
-        self.assertEqual(picked, expected)
-        first, _ = plan_slice(cfg, {}, today=TODAY)
-        self.assertNotEqual(picked, first)
-
-    def test_no_bands_falls_back_to_one_rotation(self):
-        cfg = make_config(
-            search={"min_days_ahead": 0, "window_days": 14, "trip_nights": [3]},
-            source={"pairs_per_run": 4, "bands": []},
-        )
-        picked, cursors = plan_slice(cfg, {}, today=TODAY)
-        self.assertEqual(len(picked), 4)
-        self.assertEqual(cursors, {"0": 4})
-
-
 class TestMockSource(unittest.TestCase):
+    ITEMS = [
+        ("2026-10-01", "2026-10-06", "LAX"),
+        ("2026-10-02", "2026-10-07", "ONT"),
+    ]
+
     def test_deterministic(self):
-        cfg = make_config(source={"pairs_per_run": 5})
-        first, cursors = MockSource(cfg).sweep({})
-        second, _ = MockSource(cfg).sweep({})
+        cfg = make_config()
+        first = MockSource(cfg).drill(self.ITEMS)
+        second = MockSource(cfg).drill(self.ITEMS)
         self.assertEqual([o.price for o in first], [o.price for o in second])
-        self.assertTrue(cursors)
 
     def test_emits_both_stop_classes_when_connections_allowed(self):
-        cfg = make_config(source={"pairs_per_run": 5}, search={"max_stops": 1})
-        offers, _ = MockSource(cfg).sweep({})
-        self.assertEqual(len(offers), 10)
+        cfg = make_config(search={"max_stops": 1})
+        offers = MockSource(cfg).drill(self.ITEMS)
+        self.assertEqual(len(offers), 4)
         self.assertEqual(sorted({o.stops for o in offers}), [0, 1])
 
     def test_nonstop_only_when_configured(self):
-        cfg = make_config(source={"pairs_per_run": 5}, search={"max_stops": 0})
-        offers, _ = MockSource(cfg).sweep({})
-        self.assertEqual(len(offers), 5)
+        cfg = make_config(search={"max_stops": 0})
+        offers = MockSource(cfg).drill(self.ITEMS)
+        self.assertEqual(len(offers), 2)
         self.assertTrue(all(o.stops == 0 for o in offers))
+
+    def test_destination_lands_in_the_history_key(self):
+        """Fares into different airports must never share a price history."""
+        offers = MockSource(make_config()).drill(self.ITEMS)
+        self.assertEqual({o.arr_airport for o in offers}, {"LAX", "ONT"})
+        self.assertEqual(len({o.key for o in offers}), len(offers))
+
+    def test_drills_exactly_what_it_is_given(self):
+        offers = MockSource(make_config(search={"max_stops": 0})).drill(self.ITEMS[:1])
+        self.assertEqual(
+            [(o.out_date, o.ret_date, o.arr_airport) for o in offers], self.ITEMS[:1]
+        )
 
 
 class TestFlightNumberFormatting(unittest.TestCase):
@@ -182,55 +103,6 @@ class TestFlightNumberFormatting(unittest.TestCase):
     def test_misalignment_is_dropped_rather_than_guessed(self):
         """Showing the wrong flight number is worse than showing none."""
         self.assertIsNone(_format_flight_no(["AA 171"], 2))
-
-
-class TestSecondaryDestinations(unittest.TestCase):
-    """The LA city MID returns only LAX, so the rest are asked for by name."""
-
-    def config(self, share=0.2, extras=("BUR", "SNA", "ONT", "LGB")):
-        cfg = make_config(
-            search={"min_days_ahead": 7, "window_days": 20, "trip_nights": [5]},
-            source={"pairs_per_run": 20, "bands": []},
-        )
-        cfg.route.also_check = list(extras)
-        cfg.route.also_check_share = share
-        return cfg
-
-    def test_budget_is_split(self):
-        picked, cursors = plan_slice(self.config(), {}, today=TODAY)
-        self.assertEqual(len(picked), 20)
-        extras = [p for p in picked if p[2] != "/m/030qb3t"]
-        self.assertEqual(len(extras), 4)
-        self.assertIn("alt", cursors)
-
-    def test_primary_keeps_the_majority(self):
-        picked, _ = plan_slice(self.config(), {}, today=TODAY)
-        primary = [p for p in picked if p[2] == "/m/030qb3t"]
-        self.assertEqual(len(primary), 16)
-
-    def test_extras_rotate_across_airports_not_one_at_a_time(self):
-        picked, _ = plan_slice(self.config(), {}, today=TODAY)
-        airports = {p[2] for p in picked if p[2] != "/m/030qb3t"}
-        self.assertEqual(airports, {"BUR", "SNA", "ONT", "LGB"})
-
-    def test_extras_cursor_advances_independently(self):
-        cfg = self.config()
-        first, cursors = plan_slice(cfg, {}, today=TODAY)
-        second, _ = plan_slice(cfg, cursors, today=TODAY)
-        self.assertNotEqual(
-            [p for p in first if p[2] != "/m/030qb3t"],
-            [p for p in second if p[2] != "/m/030qb3t"],
-        )
-
-    def test_none_configured_means_all_primary(self):
-        picked, cursors = plan_slice(self.config(extras=()), {}, today=TODAY)
-        self.assertTrue(all(p[2] == "/m/030qb3t" for p in picked))
-        self.assertNotIn("alt", cursors)
-
-    def test_extras_never_take_the_whole_budget(self):
-        picked, _ = plan_slice(self.config(share=5.0), {}, today=TODAY)
-        primary = [p for p in picked if p[2] == "/m/030qb3t"]
-        self.assertGreaterEqual(len(primary), 1)
 
 
 class TestCarrierMatch(unittest.TestCase):

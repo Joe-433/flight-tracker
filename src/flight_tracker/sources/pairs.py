@@ -1,12 +1,13 @@
-"""Date-pair backend: one Google Flights query per (outbound, return) pair.
+"""Full searches: one Google Flights query per (dates, destination) item.
 
-This is the backend that works against `fast-flights` as actually published
-(3.1.0). The full date space is several hundred pairs, far too many to sweep every
-run, so each run walks a rotating slice (`source.pairs_per_run`) split across
-`source.bands` and stores one cursor per band in state. See `plan_slice`.
+This is the exact source -- flight numbers, airports, the price a booking page
+will show -- and the expensive one: a request per item, against 1,380 items in
+the search space. So it never decides what to search. The planner does
+(planner.py), steered by the calendar grid, and hands this module a short list.
 
-City MIDs (e.g. "/m/02_286") are passed straight through as the airport field,
-which is how one query covers every airport in the metro.
+The origin is a city MID ("/m/02_286"), which covers every NY airport in one
+request; excluded airports are dropped per itinerary so the cheapest remaining
+option still wins. Destinations are searched by airport code.
 """
 
 from __future__ import annotations

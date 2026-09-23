@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Run a fare scan right now.
 #
-#   ./scan            sweep 40 date pairs
-#   ./scan 80         sweep 80
-#   ./scan 120        deep scan
+#   ./scan            calendar scans + the configured number of full searches
+#   ./scan 120        calendar scans + 120 full searches (a deep scan)
 #
 # Prefers a local live run if one is set up (instant, no GitHub round trip);
 # otherwise dispatches the GitHub Actions workflow and streams the result back.
@@ -12,9 +11,9 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-PAIRS="${1:-40}"
-if ! [[ "$PAIRS" =~ ^[0-9]+$ ]]; then
-  echo "usage: ./scan [number-of-date-pairs]" >&2
+DRILLS="${1:-}"
+if [ -n "$DRILLS" ] && ! [[ "$DRILLS" =~ ^[0-9]+$ ]]; then
+  echo "usage: ./scan [number-of-full-searches]" >&2
   exit 2
 fi
 
@@ -23,18 +22,18 @@ for candidate in .venv-live/bin/python python3.13 python3.12 python3.11 python3.
   PY="$(command -v "$candidate" 2>/dev/null || true)"
   [ -n "$PY" ] || continue
   if PYTHONPATH=src "$PY" -c "import fast_flights" >/dev/null 2>&1; then
-    echo "scanning locally ($PAIRS pairs) via $PY"
-    exec env PYTHONPATH=src "$PY" -m flight_tracker run --pairs "$PAIRS" --console
+    echo "scanning locally via $PY"
+    exec env PYTHONPATH=src "$PY" -m flight_tracker run --console ${DRILLS:+--drills "$DRILLS"}
   fi
 done
 
 # --- remote path -------------------------------------------------------------
 command -v gh >/dev/null || { echo "need either a local Python >=3.10 with deps, or gh" >&2; exit 1; }
 
-echo "no local scraper; dispatching GitHub Actions ($PAIRS pairs)..."
+echo "no local scraper; dispatching GitHub Actions..."
 latest() { gh run list --workflow="watch fares" --limit 1 --json databaseId --jq '.[0].databaseId // 0'; }
 before="$(latest)"
-gh workflow run "watch fares" -f pairs="$PAIRS" >/dev/null
+gh workflow run "watch fares" ${DRILLS:+-f drills="$DRILLS"} >/dev/null
 
 # The dispatched run takes a moment to appear; don't grab the previous one.
 id="$before"
@@ -52,5 +51,5 @@ echo "run $id -- https://github.com/Joe-433/flight-tracker/actions/runs/$id"
 gh run watch "$id" --exit-status >/dev/null 2>&1 || true
 echo
 gh run view "$id" --log 2>&1 \
-  | grep -E "sweep:|  ! |alert:|Why:|cheapest|cutoff|alerts sent|DEAD MAN" \
-  | sed 's/^.*[0-9]Z //'
+  | grep -E "grid:|plan:|shard [0-9]+:|apply:|  ! |alert:|record low|cheapest|alerts sent|DEAD MAN" \
+  | sed 's/^.*[0-9]Z //' | sed 's/^[a-z]*\t[^\t]*\t//'

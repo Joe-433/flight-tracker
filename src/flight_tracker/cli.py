@@ -10,12 +10,13 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import os
 import time
 import sys
 from typing import Callable, Dict, List, Optional, Tuple
 
-from . import analysis, deadman
+from . import analysis, deadman, pipeline
 from .booking import airline_url, carrier_of
 from .config import Config, load_config
 from .notify import BLURPLE, GREEN, Message, Notifier
@@ -189,49 +190,164 @@ def days_table(stats: List[analysis.DayStat], cfg: Config, limit: int = 14) -> s
 # ---------------------------------------------------------------------------
 
 
-def cmd_run(args: argparse.Namespace) -> int:
+def _load_run_config(args: argparse.Namespace) -> Config:
     cfg = load_config(args.config)
-    if args.backend:
+    if getattr(args, "backend", None):
         cfg.source.backend = args.backend
-    if args.threshold is not None:
+    if getattr(args, "threshold", None) is not None:
         cfg.alerts.threshold_usd = args.threshold
-    if args.pairs is not None:
-        cfg.source.pairs_per_run = args.pairs
+    if getattr(args, "drills", None) is not None:
+        cfg.source.drills_per_run = args.drills
+    if getattr(args, "no_grid", False):
+        cfg.grid.enabled = False
+    return cfg
 
+
+def _print_plan(plan_doc: Dict[str, object]) -> None:
+    status = plan_doc.get("grid_status")
+    print(
+        "grid: %s | %s scans, %s failed, %s requests"
+        % (status, plan_doc.get("grid_scans"), plan_doc.get("grid_failed"),
+           plan_doc.get("grid_requests"))
+    )
+    for error in list(plan_doc.get("grid_errors") or [])[:3]:
+        print("  ! %s" % str(error)[:200])
+    shards = plan_doc.get("shards") or []
+    print(
+        "plan: %d full searches across %d shard(s)"
+        % (sum(len(shard) for shard in shards), len(shards))
+    )
+    for key, reason, overdue, price in list(plan_doc.get("reasons") or [])[:8]:
+        print(
+            "  %-28s %-6s x%-5s %s"
+            % (key, _money(price) if price else "?", overdue, reason)
+        )
+
+
+def cmd_plan(args: argparse.Namespace) -> int:
+    """Stage 1 on its own: calendar scans + choosing the drills, to a file."""
+    cfg = _load_run_config(args)
     state = State.load(args.state)
-    notifier = Notifier.from_env(force_console=args.console)
+    plan_doc = pipeline.make_plan(cfg, state, shards=args.shards)
+    _print_plan(plan_doc)
+    with open(args.out, "w", encoding="utf-8") as fh:
+        json.dump(plan_doc, fh)
+    if args.github_output:
+        # The non-empty shards become the next job's matrix: no point paying
+        # for a runner that has nothing to search.
+        busy = [i for i, shard in enumerate(plan_doc["shards"]) if shard]
+        with open(args.github_output, "a", encoding="utf-8") as fh:
+            fh.write("shards=%s\n" % json.dumps(busy))
+    return 0
+
+
+def cmd_sweep(args: argparse.Namespace) -> int:
+    """Stage 2 on its own: one shard's full searches, to a file."""
+    cfg = _load_run_config(args)
+    with open(args.plan, "r", encoding="utf-8") as fh:
+        plan_doc = json.load(fh)
+    result = pipeline.run_drills(cfg, plan_doc, args.shard)
+    print(
+        "shard %d: %d searches -> %d fares, %d errors"
+        % (args.shard, len(result["checked"]), len(result["offers"]), len(result["errors"]))
+    )
+    for error in result["errors"][:5]:
+        print("  ! %s" % error[:200])
+    with open(args.out, "w", encoding="utf-8") as fh:
+        json.dump(result, fh)
+    return 0
+
+
+def cmd_apply(args: argparse.Namespace) -> int:
+    """Stage 3 on its own: fold shard results into state and alert."""
+    cfg = _load_run_config(args)
+    plan_doc: Dict[str, object] = {}
+    if args.plan and os.path.exists(args.plan):
+        with open(args.plan, "r", encoding="utf-8") as fh:
+            plan_doc = json.load(fh)
+    else:
+        print("no plan: the plan stage failed, recording this run as empty")
+    results = []
+    for path in args.results:
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                results.append(json.load(fh))
+        except (OSError, ValueError) as exc:
+            print("skipping unreadable result %s: %s" % (path, exc))
+    state = State.load(args.state)
+    code = _apply(cfg, state, plan_doc, results, args)
+    state.save(args.state)
+    return code
+
+
+def cmd_run(args: argparse.Namespace) -> int:
+    """All three stages in-process, one shard. For local and manual runs."""
+    cfg = _load_run_config(args)
+    state = State.load(args.state)
+    plan_doc = pipeline.make_plan(cfg, state, shards=1)
+    _print_plan(plan_doc)
+    result = pipeline.run_drills(cfg, plan_doc, 0)
+    code = _apply(cfg, state, plan_doc, [result], args)
+    state.save(args.state)
+    return code
+
+
+def _apply(
+    cfg: Config,
+    state: State,
+    plan_doc: Dict[str, object],
+    results: List[Dict[str, object]],
+    args: argparse.Namespace,
+) -> int:
+    notify = not getattr(args, "no_notify", False)
+    notifier = Notifier.from_env(force_console=getattr(args, "console", False))
     now = utcnow()
 
-    offers: List[Offer] = []
-    errors: List[str] = []
-    next_cursors = dict(state.cursors)
-    try:
-        source = get_source(cfg)
-        offers, next_cursors = source.sweep(state.cursors)
-        errors = source.errors
-    except ScrapeError as exc:
-        errors = [str(exc)]
-        print("scrape failed: %s" % exc)
-    except Exception as exc:  # unexpected, but must not skip the health update
-        errors = ["unhandled: %r" % exc]
-        print("unexpected failure: %r" % exc)
+    offers = pipeline.offers_from(results)
+    errors: List[str] = [e for r in results for e in (r.get("errors") or [])]
+    searched = sum(len(r.get("checked") or []) for r in results)
 
     print(
-        "%s sweep: %d offers, %d errors (backend=%s)"
-        % (now.isoformat(timespec="seconds"), len(offers), len(errors), cfg.source.backend)
+        "%s apply: %d shard result(s), %d searches, %d fares, %d errors"
+        % (now.isoformat(timespec="seconds"), len(results), searched, len(offers), len(errors))
     )
-    # Partial failures are normal (a date pair with no nonstops at all will
-    # error), but a silent count tells you nothing about which kind you have.
+    # Partial failures are normal (a date pair with no flights errors), but a
+    # count alone can't tell you which kind you have.
     for error in errors[:5]:
-        print("  ! %s" % error[:200])
+        print("  ! %s" % str(error)[:200])
     if len(errors) > 5:
         print("  ! ...and %d more" % (len(errors) - 5))
+
+    # Calendar scans and the planner's memory.
+    for key, entry in dict(plan_doc.get("grid") or {}).items():
+        state.grid[key] = entry
+    for result in results:
+        stamp = str(result.get("finished") or now.isoformat())
+        for key in result.get("checked") or []:
+            state.checked[str(key)] = stamp
+    state.runs.append(now.isoformat())
 
     # Assess BEFORE recording, so a fare is never part of its own baseline.
     assessment = analysis.assess(offers, state, cfg, now=now)
 
     state.record(offers, cfg.history, now=now)
-    state.cursors = next_cursors
+
+    # Stamp each fresh full search with what the calendar said about the same
+    # trip in this run. The planner measures movement against this, calendar
+    # to calendar, so the calendar's systematic offset from full searches
+    # cancels out instead of reading as a permanent price drop.
+    plan_grid = dict(plan_doc.get("grid") or {})
+    for offer in offers:
+        snap = state.latest.get(offer.key)
+        if snap is None:
+            continue
+        combo = "%s|%d|%d" % (offer.arr_airport or "?", offer.nights, 1 if offer.stops else 0)
+        prices = (plan_grid.get(combo) or {}).get("prices") or {}
+        if offer.out_date in prices:
+            snap["grid_at"] = prices[offer.out_date]
+        else:
+            snap.pop("grid_at", None)
+
     state.trim(
         cfg.history.days,
         now=now,
@@ -242,11 +358,14 @@ def cmd_run(args: argparse.Namespace) -> int:
     )
 
     health = deadman.update(state, cfg, got_data=bool(offers), errors=errors, now=now)
-
-    if health.should_notify and not args.no_notify:
+    if health.should_notify and notify:
         notifier.send(_health_message(health, cfg, state))
     if health.down:
         print("DEAD MAN'S SWITCH: %s" % "; ".join(health.reasons))
+
+    grid_notice = _update_grid_health(state, cfg, str(plan_doc.get("grid_status") or ""))
+    if grid_notice and notify:
+        notifier.send(grid_notice)
 
     sent = 0
     for deal in assessment.alerts:
@@ -255,15 +374,16 @@ def cmd_run(args: argparse.Namespace) -> int:
         if not state.should_alert(deal.offer, cfg, now=now):
             continue
         print(
-            "alert: %s %s->%s (%s)"
+            "alert: %s %s->%s %s (%s)"
             % (
                 _money(deal.offer.price, deal.offer.currency),
                 deal.offer.out_date,
                 deal.offer.ret_date,
+                deal.offer.arr_airport or "",
                 ",".join(deal.reasons),
             )
         )
-        if not args.no_notify:
+        if notify:
             notifier.send(deal_message(deal, cfg))
         state.mark_alerted(deal.offer, now=now)
         sent += 1
@@ -277,29 +397,83 @@ def cmd_run(args: argparse.Namespace) -> int:
                 _money(record.previous),
             )
         )
-        if not args.no_notify:
+        if notify:
             notifier.send(record_message(record, cfg))
 
     if assessment.cheapest:
         print(
-            "cheapest this sweep: %s on %s -> %s"
+            "cheapest this run: %s on %s -> %s %s"
             % (
                 _money(assessment.cheapest.price, assessment.cheapest.currency),
                 assessment.cheapest.out_date,
                 assessment.cheapest.ret_date,
+                assessment.cheapest.arr_airport or "",
             )
         )
-    if assessment.cheap_cutoff:
-        print("cheap-day cutoff: %s" % _money(assessment.cheap_cutoff))
     print(
-        "alerts sent: %d | tracked pairs: %d | cursors: %s"
-        % (sent, len(state.observations), state.cursors)
+        "alerts sent: %d | fresh fares: %d | runs in last 24h: %d"
+        % (sent, len(state.latest), runs_last_day(state, now))
     )
 
-    state.save(args.state)
-    if health.down and args.fail_on_down:
+    if health.down and getattr(args, "fail_on_down", False):
         return 1
     return 0
+
+
+def runs_last_day(state: State, now: Optional[dt.datetime] = None) -> int:
+    now = now or utcnow()
+    count = 0
+    for stamp in state.runs:
+        age = _hours_since(stamp, now)
+        # `age or ...` would be wrong here: a run that just happened is 0.0
+        # hours old, which is falsy.
+        if age is not None and age <= 24:
+            count += 1
+    return count
+
+
+def _update_grid_health(state: State, cfg: Config, status: str) -> Optional[Message]:
+    """Track calendar failures; return a notice when it goes down or comes back.
+
+    The sweep carries on without the calendar -- the planner falls back to the
+    last full-search prices -- so this is a heads-up, not the dead man.
+    """
+    health = state.grid_health
+    failures = int(health.get("failures") or 0)
+    was_down = bool(health.get("down"))
+
+    if status == "ok":
+        state.grid_health = {"failures": 0, "down": False}
+        if was_down:
+            return Message(
+                title="\u2705 Calendar scans are working again",
+                body="Full searches are being steered by fresh calendar prices again.",
+            )
+        return None
+    if status not in ("failed", "unavailable"):
+        return None  # skipped or disabled: no evidence either way
+
+    failures += 1
+    health["failures"] = failures
+    if failures >= cfg.grid.notify_after_failures and not was_down:
+        health["down"] = True
+        return Message(
+            title="\u26a0\ufe0f Calendar scans are failing",
+            body="\n".join(
+                [
+                    "%d runs in a row got nothing from Google's calendar endpoint." % failures,
+                    "",
+                    "Fares are still being tracked -- full searches carry on, "
+                    "scheduled from their own last prices -- but they're no "
+                    "longer steered toward dates the calendar says are cheap.",
+                    "",
+                    "Likely cause: Google changed the call the `flights` package "
+                    "reverse-engineers. Check: python -m flight_tracker grid",
+                ]
+            ),
+            urgent=False,
+        )
+    return None
 
 
 def _health_message(health: deadman.Health, cfg: Config, state: State) -> Message:
@@ -397,7 +571,8 @@ def cmd_verify(args: argparse.Namespace) -> int:
     out_date, ret_date = pairs[len(pairs) // 2]
 
     print("config : %s" % args.config)
-    print("route  : %s -> %s" % (cfg.route.origin, cfg.route.destination))
+    dest = args.to or cfg.route.destinations[0]
+    print("route  : %s -> %s" % (cfg.route.origin, dest))
     print("dates  : %s -> %s" % (out_date, ret_date))
     print("filters: max_stops=%d carry_on=%d checked=%d %s"
           % (cfg.search.max_stops, cfg.search.carry_on_bags,
@@ -411,12 +586,12 @@ def cmd_verify(args: argparse.Namespace) -> int:
 
     fetch = getattr(source, "fetch_pair", None)
     if fetch is None:
-        offers, _ = source.sweep(0)
+        offers = source.drill([(out_date, ret_date, dest)])
         offer = offers[0] if offers else None
     else:
-        query = source._query(out_date, ret_date)  # noqa: SLF001 - diagnostics
+        query = source._query(out_date, ret_date, dest)  # noqa: SLF001 - diagnostics
         print("url    : %s" % query.url())
-        offer = fetch(out_date, ret_date)
+        offer = fetch(out_date, ret_date, dest)
 
     if source.errors:
         print("errors : %s" % "; ".join(source.errors))
@@ -455,9 +630,7 @@ def cmd_probe(args: argparse.Namespace) -> int:
     if args.max_stops is not None:
         cfg.search.max_stops = args.max_stops
     if args.to:
-        cfg.route.destination = args.to
-    cfg.source.bands = []
-    cfg.route.also_check = []
+        cfg.route.destinations = [args.to.upper()]
 
     today = dt.date.today()
     pairs = date_pairs(cfg, today)
@@ -490,7 +663,7 @@ def cmd_probe(args: argparse.Namespace) -> int:
     for i, (out_date, ret_date) in enumerate(sampled):
         if i:
             _time.sleep(_random.uniform(2, 5))
-        offer = source.fetch_pair(out_date, ret_date)
+        offer = source.fetch_pair(out_date, ret_date, cfg.route.destinations[0])
         lead = (dt.date.fromisoformat(out_date) - today).days
         if offer is None:
             print("  %3d days  %s -> %s   no fare" % (lead, out_date, ret_date))
@@ -765,6 +938,18 @@ def cheapest_lines(
     return body
 
 
+def _report_footer(state: State) -> str:
+    """Enough to tell at a glance whether the tracker is actually running."""
+    bits = [
+        "%d runs in the last 24h" % runs_last_day(state),
+        "%d fares tracked" % len(state.latest),
+    ]
+    if state.grid_health.get("down"):
+        bits.append("calendar scans DOWN")
+    bits.append("outbound airports")
+    return " \u00b7 ".join(bits)
+
+
 def cmd_report(args: argparse.Namespace) -> int:
     cfg = load_config(args.config)
     state = State.load(args.state)
@@ -772,8 +957,7 @@ def cmd_report(args: argparse.Namespace) -> int:
         title="Cheapest %s \u2192 %s \u00b7 top %d of each"
         % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
         body=cheapest_lines(state, cfg, limit=args.limit),
-        footer="Outbound airports \u00b7 prices as last seen \u00b7 "
-        "%d date pairs tracked" % len(state.latest),
+        footer=_report_footer(state),
         color=GREEN,
     )
     if args.send:
@@ -799,7 +983,7 @@ def cmd_dump(args: argparse.Namespace) -> int:
     """
     cfg = load_config(args.config)
     if args.to:
-        cfg.route.destination = args.to
+        cfg.route.destinations = [args.to.upper()]
     if getattr(args, "from_", None):
         cfg.route.origin = args.from_
     pairs = date_pairs(cfg)
@@ -816,7 +1000,9 @@ def cmd_dump(args: argparse.Namespace) -> int:
     results = numbers = None
     for offset in range(args.attempts):
         out_date, ret_date = pairs[(len(pairs) // 2 + offset * 7) % len(pairs)]
-        html = fetch_flights_html(source._query(out_date, ret_date))  # noqa: SLF001
+        html = fetch_flights_html(
+            source._query(out_date, ret_date, cfg.route.destinations[0])  # noqa: SLF001
+        )
         try:
             results = parse(html)
         except Exception as exc:
@@ -1057,18 +1243,41 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--state", default=DEFAULT_STATE)
     sub = parser.add_subparsers(dest="command", required=True)
 
-    run = sub.add_parser("run", help="one sweep + alerting")
-    run.add_argument("--backend", choices=["pairs", "grid", "mock"])
-    run.add_argument("--threshold", type=float)
-    run.add_argument(
-        "--pairs",
-        type=int,
-        help="override source.pairs_per_run for this run (manual deep scan)",
-    )
+    def run_options(p: argparse.ArgumentParser) -> None:
+        p.add_argument("--backend", choices=["pairs", "mock"])
+        p.add_argument("--threshold", type=float)
+        p.add_argument("--drills", type=int, help="full searches this run")
+        p.add_argument("--no-grid", action="store_true", dest="no_grid")
+
+    run = sub.add_parser("run", help="plan + drill + apply in one process")
+    run_options(run)
     run.add_argument("--no-notify", action="store_true", help="decide but don't send")
     run.add_argument("--console", action="store_true", help="also print alerts")
     run.add_argument("--fail-on-down", action="store_true", help="exit 1 if unhealthy")
     run.set_defaults(func=cmd_run)
+
+    plan_cmd = sub.add_parser("plan", help="stage 1: calendar scans, choose drills")
+    run_options(plan_cmd)
+    plan_cmd.add_argument("--shards", type=int)
+    plan_cmd.add_argument("--out", default="plan.json")
+    plan_cmd.add_argument("--github-output", dest="github_output")
+    plan_cmd.set_defaults(func=cmd_plan)
+
+    sweep_cmd = sub.add_parser("sweep", help="stage 2: one shard's full searches")
+    run_options(sweep_cmd)
+    sweep_cmd.add_argument("--plan", default="plan.json")
+    sweep_cmd.add_argument("--shard", type=int, required=True)
+    sweep_cmd.add_argument("--out", required=True)
+    sweep_cmd.set_defaults(func=cmd_sweep)
+
+    apply_cmd = sub.add_parser("apply", help="stage 3: fold results, alert")
+    run_options(apply_cmd)
+    apply_cmd.add_argument("--plan", default="plan.json")
+    apply_cmd.add_argument("results", nargs="*")
+    apply_cmd.add_argument("--no-notify", action="store_true")
+    apply_cmd.add_argument("--console", action="store_true")
+    apply_cmd.add_argument("--fail-on-down", action="store_true")
+    apply_cmd.set_defaults(func=cmd_apply)
 
     days = sub.add_parser("days", help="cheapest departure days from history")
     days.add_argument("--limit", type=int, default=14)
@@ -1118,7 +1327,8 @@ def build_parser() -> argparse.ArgumentParser:
     grid.set_defaults(func=cmd_grid)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")
-    verify.add_argument("--backend", choices=["pairs", "grid", "mock"])
+    verify.add_argument("--backend", choices=["pairs", "mock"])
+    verify.add_argument("--to", help="destination airport (default: first in config)")
     verify.set_defaults(func=cmd_verify)
 
     return parser

@@ -83,6 +83,8 @@ class GridScanner:
     """
 
     name = "grid"
+    # Pause between requests. Only real network scanners need to be polite.
+    paced = True
 
     def __init__(self, cfg: Config) -> None:
         self.cfg = cfg
@@ -118,7 +120,7 @@ class GridScanner:
         lo, hi = (list(self.cfg.grid.jitter_seconds) + [0, 0])[:2]
 
         for index, (first, last) in enumerate(spans):
-            if index or self.requests:
+            if self.paced and (index or self.requests):
                 time.sleep(random.uniform(float(lo), float(hi)))
             self.requests += 1
             try:
@@ -244,6 +246,8 @@ class FliGridScanner(GridScanner):
 
 class MockGridScanner(GridScanner):
     """Deterministic calendar prices, for running the pipeline offline."""
+
+    paced = False
 
     def _fetch(
         self, combo: Combo, first: dt.date, last: dt.date

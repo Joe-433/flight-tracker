@@ -1,52 +1,138 @@
 name: watch fares
 
+# One run, three stages (see src/flight_tracker/pipeline.py):
+#
+#   plan    calendar scans, then choose which date pairs get a full search
+#   drill   full searches, fanned out across runners -- one IP each
+#   apply   fold the results into state, alert, commit
+#
+# The primary trigger is EXTERNAL: a free cron service calling this workflow's
+# workflow_dispatch endpoint every 30 minutes (README, "External trigger").
+# GitHub throttles its own schedules hard -- a */10 cron here delivered 41,
+# then 12, then 6 runs a day -- but dispatch events run when they're sent.
+# The schedule below is only a backstop in case the external trigger dies.
+
 on:
-  schedule:
-    # Every 30 minutes -- nominally. GitHub throttles frequent schedules hard:
-    # a */10 cron here actually delivered 41 runs one day, then 12, then 6,
-    # against a nominal 144. Asking for less gets a larger share of what's
-    # asked, and each run now sweeps a big batch rather than relying on the
-    # cadence. See README "Request budget".
-    - cron: "0,30 * * * *"
   workflow_dispatch:
     inputs:
+      drills:
+        description: "Full searches this run (blank = config, 60)"
+        required: false
+      notify:
+        description: "Send alerts"
+        type: boolean
+        default: true
+      grid:
+        description: "Run calendar scans"
+        type: boolean
+        default: true
       threshold:
-        description: "Override alert threshold (USD) for this run"
+        description: "Override the nonstop alert threshold (USD) for this run"
         required: false
       backend:
-        description: "pairs | grid | mock"
+        description: "pairs | mock"
         required: false
         default: "pairs"
-      pairs:
-        description: "Date pairs to sweep this run (default 20; try 80 for a deep manual scan)"
-        required: false
+  schedule:
+    - cron: "17 */2 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  # Never let two sweeps race on data/state.json.
+  # One run at a time: state has a single writer per run. A trigger that
+  # arrives mid-run waits; a third replaces the waiting one.
   group: watch-fares
   cancel-in-progress: false
 
+env:
+  PYTHONPATH: src
+  FT_DRILLS_PER_RUN: ${{ inputs.drills }}
+  FT_THRESHOLD_USD: ${{ inputs.threshold }}
+  FT_BACKEND: ${{ inputs.backend }}
+  FT_GRID: ${{ inputs.grid == false && '0' || '' }}
+
 jobs:
-  sweep:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
+    outputs:
+      shards: ${{ steps.plan.outputs.shards }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+      - run: pip install -r requirements.txt
+      - id: plan
+        name: Calendar scans and drill plan
+        run: python -m flight_tracker plan --out plan.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan
+          path: plan.json
+          retention-days: 3
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+  drill:
+    needs: plan
+    if: needs.plan.outputs.shards != '' && needs.plan.outputs.shards != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      # One shard failing must not cancel the others; apply uses what arrives.
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: plan
+      - name: Full searches, shard ${{ matrix.shard }}
+        run: >-
+          python -m flight_tracker sweep --plan plan.json
+          --shard ${{ matrix.shard }} --out result-${{ matrix.shard }}.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.shard }}
+          path: result-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+          retention-days: 3
 
-      - name: Sweep
+  apply:
+    needs: [plan, drill]
+    # Always: a run whose plan or drills crashed must still reach the dead
+    # man's switch, or a total outage would be silent.
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: plan
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: result-*
+          path: results
+          merge-multiple: true
+
+      - name: Apply results and alert
         env:
-          PYTHONPATH: src
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -54,14 +140,12 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          FT_THRESHOLD_USD: ${{ github.event.inputs.threshold }}
-          FT_BACKEND: ${{ github.event.inputs.backend }}
-          FT_PAIRS_PER_RUN: ${{ github.event.inputs.pairs }}
-        run: python -m flight_tracker run --console
+          NOTIFY: ${{ inputs.notify == false && '--no-notify' || '' }}
+        run: |
+          shopt -s nullglob
+          python -m flight_tracker apply --plan plan.json --console $NOTIFY results/*.json
 
       - name: Commit price history
-        env:
-          PYTHONPATH: src
         run: |
           git config user.name "flight-tracker"
           git config user.email "actions@users.noreply.github.com"
@@ -77,9 +161,9 @@ jobs:
           # remote, merge it into ours semantically, and push that.
           for attempt in 1 2 3 4 5; do
             cp data/state.json /tmp/ours.json
-            git fetch --quiet origin main
-            git reset --quiet --hard origin/main
-            git show origin/main:data/state.json > /tmp/theirs.json 2>/dev/null || echo '{}' > /tmp/theirs.json
+            git fetch --quiet origin "$GITHUB_REF_NAME"
+            git reset --quiet --hard "origin/$GITHUB_REF_NAME"
+            git show "origin/$GITHUB_REF_NAME:data/state.json" > /tmp/theirs.json 2>/dev/null || echo '{}' > /tmp/theirs.json
             cp /tmp/ours.json data/state.json
             python -m flight_tracker merge /tmp/theirs.json
 
@@ -89,7 +173,7 @@ jobs:
             fi
             git add data/state.json
             git commit --quiet -m "chore: price history $(date -u +%Y-%m-%dT%H:%MZ)"
-            if git push --quiet; then
+            if git push --quiet origin "HEAD:$GITHUB_REF_NAME"; then
               echo "pushed on attempt $attempt"
               exit 0
             fi

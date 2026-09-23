@@ -14,12 +14,12 @@ class TestPersistence(unittest.TestCase):
     def test_roundtrip(self):
         state = State()
         state.record([make_offer(300)], None, now=NOW)
-        state.cursors = {"0": 7, "1": 3}
+        state.checked = {"2026-09-20|2026-09-24|LAX": NOW.isoformat()}
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "nested", "state.json")
             state.save(path)
             loaded = State.load(path)
-        self.assertEqual(loaded.cursors, {"0": 7, "1": 3})
+        self.assertEqual(loaded.checked, state.checked)
         self.assertEqual(loaded.observations, state.observations)
 
     def test_missing_file_is_fresh_state(self):

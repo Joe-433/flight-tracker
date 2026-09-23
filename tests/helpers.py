@@ -13,7 +13,9 @@ from flight_tracker.config import (  # noqa: E402
     Config,
     Deadman,
     Deals,
+    Grid,
     Route,
+    Schedule,
     Search,
     Source,
 )
@@ -24,9 +26,16 @@ NOW = dt.datetime(2026, 9, 12, 12, 0, tzinfo=dt.timezone.utc)
 
 def make_config(**overrides) -> Config:
     cfg = Config(
-        route=Route(origin="/m/02_286", destination="/m/030qb3t"),
+        route=Route(
+            origin="/m/02_286",
+            destinations=["LAX"],
+            origin_airports=["JFK", "LGA", "EWR"],
+            exclude_origins=["EWR"],
+        ),
         search=Search(),
         source=Source(),
+        grid=Grid(jitter_seconds=[0, 0]),
+        schedule=Schedule(),
         alerts=Alerts(),
         deals=Deals(),
         deadman=Deadman(),
