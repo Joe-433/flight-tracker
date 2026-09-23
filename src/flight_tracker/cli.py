@@ -969,6 +969,8 @@ def cmd_grid(args: argparse.Namespace) -> int:
     from .sources.grid import Combo, GridUnavailable, combos, get_grid
 
     cfg = load_config(args.config)
+    if args.carry_on is not None:
+        cfg.search.carry_on_bags = args.carry_on
     state = State.load(args.state)
     try:
         scanner = get_grid(cfg)
@@ -987,7 +989,10 @@ def cmd_grid(args: argparse.Namespace) -> int:
     if args.limit:
         wanted = wanted[: args.limit]
 
-    print("origins %s | %d scans" % ("+".join(scanner.origins()), len(wanted)))
+    print(
+        "origins %s | %d scans | carry-on bags %d"
+        % ("+".join(scanner.origins()), len(wanted), cfg.search.carry_on_bags)
+    )
     print("")
     print("%-12s %6s %9s  %-12s" % ("SCAN", "DATES", "CHEAPEST", "ON"))
 
@@ -1108,6 +1113,7 @@ def build_parser() -> argparse.ArgumentParser:
     grid.add_argument("--dest")
     grid.add_argument("--nights", type=int)
     grid.add_argument("--limit", type=int)
+    grid.add_argument("--carry-on", type=int, dest="carry_on")
     grid.set_defaults(func=cmd_grid)
 
     verify = sub.add_parser("verify", help="one live query, sanity-checked")

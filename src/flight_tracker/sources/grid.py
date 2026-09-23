@@ -213,8 +213,12 @@ class FliGridScanner(GridScanner):
                 if combo.nonstop
                 else self._MaxStops.ONE_STOP_OR_FEWER
             ),
-            bags=self._BagsFilter(
-                checked_bags=s.checked_bags, carry_on=bool(s.carry_on_bags)
+            bags=(
+                self._BagsFilter(
+                    checked_bags=s.checked_bags, carry_on=bool(s.carry_on_bags)
+                )
+                if (s.checked_bags or s.carry_on_bags)
+                else None
             ),
             from_date=first.isoformat(),
             to_date=last.isoformat(),
