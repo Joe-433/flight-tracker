@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import random
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from ..config import Config
 from .base import Item, Offer, ScrapeError, Source
@@ -156,7 +156,6 @@ class PairsSource(Source):
                 Passengers,
                 create_query,
                 fetch_flights_html,
-                get_flights,
             )
             from fast_flights.parser import parse
         except ImportError as exc:  # pragma: no cover - environment problem
@@ -177,7 +176,6 @@ class PairsSource(Source):
         self._FlightQuery = FlightQuery
         self._Passengers = Passengers
         self._create_query = create_query
-        self._get_flights = get_flights
         self._fetch_html = fetch_flights_html
         self._parse = parse
 

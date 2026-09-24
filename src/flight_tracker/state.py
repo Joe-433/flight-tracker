@@ -229,8 +229,6 @@ class State:
         self.consecutive_failures = min(
             int(self.consecutive_failures or 0), int(other.consecutive_failures or 0)
         )
-        if not other.deadman.get("down"):
-            self.deadman = other.deadman if not self.deadman.get("down") else self.deadman
         return self
 
     # -- history ------------------------------------------------------------

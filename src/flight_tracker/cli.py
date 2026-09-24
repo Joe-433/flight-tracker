@@ -12,8 +12,9 @@ import argparse
 import datetime as dt
 import json
 import os
-import time
+import random
 import sys
+import time
 from typing import Callable, Dict, List, Optional, Tuple
 
 from . import analysis, deadman, pipeline
@@ -68,18 +69,14 @@ def describe(deal: analysis.Deal, cfg: Config) -> str:
     return "; ".join(bits)
 
 
-def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
-    offer = deal.offer
+def _trip_fields(offer: Offer) -> List[Tuple[str, str]]:
+    """The "When" and "Flight" fields every fare message carries."""
     airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
-    fields = [
+    return [
         (
             "When",
             "%s \u2192 %s  \u00b7  %d nights"
-            % (
-                _pretty_date(offer.out_date),
-                _pretty_date(offer.ret_date),
-                offer.nights,
-            ),
+            % (_pretty_date(offer.out_date), _pretty_date(offer.ret_date), offer.nights),
         ),
         (
             "Flight",
@@ -91,6 +88,12 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
                 offer.flight_no or airlines,
             ),
         ),
+    ]
+
+
+def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
+    offer = deal.offer
+    fields = _trip_fields(offer) + [
         ("Why", describe(deal, cfg) or "cheapest in this sweep"),
     ]
     if deal.baseline:
@@ -115,7 +118,6 @@ def deal_message(deal: analysis.Deal, cfg: Config) -> Message:
 
 def record_message(record: analysis.RecordLow, cfg: Config) -> Message:
     offer = record.offer
-    airlines = ", ".join(offer.airlines) if offer.airlines else "see link"
     age = ""
     hours = _hours_since(record.previous_seen)
     if hours is not None:
@@ -136,26 +138,8 @@ def record_message(record: analysis.RecordLow, cfg: Config) -> Message:
                 "%s, down %s%s"
                 % (_money(record.previous), _money(record.saving), age),
             ),
-            (
-                "When",
-                "%s \u2192 %s  \u00b7  %d nights"
-                % (
-                    _pretty_date(offer.out_date),
-                    _pretty_date(offer.ret_date),
-                    offer.nights,
-                ),
-            ),
-            (
-                "Flight",
-                "%s  \u00b7  %s\u2192%s  \u00b7  %s"
-                % (
-                    _clock12(offer.dep_time).strip(),
-                    offer.dep_airport or "???",
-                    offer.arr_airport or "???",
-                    offer.flight_no or airlines,
-                ),
-            ),
-        ],
+        ]
+        + _trip_fields(offer),
         url=offer.url,
         color=BLURPLE,  # informational: no @here, this is not the $250 alarm
         footer="Still above your alert threshold \u00b7 tap the title to book",
@@ -625,8 +609,8 @@ def cmd_probe(args: argparse.Namespace) -> int:
     cfg.search.window_days = args.window
     if args.nights:
         cfg.search.trip_nights = args.nights
-    if args.bags:
-        cfg.grid.include_bags = True
+    if args.carry_on is not None:
+        cfg.search.carry_on_bags = args.carry_on
     if args.max_stops is not None:
         cfg.search.max_stops = args.max_stops
     if args.to:
@@ -657,12 +641,9 @@ def cmd_probe(args: argparse.Namespace) -> int:
         return 1
 
     results: List[Offer] = []
-    import random as _random
-    import time as _time
-
     for i, (out_date, ret_date) in enumerate(sampled):
         if i:
-            _time.sleep(_random.uniform(2, 5))
+            time.sleep(random.uniform(2, 5))
         offer = source.fetch_pair(out_date, ret_date, cfg.route.destinations[0])
         lead = (dt.date.fromisoformat(out_date) - today).days
         if offer is None:
@@ -705,47 +686,6 @@ def _clock12(value: Optional[str]) -> str:
     suffix = "a" if hour < 12 else "p"
     display = hour % 12 or 12
     return "%d:%02d%s" % (display, minute, suffix)
-
-
-def _short_date(value: str) -> str:
-    return dt.date.fromisoformat(value).strftime("%a %b %-d")
-
-
-def _row_parts(price: float, snap: dict, cfg: Config) -> List[str]:
-    out_date = str(snap.get("out_date", ""))
-    ret_date = str(snap.get("ret_date", ""))
-    nights = ""
-    if out_date and ret_date:
-        nights = str(
-            (
-                dt.date.fromisoformat(ret_date) - dt.date.fromisoformat(out_date)
-            ).days
-        )
-
-    stops = snap.get("stops")
-    stops_text = (
-        "nonstop"
-        if stops == 0
-        else ("%s stop" % stops if isinstance(stops, int) else "?")
-    )
-    airlines = snap.get("airlines") or []
-    # The flight number is shorter than the airline name and more useful: it
-    # already names the carrier, and it's what a booking site wants.
-    who = str(snap.get("flight_no") or "") or (
-        ", ".join(str(a) for a in airlines)[:12] or "?"
-    )
-
-    return [
-        _money(price, cfg.search.currency),
-        _short_date(out_date) if out_date else "?",
-        _short_date(ret_date) if ret_date else "?",
-        nights,
-        _clock12(snap.get("dep_time")).strip(),
-        _clock12(snap.get("arr_time")).strip(),
-        "%s\u2192%s" % (snap.get("dep_airport") or "???", snap.get("arr_airport") or "???"),
-        stops_text,
-        who,
-    ]
 
 
 def _dedupe_key(snap: dict) -> tuple:
@@ -828,8 +768,8 @@ def _fare_line(
         "**[%s](%s)**" % (money, url) if (linked and url) else "**%s**" % money,
         "%s \u2192 %s"
         % (
-            _short_date(out_date) if out_date else "?",
-            _short_date(ret_date) if ret_date else "?",
+            _pretty_date(out_date) if out_date else "?",
+            _pretty_date(ret_date) if ret_date else "?",
         ),
         "%dn" % _nights(snap),
         "%s\u2192%s" % (snap.get("dep_airport") or "???", snap.get("arr_airport") or "???"),
@@ -991,7 +931,7 @@ def cmd_dump(args: argparse.Namespace) -> int:
     from fast_flights import fetch_flights_html
     from fast_flights.parser import parse
 
-    from .sources.pairs import _flight_numbers, _format_flight_no
+    from .sources.pairs import _explain, _flight_numbers, _format_flight_no, carrier_matches
 
     source = get_source(cfg)
 
@@ -1006,7 +946,7 @@ def cmd_dump(args: argparse.Namespace) -> int:
         try:
             results = parse(html)
         except Exception as exc:
-            print("skipping %s -> %s: %s" % (out_date, ret_date, _explain_dump(exc)))
+            print("skipping %s -> %s: %s" % (out_date, ret_date, _explain(exc)))
             time.sleep(3)
             continue
         numbers = _flight_numbers(html)
@@ -1034,26 +974,13 @@ def cmd_dump(args: argparse.Namespace) -> int:
         airlines = list(getattr(item, "airlines", []) or [])
         legs = list(getattr(item, "flights", []) or [])
         flight_no = _format_flight_no(segment_numbers, len(legs))
-        carrier = (segment_numbers[0] or "").split(" ")[0] if segment_numbers else ""
 
         if not flight_no or not airlines:
             verdict, unknown = "?", unknown + 1
+        elif carrier_matches(flight_no, airlines):
+            verdict, agree = "ok", agree + 1
         else:
-            # The payload gives the airline name alongside the code; the
-            # parser reports names independently. They must describe the
-            # same carrier.
-            names = " ".join(airlines).lower()
-            initials = "".join(word[0] for word in names.split() if word)
-            verdict = "ok" if (
-                carrier.lower() in names
-                or carrier.lower() in initials
-                or names.startswith(carrier[:2].lower())
-                or _CARRIERS.get(carrier, "").lower() in names
-            ) else "MISMATCH"
-            if verdict == "ok":
-                agree += 1
-            else:
-                disagree += 1
+            verdict, disagree = "MISMATCH", disagree + 1
 
         route = "?"
         if legs:
@@ -1086,28 +1013,6 @@ def cmd_dump(args: argparse.Namespace) -> int:
     print("These are ALL itineraries Google returned, not just the cheapest --")
     print("so this shows whether the city MIDs really search the whole metro.")
     return 1 if disagree else 0
-
-
-def _explain_dump(exc: Exception) -> str:
-    if isinstance(exc, (IndexError, KeyError, TypeError)):
-        return "unparsable payload (%r)" % exc
-    return "%s: %s" % (type(exc).__name__, exc)
-
-
-# Codes whose airline name shares no letters with the code.
-_CARRIERS = {
-    "WN": "Southwest",
-    "B6": "JetBlue",
-    "AS": "Alaska",
-    "AA": "American",
-    "DL": "Delta",
-    "UA": "United",
-    "NK": "Spirit",
-    "F9": "Frontier",
-    "HA": "Hawaiian",
-    "SY": "Sun Country",
-    "G4": "Allegiant",
-}
 
 
 def cmd_merge(args: argparse.Namespace) -> int:
@@ -1152,7 +1057,7 @@ def cmd_grid(args: argparse.Namespace) -> int:
     anything: does the calendar endpoint answer at all, and when it names a
     price for a date pair, does a full search for that pair agree?
     """
-    from .sources.grid import Combo, GridUnavailable, combos, get_grid
+    from .sources.grid import GridUnavailable, combos, get_grid
 
     cfg = load_config(args.config)
     if args.bags:

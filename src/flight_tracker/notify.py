@@ -48,10 +48,6 @@ class Message:
     fields: List[Tuple[str, str]] = field(default_factory=list)
     footer: Optional[str] = None
     color: Optional[int] = None
-    # Discord embeds cap at roughly 72 monospace characters before wrapping;
-    # a plain message is much wider. Wide tables set this and give up the
-    # embed's coloured chrome to get the width.
-    plain: bool = False
 
     def as_text(self) -> str:
         parts = [self.title]
@@ -94,8 +90,6 @@ class DiscordChannel(Channel):
         self.webhook_url = webhook_url
 
     def send(self, message: Message) -> None:
-        if message.plain:
-            return self._send_plain(message)
         # An embed, not a wall of text. Discord gives embeds a coloured spine,
         # a real title, and proper field spacing; a fenced code block just
         # renders as a grey slab that reads like a dumped file. The deeplink
@@ -124,34 +118,6 @@ class DiscordChannel(Channel):
         request = urllib.request.Request(
             self.webhook_url,
             data=payload,
-            headers={"Content-Type": "application/json", "User-Agent": USER_AGENT},
-            method="POST",
-        )
-        with urllib.request.urlopen(request, timeout=20) as response:
-            if response.status >= 300:
-                raise RuntimeError("discord returned HTTP %s" % response.status)
-
-    def _send_plain(self, message: Message) -> None:
-        """A normal message, for content too wide to survive an embed."""
-        parts = ["**%s**" % message.title]
-        if message.body:
-            parts.append(message.body)
-        for name, value in message.fields:
-            parts.append("**%s** %s" % (name, value))
-        if message.url:
-            parts.append("[Book on Google Flights](%s)" % message.url)
-        if message.footer:
-            parts.append("-# %s" % message.footer)
-
-        body = {
-            "content": "\n".join(parts)[:1990],
-            "allowed_mentions": {"parse": ["everyone"]},
-        }
-        if message.urgent:
-            body["content"] = "@here " + body["content"]
-        request = urllib.request.Request(
-            self.webhook_url,
-            data=json.dumps(body).encode(),
             headers={"Content-Type": "application/json", "User-Agent": USER_AGENT},
             method="POST",
         )

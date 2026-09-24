@@ -10,7 +10,6 @@ import hashlib
 import os
 from typing import List
 
-from ..config import Config
 from .base import Item, Offer, Source
 
 AIRLINES = [["JetBlue"], ["Delta"], ["American"], ["United"], ["Alaska"]]

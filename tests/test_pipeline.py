@@ -135,6 +135,16 @@ class TestApplyStage(unittest.TestCase):
         self.assertEqual(state.consecutive_failures, 1)
 
 
+class TestCliParsing(unittest.TestCase):
+    def test_probe_runs_with_its_own_flags(self):
+        """Regression: probe read an args.bags its parser never defined."""
+        args = cli.build_parser().parse_args(
+            ["probe", "--min-days", "30", "--carry-on", "0", "--pairs", "1"]
+        )
+        with mock.patch.object(cli, "get_source", side_effect=cli.ScrapeError("offline")):
+            self.assertEqual(args.func(args), 1)  # fails cleanly, doesn't crash
+
+
 class TestRunCounter(unittest.TestCase):
     def test_a_run_that_just_happened_counts(self):
         """0.0 hours old is falsy; it must still count."""
