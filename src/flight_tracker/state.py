@@ -94,6 +94,8 @@ class State:
     # Start times of recent runs, so the report can say whether the trigger is
     # actually firing.
     runs: List[str] = field(default_factory=list)
+    # When the weekly report last went out.
+    last_report: Optional[str] = None
     # Consecutive runs where every calendar scan failed.
     grid_health: Dict[str, object] = field(
         default_factory=lambda: {"failures": 0, "down": False}
@@ -126,6 +128,7 @@ class State:
             "grid",
             "runs",
             "grid_health",
+            "last_report",
         ):
             if key in raw:
                 setattr(state, key, raw[key])
@@ -148,6 +151,7 @@ class State:
             "grid": self.grid,
             "runs": self.runs,
             "grid_health": self.grid_health,
+            "last_report": self.last_report,
         }
         # Atomic write: a half-written state file would look like a fresh start
         # and silently wipe price history.
@@ -223,6 +227,8 @@ class State:
         ):
             self.grid_health = dict(other.grid_health)
 
+        # Latest send wins, so two overlapping runs can't both send the report.
+        self.last_report = max(self.last_report or "", other.last_report or "") or None
         self.last_run = max(self.last_run or "", other.last_run or "") or None
         self.last_data = max(self.last_data or "", other.last_data or "") or None
         # A success anywhere clears the failure streak.

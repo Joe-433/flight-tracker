@@ -84,6 +84,23 @@ class Schedule:
 
 
 @dataclass
+class Report:
+    """The weekly cheapest-fares message.
+
+    Sent by the sweep itself: each run checks whether this week's slot has
+    passed without a report. GitHub's own scheduler dropped both of its
+    triggers on 2026-09-28, while the externally-triggered sweep ran 48 times
+    that day, so the report rides on the sweep.
+    """
+
+    enabled: bool = True
+    weekday: int = 0             # Monday
+    hour: int = 6                # local time, in `timezone`
+    timezone: str = "America/Los_Angeles"
+    limit: int = 3               # fares per section
+
+
+@dataclass
 class Alerts:
     threshold_usd: float = 250.0
     threshold_usd_with_stops: float = 200.0  # a layover has to be worth it
@@ -124,6 +141,7 @@ class Config:
     source: Source = field(default_factory=Source)
     grid: Grid = field(default_factory=Grid)
     schedule: Schedule = field(default_factory=Schedule)
+    report: Report = field(default_factory=Report)
     alerts: Alerts = field(default_factory=Alerts)
     history: History = field(default_factory=History)
     deals: Deals = field(default_factory=Deals)
@@ -155,6 +173,7 @@ def load_config(path: str) -> Config:
         source=_build(Source, raw.get("source")),
         grid=_build(Grid, raw.get("grid")),
         schedule=_build(Schedule, raw.get("schedule")),
+        report=_build(Report, raw.get("report")),
         alerts=_build(Alerts, raw.get("alerts")),
         history=_build(History, raw.get("history")),
         deals=_build(Deals, raw.get("deals")),

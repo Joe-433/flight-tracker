@@ -87,6 +87,16 @@ schedule:
   urgent_hours: 0.25      # under an alert threshold, or a new low
   moved_usd: 10           # calendar this far below the last full search
 
+report:
+  # The weekly cheapest-fares message: 3 nonstop + 3 one-stop. Sent by
+  # whichever sweep first runs after the slot, not by a GitHub schedule --
+  # GitHub dropped both of its triggers for this on 2026-09-28.
+  enabled: true
+  weekday: 0              # Monday
+  hour: 6
+  timezone: "America/Los_Angeles"
+  limit: 3
+
 alerts:
   threshold_usd: 250              # nonstop: tell me now
   threshold_usd_with_stops: 200   # a layover has to be worth $50+ to hear about

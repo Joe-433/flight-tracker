@@ -491,9 +491,17 @@ response at all. And prices are **as last seen**. For routine trips that can
 be most of a day, which is why each row says how old its price is once it
 passes twelve hours.
 
-GitHub cron is UTC-only and DST-blind, so the workflow fires at both 13:00 and
-14:00 UTC and the job itself checks whether it's really 6am in Los Angeles.
-Without that the report would drift an hour twice a year.
+The report is sent **by the sweep itself**, not by a GitHub schedule. Each run
+checks whether this week's slot (Monday 6am Pacific, `report:` in
+config.yaml) has passed without a report and, if so, sends one. It was a
+separate scheduled workflow until 2026-09-28, when GitHub dropped both of its
+Monday triggers while the externally triggered sweep ran 48 times that day.
+Riding on the sweep means a missed slot heals within 30 minutes. It's marked
+sent only if a channel accepts it, so a Discord outage means a retry, not a
+lost week. The time is computed in local wall time, so 6am stays 6am across
+daylight saving.
+
+The **weekly report** workflow remains as a manual "send it now" button.
 
 ### Running a scan on demand
 

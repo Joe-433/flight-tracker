@@ -1,17 +1,12 @@
 name: weekly report
 
-# Top 10 cheapest fares, every Monday at 6:00am Pacific.
-#
-# GitHub cron is UTC only and has no idea about daylight saving, so 6am
-# Pacific is 13:00 UTC for half the year and 14:00 UTC for the other half.
-# We fire at both and let the job decide which one is really 6am local --
-# otherwise the report drifts by an hour twice a year.
+# Manual send only. The scheduled Monday report is sent by the sweep itself
+# (see `report:` in config.yaml): GitHub dropped both of this workflow's
+# scheduled triggers on 2026-09-28, while the externally-triggered sweep ran
+# every 30 minutes. This button is for "show me the report now".
 
 on:
-  schedule:
-    - cron: "0 13 * * 1"   # 6am PDT (Mar-Nov)
-    - cron: "0 14 * * 1"   # 6am PST (Nov-Mar)
-  workflow_dispatch:       # manual runs always send
+  workflow_dispatch:
 
 jobs:
   report:
@@ -23,23 +18,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-
-      - name: Is it actually 6am in Los Angeles?
-        id: gate
-        run: |
-          python - <<'PY' >> "$GITHUB_OUTPUT"
-          import datetime as dt, os
-          from zoneinfo import ZoneInfo
-          hour = dt.datetime.now(ZoneInfo("America/Los_Angeles")).hour
-          manual = os.environ["EVENT"] == "workflow_dispatch"
-          print("send=%s" % ("true" if manual or hour == 6 else "false"))
-          print("hour=%d" % hour)
-          PY
-        env:
-          EVENT: ${{ github.event_name }}
-
       - name: Send report
-        if: steps.gate.outputs.send == 'true'
         env:
           PYTHONPATH: src
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -50,7 +29,3 @@ jobs:
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: python -m flight_tracker report --send --limit 3
-
-      - name: Skipped
-        if: steps.gate.outputs.send != 'true'
-        run: echo "Local hour is ${{ steps.gate.outputs.hour }}, not 6 -- this is the other DST cron."

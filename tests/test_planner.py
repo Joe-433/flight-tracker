@@ -185,7 +185,6 @@ class TestOverdue(unittest.TestCase):
 
     def test_last_success_stands_in_for_a_missing_search_time(self):
         """State written before `checked` existed still has `latest.seen`."""
-        c = cfg()
         state = State()
         stamp = (NOW - dt.timedelta(hours=10)).isoformat()
         state.latest[planner.item_key(item(15)) + "|0"] = {"price": 420, "seen": stamp}

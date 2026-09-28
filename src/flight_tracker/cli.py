@@ -23,7 +23,7 @@ from .config import Config, load_config
 from .notify import BLURPLE, GREEN, Message, Notifier
 from .sources import ScrapeError, get_source
 from .sources.base import Offer, date_pairs
-from .state import State, hours_since as _hours_since, utcnow
+from .state import State, hours_since as _hours_since, parse_ts, utcnow
 
 DEFAULT_CONFIG = "config.yaml"
 DEFAULT_STATE = os.path.join("data", "state.json")
@@ -398,6 +398,17 @@ def _apply(
         "alerts sent: %d | fresh fares: %d | runs in last 24h: %d"
         % (sent, len(state.latest), runs_last_day(state, now))
     )
+
+    # The weekly report goes out from whichever run first follows its slot.
+    # Marked sent only if a channel accepted it, so a Discord outage means a
+    # retry on the next run rather than a lost week.
+    if notify and report_due(state, cfg, now):
+        results = notifier.send(report_message(state, cfg, cfg.report.limit))
+        if any(ok for _, ok, _ in results):
+            state.last_report = now.isoformat()
+            print("weekly report sent")
+        else:
+            print("weekly report failed to send; will retry next run")
 
     if health.down and getattr(args, "fail_on_down", False):
         return 1
@@ -890,16 +901,45 @@ def _report_footer(state: State) -> str:
     return " \u00b7 ".join(bits)
 
 
-def cmd_report(args: argparse.Namespace) -> int:
-    cfg = load_config(args.config)
-    state = State.load(args.state)
-    message = Message(
+def report_message(state: State, cfg: Config, limit: int) -> Message:
+    return Message(
         title="Cheapest %s \u2192 %s \u00b7 top %d of each"
-        % (cfg.route.origin_label, cfg.route.destination_label, args.limit),
-        body=cheapest_lines(state, cfg, limit=args.limit),
+        % (cfg.route.origin_label, cfg.route.destination_label, limit),
+        body=cheapest_lines(state, cfg, limit=limit),
         footer=_report_footer(state),
         color=GREEN,
     )
+
+
+def report_slot(cfg: Config, now: dt.datetime) -> dt.datetime:
+    """The most recent scheduled report time at or before `now`, in UTC.
+
+    Built from local wall time, so "6am Pacific" stays 6am across DST.
+    """
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo(cfg.report.timezone)
+    local = now.astimezone(tz)
+    day = local.date() - dt.timedelta(days=(local.weekday() - cfg.report.weekday) % 7)
+    slot = dt.datetime.combine(day, dt.time(cfg.report.hour), tzinfo=tz)
+    if slot > local:
+        slot = dt.datetime.combine(
+            day - dt.timedelta(days=7), dt.time(cfg.report.hour), tzinfo=tz
+        )
+    return slot.astimezone(dt.timezone.utc)
+
+
+def report_due(state: State, cfg: Config, now: dt.datetime) -> bool:
+    if not cfg.report.enabled:
+        return False
+    sent = parse_ts(state.last_report)
+    return sent is None or sent < report_slot(cfg, now)
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    cfg = load_config(args.config)
+    state = State.load(args.state)
+    message = report_message(state, cfg, args.limit)
     if args.send:
         results = Notifier.from_env().send(message)
         for name, ok, error in results:
