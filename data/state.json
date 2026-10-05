@@ -3662,7 +3662,7 @@
   },
   "last_data": "2026-10-05T19:20:49.649894+00:00",
   "last_report": "2026-10-05T13:03:47.666695+00:00",
-  "last_run": "2026-10-05T19:50:46.147120+00:00",
+  "last_run": "2026-10-05T20:15:54.698038+00:00",
   "latest": {
     "2026-10-18|2026-10-23|BUR|1": {
       "airlines": [
@@ -22772,23 +22772,6 @@
       "seen": "2026-10-05T08:33:18.322452+00:00",
       "stops": 1,
       "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyBRIDTEdCGiISCjIwMjYtMTItMjQoAWoFEgNMR0JyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
-    },
-    "2026-12-19|2026-12-24|ONT|1": {
-      "airlines": [
-        "American"
-      ],
-      "arr_airport": "ONT",
-      "arr_time": "08:45",
-      "dep_airport": "JFK",
-      "dep_time": "19:15",
-      "flight_no": "AA 676 / 1423",
-      "grid_at": 522.0,
-      "out_date": "2026-12-19",
-      "price": 522.0,
-      "ret_date": "2026-12-24",
-      "seen": "2026-10-04T08:03:14.226115+00:00",
-      "stops": 1,
-      "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyBRIDT05UGiISCjIwMjYtMTItMjQoAWoFEgNPTlRyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
     },
     "2026-12-19|2026-12-25|BUR|1": {
       "airlines": [
@@ -159415,7 +159398,6 @@
     }
   },
   "runs": [
-    "2026-10-03T20:03:17.188120+00:00",
     "2026-10-03T20:33:23.137179+00:00",
     "2026-10-03T21:03:14.120800+00:00",
     "2026-10-03T21:33:21.724467+00:00",
@@ -159517,7 +159499,8 @@
     "2026-10-05T18:33:27.911237+00:00",
     "2026-10-05T19:03:37.557596+00:00",
     "2026-10-05T19:20:49.649894+00:00",
-    "2026-10-05T19:50:46.147120+00:00"
+    "2026-10-05T19:50:46.147120+00:00",
+    "2026-10-05T20:15:54.698038+00:00"
   ],
   "version": 3
 }
