@@ -1,6 +1,6 @@
 {
  "last_report": "2026-11-11T14:03:05.124209+00:00",
- "last_scan": "2026-11-11T14:03:05.124209+00:00",
+ "last_scan": "2026-11-11T21:03:03.620078+00:00",
  "legs": {
   "back|2027-01-01|BUR": [],
   "back|2027-01-01|LAX": [
@@ -11,14 +11,14 @@
     "airport": "LAX",
     "date": "2027-01-01",
     "direction": "back",
-    "flight_no": "B6 224",
+    "flight_no": "B6 1824",
     "layover": null,
-    "price": 354.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 412.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2027-01-01T14:20",
-      "dep": "2027-01-01T06:00",
+      "arr": "2027-01-01T15:23",
+      "dep": "2027-01-01T07:00",
       "from": "LAX",
       "to": "JFK"
      }
@@ -26,7 +26,40 @@
     "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDEoAWoFEgNMQVhyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
-  "back|2027-01-01|LGB": [],
+  "back|2027-01-01|LGB": [
+   {
+    "airlines": [
+     "Alaska"
+    ],
+    "airport": "LGB",
+    "date": "2027-01-01",
+    "direction": "back",
+    "flight_no": "AS 382 / 22",
+    "layover": {
+     "airport": "SEA",
+     "end": "2027-01-01T22:59",
+     "minutes": 789,
+     "start": "2027-01-01T09:50"
+    },
+    "price": 382.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2027-01-01T09:50",
+      "dep": "2027-01-01T07:00",
+      "from": "LGB",
+      "to": "SEA"
+     },
+     {
+      "arr": "2027-01-02T07:20",
+      "dep": "2027-01-01T22:59",
+      "from": "SEA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDEoAWoFEgNMR0JyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "back|2027-01-01|ONT": [
    {
     "airlines": [
@@ -42,8 +75,8 @@
      "minutes": 847,
      "start": "2027-01-01T08:52"
     },
-    "price": 425.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 435.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-01T08:52",
@@ -61,7 +94,29 @@
     "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDEoAWoFEgNPTlRyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
-  "back|2027-01-01|SNA": [],
+  "back|2027-01-01|SNA": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "airport": "SNA",
+    "date": "2027-01-01",
+    "direction": "back",
+    "flight_no": "AA 3085",
+    "layover": null,
+    "price": 661.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2027-01-01T22:29",
+      "dep": "2027-01-01T14:01",
+      "from": "SNA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDEoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "back|2027-01-02|BUR": [],
   "back|2027-01-02|LAX": [
    {
@@ -71,14 +126,14 @@
     "airport": "LAX",
     "date": "2027-01-02",
     "direction": "back",
-    "flight_no": "B6 2724",
+    "flight_no": "B6 224",
     "layover": null,
     "price": 504.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2027-01-03T06:52",
-      "dep": "2027-01-02T22:30",
+      "arr": "2027-01-02T14:20",
+      "dep": "2027-01-02T06:00",
       "from": "LAX",
       "to": "JFK"
      }
@@ -88,29 +143,7 @@
   ],
   "back|2027-01-02|LGB": [],
   "back|2027-01-02|ONT": [],
-  "back|2027-01-02|SNA": [
-   {
-    "airlines": [
-     "American"
-    ],
-    "airport": "SNA",
-    "date": "2027-01-02",
-    "direction": "back",
-    "flight_no": "AA 3085",
-    "layover": null,
-    "price": 749.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
-    "segments": [
-     {
-      "arr": "2027-01-02T22:29",
-      "dep": "2027-01-02T14:01",
-      "from": "SNA",
-      "to": "JFK"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDIoAWoFEgNTTkFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
-   }
-  ],
+  "back|2027-01-02|SNA": [],
   "back|2027-01-03|BUR": [],
   "back|2027-01-03|LAX": [
    {
@@ -122,8 +155,8 @@
     "direction": "back",
     "flight_no": "B6 324",
     "layover": null,
-    "price": 394.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 424.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-04T07:58",
@@ -147,8 +180,8 @@
     "direction": "back",
     "flight_no": "AA 2824",
     "layover": null,
-    "price": 728.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 723.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-03T20:30",
@@ -172,7 +205,7 @@
     "flight_no": "AA 30",
     "layover": null,
     "price": 200.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-05T07:59",
@@ -194,14 +227,14 @@
     "airport": "SNA",
     "date": "2027-01-04",
     "direction": "back",
-    "flight_no": "AA 2824",
+    "flight_no": "AA 3085",
     "layover": null,
-    "price": 562.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 525.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2027-01-04T20:30",
-      "dep": "2027-01-04T12:01",
+      "arr": "2027-01-04T22:29",
+      "dep": "2027-01-04T14:01",
       "from": "SNA",
       "to": "JFK"
      }
@@ -213,19 +246,19 @@
   "back|2027-01-05|LAX": [
    {
     "airlines": [
-     "JetBlue"
+     "American"
     ],
     "airport": "LAX",
     "date": "2027-01-05",
     "direction": "back",
-    "flight_no": "B6 2724",
+    "flight_no": "AA 274",
     "layover": null,
-    "price": 144.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 214.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2027-01-06T06:52",
-      "dep": "2027-01-05T22:29",
+      "arr": "2027-01-05T21:50",
+      "dep": "2027-01-05T13:30",
       "from": "LAX",
       "to": "JFK"
      }
@@ -246,7 +279,7 @@
     "flight_no": "AA 3085",
     "layover": null,
     "price": 349.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-05T22:29",
@@ -259,7 +292,29 @@
    }
   ],
   "back|2027-01-06|BUR": [],
-  "back|2027-01-06|LAX": [],
+  "back|2027-01-06|LAX": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "airport": "LAX",
+    "date": "2027-01-06",
+    "direction": "back",
+    "flight_no": "B6 224",
+    "layover": null,
+    "price": 144.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2027-01-06T14:17",
+      "dep": "2027-01-06T06:00",
+      "from": "LAX",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDYoAWoFEgNMQVhyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "back|2027-01-06|LGB": [],
   "back|2027-01-06|ONT": [],
   "back|2027-01-06|SNA": [
@@ -273,7 +328,7 @@
     "flight_no": "AA 3085",
     "layover": null,
     "price": 349.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-06T20:30",
@@ -286,7 +341,29 @@
    }
   ],
   "back|2027-01-07|BUR": [],
-  "back|2027-01-07|LAX": [],
+  "back|2027-01-07|LAX": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "airport": "LAX",
+    "date": "2027-01-07",
+    "direction": "back",
+    "flight_no": "B6 224",
+    "layover": null,
+    "price": 174.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2027-01-07T14:17",
+      "dep": "2027-01-07T06:00",
+      "from": "LAX",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDEtMDcoAWoFEgNMQVhyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "back|2027-01-07|LGB": [],
   "back|2027-01-07|ONT": [],
   "back|2027-01-07|SNA": [
@@ -300,7 +377,7 @@
     "flight_no": "AA 3085",
     "layover": null,
     "price": 349.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2027-01-07T20:30",
@@ -544,18 +621,18 @@
   "out|2026-12-18|LAX": [
    {
     "airlines": [
-     "JetBlue"
+     "American"
     ],
     "airport": "LAX",
     "date": "2026-12-18",
     "direction": "out",
-    "flight_no": "B6 123",
+    "flight_no": "AA 171",
     "layover": null,
-    "price": 442.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 504.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2026-12-18T09:15",
+      "arr": "2026-12-18T09:21",
       "dep": "2026-12-18T06:00",
       "from": "JFK",
       "to": "LAX"
@@ -565,7 +642,40 @@
    }
   ],
   "out|2026-12-18|LGB": [],
-  "out|2026-12-18|ONT": [],
+  "out|2026-12-18|ONT": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "airport": "ONT",
+    "date": "2026-12-18",
+    "direction": "out",
+    "flight_no": "AA 1487 / 1841",
+    "layover": {
+     "airport": "PHX",
+     "end": "2026-12-18T21:35",
+     "minutes": 675,
+     "start": "2026-12-18T10:20"
+    },
+    "price": 403.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2026-12-18T10:20",
+      "dep": "2026-12-18T06:30",
+      "from": "JFK",
+      "to": "PHX"
+     },
+     {
+      "arr": "2026-12-18T21:57",
+      "dep": "2026-12-18T21:35",
+      "from": "PHX",
+      "to": "ONT"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyBRIDT05UQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "out|2026-12-18|SNA": [
    {
     "airlines": [
@@ -576,8 +686,8 @@
     "direction": "out",
     "flight_no": "AA 2824",
     "layover": null,
-    "price": 627.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 622.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-18T11:05",
@@ -587,38 +697,92 @@
      }
     ],
     "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "airport": "SNA",
+    "date": "2026-12-18",
+    "direction": "out",
+    "flight_no": "AA 1487 / 2637",
+    "layover": {
+     "airport": "PHX",
+     "end": "2026-12-18T22:05",
+     "minutes": 705,
+     "start": "2026-12-18T10:20"
+    },
+    "price": 494.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2026-12-18T10:20",
+      "dep": "2026-12-18T06:30",
+      "from": "JFK",
+      "to": "PHX"
+     },
+     {
+      "arr": "2026-12-18T22:30",
+      "dep": "2026-12-18T22:05",
+      "from": "PHX",
+      "to": "SNA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTgoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
   "out|2026-12-19|BUR": [],
-  "out|2026-12-19|LAX": [],
+  "out|2026-12-19|LAX": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "airport": "LAX",
+    "date": "2026-12-19",
+    "direction": "out",
+    "flight_no": "B6 123",
+    "layover": null,
+    "price": 574.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2026-12-19T09:15",
+      "dep": "2026-12-19T06:00",
+      "from": "JFK",
+      "to": "LAX"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMTkoAWoLEgkvbS8wMl8yODZyBRIDTEFYQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "out|2026-12-19|LGB": [],
   "out|2026-12-19|ONT": [
    {
     "airlines": [
-     "United"
+     "American"
     ],
     "airport": "ONT",
     "date": "2026-12-19",
     "direction": "out",
-    "flight_no": "UA 2389 / 1933",
+    "flight_no": "AA 1417 / 1982",
     "layover": {
      "airport": "ORD",
-     "end": "2026-12-19T19:52",
-     "minutes": 724,
-     "start": "2026-12-19T07:48"
+     "end": "2026-12-19T21:27",
+     "minutes": 807,
+     "start": "2026-12-19T08:00"
     },
-    "price": 483.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 433.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2026-12-19T07:48",
+      "arr": "2026-12-19T08:00",
       "dep": "2026-12-19T06:00",
       "from": "LGA",
       "to": "ORD"
      },
      {
-      "arr": "2026-12-19T22:31",
-      "dep": "2026-12-19T19:52",
+      "arr": "2026-12-19T23:59",
+      "dep": "2026-12-19T21:27",
       "from": "ORD",
       "to": "ONT"
      }
@@ -636,8 +800,8 @@
     "direction": "out",
     "flight_no": "AA 2824",
     "layover": null,
-    "price": 647.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 642.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-19T11:05",
@@ -653,19 +817,19 @@
   "out|2026-12-20|LAX": [
    {
     "airlines": [
-     "JetBlue"
+     "American"
     ],
     "airport": "LAX",
     "date": "2026-12-20",
     "direction": "out",
-    "flight_no": "B6 523",
+    "flight_no": "AA 33",
     "layover": null,
-    "price": 394.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 504.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2026-12-20T10:19",
-      "dep": "2026-12-20T07:00",
+      "arr": "2026-12-20T10:33",
+      "dep": "2026-12-20T06:59",
       "from": "JFK",
       "to": "LAX"
      }
@@ -686,8 +850,8 @@
      "minutes": 533,
      "start": "2026-12-20T09:35"
     },
-    "price": 261.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 286.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-20T09:35",
@@ -722,7 +886,7 @@
      "start": "2026-12-20T10:03"
     },
     "price": 376.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-20T10:03",
@@ -740,9 +904,53 @@
     "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyBRIDT05UQgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
-  "out|2026-12-20|SNA": [],
+  "out|2026-12-20|SNA": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "airport": "SNA",
+    "date": "2026-12-20",
+    "direction": "out",
+    "flight_no": "AA 2824",
+    "layover": null,
+    "price": 656.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2026-12-20T11:05",
+      "dep": "2026-12-20T07:29",
+      "from": "JFK",
+      "to": "SNA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjAoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "out|2026-12-21|BUR": [],
-  "out|2026-12-21|LAX": [],
+  "out|2026-12-21|LAX": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "airport": "LAX",
+    "date": "2026-12-21",
+    "direction": "out",
+    "flight_no": "AA 33",
+    "layover": null,
+    "price": 432.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
+    "segments": [
+     {
+      "arr": "2026-12-21T10:34",
+      "dep": "2026-12-21T07:00",
+      "from": "JFK",
+      "to": "LAX"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyBRIDTEFYQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "out|2026-12-21|LGB": [],
   "out|2026-12-21|ONT": [
    {
@@ -760,7 +968,7 @@
      "start": "2026-12-21T10:03"
     },
     "price": 433.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-21T10:03",
@@ -778,182 +986,63 @@
     "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyBRIDT05UQgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
-  "out|2026-12-21|SNA": [],
-  "out|2026-12-22|BUR": [],
-  "out|2026-12-22|LAX": [
-   {
-    "airlines": [
-     "JetBlue"
-    ],
-    "airport": "LAX",
-    "date": "2026-12-22",
-    "direction": "out",
-    "flight_no": "B6 823",
-    "layover": null,
-    "price": 438.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
-    "segments": [
-     {
-      "arr": "2026-12-23T00:33",
-      "dep": "2026-12-22T21:10",
-      "from": "JFK",
-      "to": "LAX"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyBRIDTEFYQgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "Frontier"
-    ],
-    "airport": "LAX",
-    "date": "2026-12-22",
-    "direction": "out",
-    "flight_no": "F9 2431 / 4145",
-    "layover": {
-     "airport": "MCO",
-     "end": "2026-12-22T18:28",
-     "minutes": 533,
-     "start": "2026-12-22T09:35"
-    },
-    "price": 393.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
-    "segments": [
-     {
-      "arr": "2026-12-22T09:35",
-      "dep": "2026-12-22T06:30",
-      "from": "LGA",
-      "to": "MCO"
-     },
-     {
-      "arr": "2026-12-22T21:02",
-      "dep": "2026-12-22T18:28",
-      "from": "MCO",
-      "to": "LAX"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyBRIDTEFYQgEBSAGYAQI=&hl=&curr=USD"
-   }
-  ],
-  "out|2026-12-22|LGB": [],
-  "out|2026-12-22|ONT": [
-   {
-    "airlines": [
-     "United"
-    ],
-    "airport": "ONT",
-    "date": "2026-12-22",
-    "direction": "out",
-    "flight_no": "UA 2804 / 1933",
-    "layover": {
-     "airport": "ORD",
-     "end": "2026-12-22T19:52",
-     "minutes": 649,
-     "start": "2026-12-22T09:03"
-    },
-    "price": 433.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
-    "segments": [
-     {
-      "arr": "2026-12-22T09:03",
-      "dep": "2026-12-22T07:15",
-      "from": "LGA",
-      "to": "ORD"
-     },
-     {
-      "arr": "2026-12-22T22:31",
-      "dep": "2026-12-22T19:52",
-      "from": "ORD",
-      "to": "ONT"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyBRIDT05UQgEBSAGYAQI=&hl=&curr=USD"
-   }
-  ],
-  "out|2026-12-22|SNA": [
+  "out|2026-12-21|SNA": [
    {
     "airlines": [
      "American"
     ],
     "airport": "SNA",
-    "date": "2026-12-22",
+    "date": "2026-12-21",
     "direction": "out",
     "flight_no": "AA 2824",
     "layover": null,
-    "price": 599.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 584.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2026-12-22T11:05",
-      "dep": "2026-12-22T07:29",
+      "arr": "2026-12-21T11:05",
+      "dep": "2026-12-21T07:29",
       "from": "JFK",
       "to": "SNA"
      }
     ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "United"
-    ],
-    "airport": "SNA",
-    "date": "2026-12-22",
-    "direction": "out",
-    "flight_no": "UA 2804 / 2827",
-    "layover": {
-     "airport": "ORD",
-     "end": "2026-12-22T19:45",
-     "minutes": 642,
-     "start": "2026-12-22T09:03"
-    },
-    "price": 437.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
-    "segments": [
-     {
-      "arr": "2026-12-22T09:03",
-      "dep": "2026-12-22T07:15",
-      "from": "LGA",
-      "to": "ORD"
-     },
-     {
-      "arr": "2026-12-22T22:27",
-      "dep": "2026-12-22T19:45",
-      "from": "ORD",
-      "to": "SNA"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjIoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjEoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
+  "out|2026-12-22|BUR": [],
+  "out|2026-12-22|LAX": [],
+  "out|2026-12-22|LGB": [],
+  "out|2026-12-22|ONT": [],
+  "out|2026-12-22|SNA": [],
   "out|2026-12-23|BUR": [],
   "out|2026-12-23|LAX": [],
   "out|2026-12-23|LGB": [],
   "out|2026-12-23|ONT": [],
-  "out|2026-12-23|SNA": [],
-  "out|2026-12-24|BUR": [],
-  "out|2026-12-24|LAX": [
+  "out|2026-12-23|SNA": [
    {
     "airlines": [
-     "JetBlue"
+     "American"
     ],
-    "airport": "LAX",
-    "date": "2026-12-24",
+    "airport": "SNA",
+    "date": "2026-12-23",
     "direction": "out",
-    "flight_no": "B6 2715",
+    "flight_no": "AA 2824",
     "layover": null,
-    "price": 438.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 694.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
-      "arr": "2026-12-24T21:20",
-      "dep": "2026-12-24T17:59",
+      "arr": "2026-12-23T11:05",
+      "dep": "2026-12-23T07:29",
       "from": "JFK",
-      "to": "LAX"
+      "to": "SNA"
      }
     ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjQoAWoLEgkvbS8wMl8yODZyBRIDTEFYQgEBSAGYAQI=&hl=&curr=USD"
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjYtMTItMjMoAWoLEgkvbS8wMl8yODZyBRIDU05BQgEBSAGYAQI=&hl=&curr=USD"
    }
   ],
+  "out|2026-12-24|BUR": [],
+  "out|2026-12-24|LAX": [],
   "out|2026-12-24|LGB": [],
   "out|2026-12-24|ONT": [],
   "out|2026-12-24|SNA": [
@@ -966,8 +1055,8 @@
     "direction": "out",
     "flight_no": "AA 2824",
     "layover": null,
-    "price": 733.0,
-    "seen": "2026-11-11T14:03:05.124209+00:00",
+    "price": 728.0,
+    "seen": "2026-11-11T21:03:03.620078+00:00",
     "segments": [
      {
       "arr": "2026-12-24T11:05",
@@ -1017,7 +1106,7 @@
    "airport": "LAX",
    "flight_no": "B6 123",
    "out_date": "2026-12-20",
-   "price": 697.0,
+   "price": 773.0,
    "ret_date": "2027-01-04",
    "segments": [
     {
@@ -1036,7 +1125,7 @@
    "airport": "LAX",
    "flight_no": "B6 123",
    "out_date": "2026-12-20",
-   "price": 581.0,
+   "price": 718.0,
    "ret_date": "2027-01-05",
    "segments": [
     {
@@ -1055,7 +1144,7 @@
    "airport": "LAX",
    "flight_no": "B6 123",
    "out_date": "2026-12-20",
-   "price": 581.0,
+   "price": 718.0,
    "ret_date": "2027-01-06",
    "segments": [
     {
@@ -1067,24 +1156,24 @@
    ],
    "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjYtMTItMjAoAGoFEgNKRktyBRIDTEFYGhwSCjIwMjctMDEtMDYoAGoFEgNMQVhyBRIDSkZLQgEBSAGYAQE=&hl=&curr=USD"
   },
-  "2026-12-22|2027-01-05": {
+  "2026-12-20|2027-01-07": {
    "airlines": [
     "American"
    ],
    "airport": "LAX",
    "flight_no": "AA 33",
-   "out_date": "2026-12-22",
-   "price": 680.0,
-   "ret_date": "2027-01-05",
+   "out_date": "2026-12-20",
+   "price": 722.0,
+   "ret_date": "2027-01-07",
    "segments": [
     {
-     "arr": "2026-12-22T10:33",
-     "dep": "2026-12-22T06:59",
+     "arr": "2026-12-20T10:33",
+     "dep": "2026-12-20T06:59",
      "from": "JFK",
      "to": "LAX"
     }
    ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjYtMTItMjIoAGoFEgNKRktyBRIDTEFYGhwSCjIwMjctMDEtMDUoAGoFEgNMQVhyBRIDSkZLQgEBSAGYAQE=&hl=&curr=USD"
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjYtMTItMjAoAGoFEgNKRktyBRIDTEFYGhwSCjIwMjctMDEtMDcoAGoFEgNMQVhyBRIDSkZLQgEBSAGYAQE=&hl=&curr=USD"
   }
  },
  "scan_log": [
@@ -1110,6 +1199,12 @@
    "at": "2026-11-11T14:03:05.124209+00:00",
    "errors": 16,
    "found": 24,
+   "searched": 70
+  },
+  {
+   "at": "2026-11-11T21:03:03.620078+00:00",
+   "errors": 15,
+   "found": 29,
    "searched": 70
   }
  ]
