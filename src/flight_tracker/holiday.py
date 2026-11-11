@@ -379,7 +379,10 @@ def run_shard(cfg: Config, plan: Dict[str, Any], shard: int, source: Any = None)
         key = leg_key(direction, day, airport)
         # A search that errored (blocked, rate-limited, unparsable) says
         # nothing about the flights, so it must not wipe the last good ones.
-        if len(source.errors) > errors_before and not found:
+        # "No flights found" is Google answering, not failing: that one is a
+        # real empty result.
+        new_errors = source.errors[errors_before:]
+        if new_errors and not found and not all("FlightsNotFound" in e for e in new_errors):
             failed.append(key)
             continue
         legs.extend(found)
