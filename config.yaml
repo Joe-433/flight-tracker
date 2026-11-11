@@ -137,16 +137,16 @@ holiday:
   # section or set `until` to a past time.
   until: "2026-11-18T00:00:00-08:00"
   label: "Christmas"
-  # Leave NY any time before Christmas (Fri Dec 25); Fri Dec 18 - Wed Dec 23
-  # preferred. Come back after New Year's Eve (Thu Dec 31); Sat Jan 2 - Tue
+  # In the office Dec 13-17, so leave NY Fri Dec 18 - Thu Dec 24 (any of
+  # those days is fine; updated 2026-11-10). Come back after New Year's Eve (Thu Dec 31); Sat Jan 2 - Tue
   # Jan 5 preferred, searched through Thu Jan 7. Ranges are [first, last],
   # inclusive.
-  outbound_dates: ["2026-12-14", "2026-12-24"]
-  preferred_outbound: ["2026-12-18", "2026-12-23"]
+  outbound_dates: ["2026-12-18", "2026-12-24"]
+  preferred_outbound: ["2026-12-18", "2026-12-24"]
   return_dates: ["2027-01-01", "2027-01-07"]
   preferred_return: ["2027-01-02", "2027-01-05"]
-  # (11 + 7 dates) x 5 LA airports = 90 one-way searches a scan, over 4
-  # runners (~23 each), plus up to 4 roundtrip checks. Every 6 hours, and
+  # (7 + 7 dates) x 5 LA airports = 70 one-way searches a scan, over 4
+  # runners (~18 each), plus up to 4 roundtrip checks. Every 6 hours, and
   # right before the daily report.
   scan_every_hours: 6
   report_hour: 6            # daily, report.timezone (6am Pacific / 9am Eastern)

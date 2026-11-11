@@ -29,6 +29,10 @@ on:
       threshold:
         description: "Override the nonstop alert threshold (USD) for this run"
         required: false
+      holiday_force:
+        description: "Holiday mode: scan and send the report now, even if not due"
+        type: boolean
+        default: false
       backend:
         description: "pairs | mock"
         required: false
@@ -80,6 +84,7 @@ jobs:
     with:
       # Unset on scheduled runs, which is "send".
       notify: ${{ inputs.notify != false }}
+      force: ${{ inputs.holiday_force == true }}
     secrets: inherit
 
   plan:

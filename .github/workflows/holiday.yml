@@ -16,6 +16,9 @@ on:
       notify:
         type: boolean
         default: true
+      force:
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -41,7 +44,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - id: plan
-        run: python -m flight_tracker holiday-plan --out holiday-plan.json --github-output "$GITHUB_OUTPUT"
+        run: python -m flight_tracker holiday-plan --out holiday-plan.json --github-output "$GITHUB_OUTPUT" ${{ inputs.force && '--force' || '' }}
       - uses: actions/upload-artifact@v4
         with:
           name: holiday-plan
@@ -122,7 +125,7 @@ jobs:
         run: |
           shopt -s nullglob
           python -m flight_tracker holiday-apply --plan holiday-plan.json \
-            ${{ inputs.notify == false && '--no-notify' || '' }} holiday-results/*.json
+            ${{ inputs.notify == false && '--no-notify' || '' }} ${{ inputs.force && '--send' || '' }} holiday-results/*.json
 
       - name: Commit holiday prices
         run: |
