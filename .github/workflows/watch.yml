@@ -53,7 +53,38 @@ env:
   FT_GRID: ${{ inputs.grid == false && '0' || '' }}
 
 jobs:
+  # Holiday mode (config.yaml `holiday:`) replaces the regular sweep until its
+  # `until` passes, then the regular sweep resumes by itself. If the mode
+  # script errors, the answer is "regular", so a config typo can't silently
+  # stop the tracker.
+  mode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: mode
+        run: |
+          pip install --quiet PyYAML
+          python -m flight_tracker holiday-mode --github-output "$GITHUB_OUTPUT" \
+            || echo "mode=regular" >> "$GITHUB_OUTPUT"
+
+  holiday:
+    needs: mode
+    if: needs.mode.outputs.mode == 'holiday'
+    uses: ./.github/workflows/holiday.yml
+    with:
+      # Unset on scheduled runs, which is "send".
+      notify: ${{ inputs.notify != false }}
+    secrets: inherit
+
   plan:
+    needs: mode
+    if: needs.mode.outputs.mode != 'holiday'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -107,10 +138,13 @@ jobs:
           retention-days: 3
 
   apply:
-    needs: [plan, drill]
+    needs: [mode, plan, drill]
     # Always: a run whose plan or drills crashed must still reach the dead
-    # man's switch, or a total outage would be silent.
-    if: always()
+    # man's switch, or a total outage would be silent. Not in holiday mode,
+    # though: the regular sweep is paused, and its silence isn't an outage.
+    # And only if the mode check itself ran: if it broke, plan was skipped
+    # too, and an empty "sweep" would trip the dead man for nothing.
+    if: always() && needs.mode.result == 'success' && needs.mode.outputs.mode != 'holiday'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

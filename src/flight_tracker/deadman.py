@@ -57,7 +57,15 @@ def update(
         return health
 
     state.consecutive_failures = int(state.consecutive_failures or 0) + 1
-    stale = hours_since(state.last_data, now)
+    last_data = state.last_data
+    # Holiday mode pauses the regular sweep on purpose; that week without
+    # prices isn't an outage. Count staleness from when the pause ended.
+    from .state import parse_ts
+
+    seen, until = parse_ts(last_data), parse_ts(cfg.holiday.until)
+    if seen is not None and until is not None and seen < until <= now:
+        last_data = until.isoformat()
+    stale = hours_since(last_data, now)
     health.hours_stale = stale
 
     if state.consecutive_failures >= cfg.deadman.fail_runs:

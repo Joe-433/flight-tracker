@@ -129,3 +129,36 @@ deadman:
   fail_runs: 2           # consecutive empty/failed sweeps before alarming
   stale_hours: 6         # or: no usable price for this long
   renotify_hours: 24     # while still down, nag at most this often
+
+holiday:
+  # Christmas 2026 trip, set up 2026-11-10 for one week. Until `until`, every
+  # watch run does this INSTEAD of the regular sweep (holiday.py), and the
+  # regular sweep resumes on its own afterwards. To end it early, delete this
+  # section or set `until` to a past time.
+  until: "2026-11-18T00:00:00-08:00"
+  label: "Christmas"
+  # Leave NY any time before Christmas (Fri Dec 25); Fri Dec 18 - Wed Dec 23
+  # preferred. Come back after New Year's Eve (Thu Dec 31); Sat Jan 2 - Tue
+  # Jan 5 preferred, searched through Thu Jan 7. Ranges are [first, last],
+  # inclusive.
+  outbound_dates: ["2026-12-14", "2026-12-24"]
+  preferred_outbound: ["2026-12-18", "2026-12-23"]
+  return_dates: ["2027-01-01", "2027-01-07"]
+  preferred_return: ["2027-01-02", "2027-01-05"]
+  # (11 + 7 dates) x 5 LA airports = 90 one-way searches a scan, over 4
+  # runners (~23 each), plus up to 4 roundtrip checks. Every 6 hours, and
+  # right before the daily report.
+  scan_every_hours: 6
+  report_hour: 6            # daily, report.timezone (6am Pacific / 9am Eastern)
+  combos: 3
+  shards: 4
+  roundtrip_checks: 4
+  # No layovers preferred. A layover only counts if it's a real daytime stop
+  # in a big city: 8h+, at one of these airports, between 6am and midnight on
+  # one day. Even then it has to save $25 to rank above a nonstop.
+  nonstop_bonus_usd: 25
+  layover_min_hours: 8
+  layover_day_hours: [6, 24]
+  layover_airports: [ATL, AUS, BNA, BOS, BWI, CLT, DAL, DCA, DEN, DFW, DTW, FLL,
+                     HOU, IAD, IAH, LAS, MCO, MDW, MIA, MSP, MSY, OAK, ORD, PDX,
+                     PHL, PHX, SAN, SEA, SFO, SJC, SLC, STL]

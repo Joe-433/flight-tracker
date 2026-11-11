@@ -1,0 +1,153 @@
+name: holiday fares
+
+# Holiday mode (src/flight_tracker/holiday.py), called by `watch fares` in
+# place of the regular sweep while config.yaml's `holiday.until` is in the
+# future. It rides on the same external 30-minute trigger; the plan stage
+# decides whether a scan is actually due (every 6h, and before the daily
+# report), so most calls end after one short job.
+#
+#   plan    scan due? split 80 one-way searches into shards
+#   drill   one shard per runner, one IP each
+#   apply   merge, roundtrip checks, rank, daily Discord report, commit
+
+on:
+  workflow_call:
+    inputs:
+      notify:
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+env:
+  PYTHONPATH: src
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      shards: ${{ steps.plan.outputs.shards }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The branch tip, not the triggering commit: a run that queued
+          # behind another must see the holiday.json that run just pushed.
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - id: plan
+        run: python -m flight_tracker holiday-plan --out holiday-plan.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: holiday-plan
+          path: holiday-plan.json
+          retention-days: 3
+
+  drill:
+    needs: plan
+    if: needs.plan.outputs.shards != '' && needs.plan.outputs.shards != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.plan.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The branch tip, not the triggering commit: a run that queued
+          # behind another must see the holiday.json that run just pushed.
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: holiday-plan
+      - name: One-way searches, shard ${{ matrix.shard }}
+        run: >-
+          python -m flight_tracker holiday-sweep --plan holiday-plan.json
+          --shard ${{ matrix.shard }} --out holiday-result-${{ matrix.shard }}.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: holiday-result-${{ matrix.shard }}
+          path: holiday-result-${{ matrix.shard }}.json
+          if-no-files-found: ignore
+          retention-days: 3
+
+  apply:
+    needs: [plan, drill]
+    # Runs even if some shards failed, but only when a scan was planned.
+    if: always() && needs.plan.outputs.shards != '' && needs.plan.outputs.shards != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The branch tip, not the triggering commit: a run that queued
+          # behind another must see the holiday.json that run just pushed.
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: holiday-plan
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: holiday-result-*
+          path: holiday-results
+          merge-multiple: true
+      - name: Rank, roundtrip checks, daily report
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          shopt -s nullglob
+          python -m flight_tracker holiday-apply --plan holiday-plan.json \
+            ${{ inputs.notify == false && '--no-notify' || '' }} holiday-results/*.json
+
+      - name: Commit holiday prices
+        run: |
+          git config user.name "flight-tracker"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet -- data/holiday.json && [ -z "$(git ls-files --others -- data/holiday.json)" ]; then
+            echo "no changes"
+            exit 0
+          fi
+          # Only this job writes data/holiday.json, and watch runs never
+          # overlap (concurrency group), so ours always wins: reset to the
+          # remote and lay our file on top.
+          cp data/holiday.json /tmp/holiday.json
+          for attempt in 1 2 3 4 5; do
+            git fetch --quiet origin "$GITHUB_REF_NAME"
+            git reset --quiet --hard "origin/$GITHUB_REF_NAME"
+            cp /tmp/holiday.json data/holiday.json
+            git add data/holiday.json
+            git diff --cached --quiet && { echo "remote already has this"; exit 0; }
+            git commit --quiet -m "chore: holiday prices $(date -u +%Y-%m-%dT%H:%MZ)"
+            if git push --quiet origin "HEAD:$GITHUB_REF_NAME"; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+          echo "could not push holiday prices" >&2
+          exit 1

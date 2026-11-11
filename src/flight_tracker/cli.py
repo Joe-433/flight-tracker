@@ -1182,6 +1182,163 @@ def cmd_grid(args: argparse.Namespace) -> int:
     return 1 if failed == len(wanted) else 0
 
 
+# ---------------------------------------------------------------------------
+# holiday mode (holiday.py): one-way legs on fixed dates, daily report
+# ---------------------------------------------------------------------------
+
+
+def cmd_holiday_mode(args: argparse.Namespace) -> int:
+    """Print `holiday` or `regular`: which sweep this run should do."""
+    from . import holiday
+
+    mode = "holiday" if holiday.active(load_config(args.config)) else "regular"
+    print("mode: %s" % mode)
+    if args.github_output:
+        with open(args.github_output, "a", encoding="utf-8") as fh:
+            fh.write("mode=%s\n" % mode)
+    return 0
+
+
+def cmd_holiday_plan(args: argparse.Namespace) -> int:
+    from . import holiday
+
+    cfg = load_config(args.config)
+    doc = holiday.load(args.holiday_state)
+    plan = holiday.make_plan(cfg, doc, force=args.force)
+    total = sum(len(s) for s in plan["shards"])
+    print(
+        "holiday plan: %s, report %s, %d searches across %d shard(s)"
+        % ("scan" if plan["scan"] else "nothing due",
+           "due" if plan["report_due"] else "not due", total, len(plan["shards"]))
+    )
+    with open(args.out, "w", encoding="utf-8") as fh:
+        json.dump(plan, fh)
+    if args.github_output:
+        busy = [i for i, shard in enumerate(plan["shards"]) if shard]
+        with open(args.github_output, "a", encoding="utf-8") as fh:
+            fh.write("shards=%s\n" % json.dumps(busy))
+    return 0
+
+
+def cmd_holiday_sweep(args: argparse.Namespace) -> int:
+    from . import holiday
+
+    cfg = load_config(args.config)
+    with open(args.plan, "r", encoding="utf-8") as fh:
+        plan = json.load(fh)
+    result = holiday.run_shard(cfg, plan, args.shard)
+    print(
+        "holiday shard %d: %d searches -> %d acceptable flights, %d errors"
+        % (args.shard, len(result["searched"]), len(result["legs"]), len(result["errors"]))
+    )
+    for error in result["errors"][:5]:
+        print("  ! %s" % error[:200])
+    with open(args.out, "w", encoding="utf-8") as fh:
+        json.dump(result, fh)
+    return 0
+
+
+def cmd_holiday_apply(args: argparse.Namespace) -> int:
+    from . import holiday
+
+    cfg = load_config(args.config)
+    doc = holiday.load(args.holiday_state)
+    now = utcnow()
+    plan: Dict[str, object] = {}
+    if args.plan and os.path.exists(args.plan):
+        with open(args.plan, "r", encoding="utf-8") as fh:
+            plan = json.load(fh)
+    results = []
+    for path in args.results:
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                results.append(json.load(fh))
+        except (OSError, ValueError) as exc:
+            print("skipping unreadable result %s: %s" % (path, exc))
+
+    searched, found = holiday.merge_legs(doc, results, now)
+    errors = [e for r in results for e in (r.get("errors") or [])]
+    print("holiday apply: %d searches folded in, %d with a fare, %d errors"
+          % (searched, found, len(errors)))
+    if searched:
+        # Only a scan that actually searched resets the clock; if every shard
+        # died, the next run tries again instead of waiting out the interval.
+        doc["last_scan"] = now.isoformat()
+    if plan.get("scan"):
+        log = list(doc.get("scan_log") or [])
+        log.append({"at": now.isoformat(), "searched": searched, "found": found,
+                     "errors": len(errors)})
+        doc["scan_log"] = log[-60:]
+
+    if searched and not args.no_roundtrips and cfg.holiday.roundtrip_checks > 0:
+        try:
+            source = holiday.OneWaySource(cfg)
+            roundtrips: Dict[str, object] = {}
+            for i, (out_date, ret_date, airport, ny) in enumerate(holiday.roundtrip_targets(doc, cfg)):
+                if i:
+                    time.sleep(random.uniform(1, 3))
+                rt = source.roundtrip(out_date, ret_date, airport, ny)
+                print("  roundtrip %s %s %s-%s: %s" % (
+                    out_date, ret_date, ny, airport, _money(rt["price"]) if rt else "none"))
+                if rt:
+                    roundtrips["%s|%s" % (out_date, ret_date)] = rt
+            doc["roundtrips"] = roundtrips
+        except ScrapeError as exc:
+            print("  roundtrip checks skipped: %s" % exc)
+
+    title, body, footer, top = holiday.report(doc, cfg, now)
+    failed = sum(len(r.get("failed") or []) for r in results)
+    if failed:
+        print("  %d searches failed; kept their last known prices" % failed)
+    if plan.get("scan") and not found:
+        body = (
+            "Heads up: this search came back empty (%d errors), so these are the "
+            "last prices we had.\n\n" % len(errors)
+        ) + body
+    for combo in top:
+        print("  %s" % holiday._short(combo))
+
+    due = holiday.report_due(doc, cfg, now)
+    if (due or args.send) and not args.no_notify:
+        message = Message(title=title, body=body, footer=footer, color=GREEN)
+        sent = Notifier.from_env(force_console=args.console).send(message)
+        for name, ok, error in sent:
+            print("  report via %-8s %s" % (name, "ok" if ok else "FAILED: %s" % error))
+        # The report is for Discord: if Discord is configured, only Discord
+        # succeeding counts. A console-only print never does.
+        names = {name for name, _, _ in sent}
+        wanted = {"discord"} if "discord" in names else names - {"console"}
+        if any(ok for name, ok, _ in sent if name in wanted):
+            doc["last_report"] = now.isoformat()
+            reports = list(doc.get("reports") or [])
+            reports.append({
+                "at": now.isoformat(),
+                "best": top[0]["total"] if top else None,
+                "top": [holiday._short(c) for c in top],
+            })
+            doc["reports"] = reports[-30:]
+    elif due:
+        print("  report due but notifications are off")
+
+    holiday.save(doc, args.holiday_state)
+    return 0
+
+
+def cmd_holiday_report(args: argparse.Namespace) -> int:
+    """Preview (or --send) the holiday report from saved state, no searching."""
+    from . import holiday
+
+    cfg = load_config(args.config)
+    doc = holiday.load(args.holiday_state)
+    title, body, footer, _top = holiday.report(doc, cfg, utcnow())
+    message = Message(title=title, body=body, footer=footer, color=GREEN)
+    if args.send:
+        sent = Notifier.from_env().send(message)
+        return 0 if any(ok for _, ok, _ in sent) else 1
+    print(message.as_text())
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="flight_tracker", description=__doc__)
     parser.add_argument("--config", default=DEFAULT_CONFIG)
@@ -1275,6 +1432,42 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--backend", choices=["pairs", "mock"])
     verify.add_argument("--to", help="destination airport (default: first in config)")
     verify.set_defaults(func=cmd_verify)
+
+    def holiday_state(p: argparse.ArgumentParser) -> None:
+        p.add_argument("--holiday-state", dest="holiday_state",
+                       default=os.path.join("data", "holiday.json"))
+
+    hmode = sub.add_parser("holiday-mode", help="print holiday or regular")
+    hmode.add_argument("--github-output", dest="github_output")
+    hmode.set_defaults(func=cmd_holiday_mode)
+
+    hplan = sub.add_parser("holiday-plan", help="holiday stage 1: is a scan due?")
+    holiday_state(hplan)
+    hplan.add_argument("--out", default="holiday-plan.json")
+    hplan.add_argument("--force", action="store_true", help="scan even if not due")
+    hplan.add_argument("--github-output", dest="github_output")
+    hplan.set_defaults(func=cmd_holiday_plan)
+
+    hsweep = sub.add_parser("holiday-sweep", help="holiday stage 2: one shard")
+    hsweep.add_argument("--plan", default="holiday-plan.json")
+    hsweep.add_argument("--shard", type=int, required=True)
+    hsweep.add_argument("--out", required=True)
+    hsweep.set_defaults(func=cmd_holiday_sweep)
+
+    happly = sub.add_parser("holiday-apply", help="holiday stage 3: rank, report")
+    holiday_state(happly)
+    happly.add_argument("--plan", default="holiday-plan.json")
+    happly.add_argument("results", nargs="*")
+    happly.add_argument("--no-notify", action="store_true")
+    happly.add_argument("--no-roundtrips", action="store_true")
+    happly.add_argument("--send", action="store_true", help="send the report even if not due")
+    happly.add_argument("--console", action="store_true")
+    happly.set_defaults(func=cmd_holiday_apply)
+
+    hreport = sub.add_parser("holiday-report", help="preview the holiday report")
+    holiday_state(hreport)
+    hreport.add_argument("--send", action="store_true")
+    hreport.set_defaults(func=cmd_holiday_report)
 
     return parser
 

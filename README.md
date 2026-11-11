@@ -532,6 +532,32 @@ hearing about twice. Hard cap of `alerts.max_per_run` (3) per sweep.
 
 ---
 
+## Holiday mode (temporary)
+
+`holiday:` in config.yaml swaps the regular sweep for a one-off trip search
+until `holiday.until`, then the regular sweep resumes by itself. Set up
+2026-11-10 for Christmas: out Dec 14–24 (Dec 18–23 preferred), back
+Jan 1–7 (Jan 2–5 preferred), any LA airport.
+
+- Each leg is searched **one way**, so the outbound and return can be on
+  different airlines. The cheapest nonstop roundtrips for the best date pairs
+  are checked too, in case one ticket is cheaper.
+- **Nonstop preferred.** A layover only counts if it's 8h+, in a listed big
+  city, and between 6am and midnight on one day, and it has to save $25 to rank
+  above a nonstop. Anything else is dropped.
+- Rides on the same 30-minute trigger (`watch fares` calls `holiday.yml`).
+  It scans every 6 hours (90 searches across 4 runners) and posts the 3
+  cheapest trips to Discord once a day at 6am Pacific. State is in
+  `data/holiday.json`; `state.json` is left alone.
+
+```bash
+python -m flight_tracker holiday-report     # preview from saved prices
+```
+
+To stop early, set `until` to a past time or delete the section.
+
+---
+
 ## Dead man's switch
 
 The real failure mode isn't a crash. It's the scraper quietly returning zero

@@ -135,6 +135,38 @@ class Deadman:
 
 
 @dataclass
+class Holiday:
+    """A temporary one-way search that replaces the regular sweep (holiday.py).
+
+    While `until` is in the future, every watch run does this instead of the
+    regular sweep: one-way legs out and back on fixed date ranges, combined
+    into the cheapest trips, with one report a day. When `until` passes the
+    regular sweep resumes by itself -- nothing to switch back.
+    """
+
+    until: Optional[str] = None            # ISO timestamp with offset; None = off
+    label: str = "Holiday"
+    outbound_dates: List[str] = field(default_factory=list)    # [first, last]
+    preferred_outbound: List[str] = field(default_factory=list)  # [first, last]
+    return_dates: List[str] = field(default_factory=list)      # [first, last]
+    preferred_return: List[str] = field(default_factory=list)  # [first, last]
+    scan_every_hours: float = 6.0
+    report_hour: int = 6                   # daily, in report.timezone
+    combos: int = 3
+    # A layover leg has to save at least this much to rank above a nonstop.
+    nonstop_bonus_usd: float = 25.0
+    # Nonstop roundtrip searches for the cheapest date pairs, in case one
+    # ticket beats two one-ways.
+    roundtrip_checks: int = 4
+    shards: int = 4
+    # A layover only counts if it's this long, in one of these airports, and
+    # sits entirely inside the daytime window [start, end) on one calendar day.
+    layover_min_hours: float = 8.0
+    layover_day_hours: List[int] = field(default_factory=lambda: [6, 24])
+    layover_airports: List[str] = field(default_factory=list)
+
+
+@dataclass
 class Config:
     route: Route
     search: Search = field(default_factory=Search)
@@ -146,6 +178,7 @@ class Config:
     history: History = field(default_factory=History)
     deals: Deals = field(default_factory=Deals)
     deadman: Deadman = field(default_factory=Deadman)
+    holiday: Holiday = field(default_factory=Holiday)
 
 
 def _build(cls, raw: Optional[Dict[str, Any]]):
@@ -178,6 +211,7 @@ def load_config(path: str) -> Config:
         history=_build(History, raw.get("history")),
         deals=_build(Deals, raw.get("deals")),
         deadman=_build(Deadman, raw.get("deadman")),
+        holiday=_build(Holiday, raw.get("holiday")),
     )
 
     # Env overrides, so a GitHub Actions run can be retuned without a commit.
