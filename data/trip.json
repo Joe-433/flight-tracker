@@ -22,14 +22,14 @@
    ],
    "suggestion": "Buy"
   },
-  "AC|LGA|GUA|2027-03-04|293": {
-   "at": "2026-11-13T05:29:50.568903+00:00",
+  "AC|EWR|GUA|2027-03-04|293": {
+   "at": "2026-11-13T11:31:41.608677+00:00",
    "confidence": 31,
-   "max_saving": "16%",
+   "max_saving": "38%",
    "price_range": [
-    247,
-    415,
-    306
+    183,
+    548,
+    363
    ],
    "suggestion": "Buy"
   },
@@ -44,16 +44,27 @@
    ],
    "suggestion": "Wait"
   },
-  "UA|EWR|GUA|2027-03-05|444": {
-   "at": "2026-11-13T05:29:50.568903+00:00",
-   "confidence": 70,
+  "UA|EWR|GUA|2027-03-04|363": {
+   "at": "2026-11-13T11:31:41.608677+00:00",
+   "confidence": 73,
    "max_saving": "40%",
    "price_range": [
-    182,
-    547,
+    183,
+    548,
     363
    ],
    "suggestion": "Wait"
+  },
+  "UA|GUA|EWR|2027-03-08|337": {
+   "at": "2026-11-13T11:31:41.608677+00:00",
+   "confidence": 22,
+   "max_saving": "31%",
+   "price_range": [
+    231,
+    838,
+    387
+   ],
+   "suggestion": "Buy"
   },
   "UA|GUA|EWR|2027-03-09|337": {
    "at": "2026-11-13T05:29:50.568903+00:00",
@@ -84,10 +95,16 @@
    "any": 609.0,
    "at": "2026-11-13T05:29:50.568903+00:00",
    "nonstop": 766.0
+  },
+  {
+   "adventure": 609.0,
+   "any": 609.0,
+   "at": "2026-11-13T11:31:41.608677+00:00",
+   "nonstop": 700.0
   }
  ],
  "last_report": "2026-11-13T05:29:50.568903+00:00",
- "last_scan": "2026-11-13T05:29:50.568903+00:00",
+ "last_scan": "2026-11-13T11:31:41.608677+00:00",
  "reports": [
   {
    "at": "2026-11-13T05:29:50.568903+00:00",
@@ -114,48 +131,88 @@
   }
  ],
  "roundtrips": {
-  "2027-03-04|2027-03-10": {
-   "airlines": [
-    "Avianca"
-   ],
-   "flight_no": "AV 653",
-   "out_date": "2027-03-04",
-   "price": 766.0,
-   "ret_date": "2027-03-10",
-   "segments": [
-    {
-     "arr": "2027-03-04T06:00",
-     "dep": "2027-03-04T01:55",
-     "from": "JFK",
-     "to": "GUA"
-    }
-   ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNKRktyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDSkZLQgEBSAGYAQE=&hl=&curr=USD"
-  },
-  "2027-03-05|2027-03-10": {
+  "2027-03-04|2027-03-08": {
    "airlines": [
     "United"
    ],
    "flight_no": "UA 1551",
-   "out_date": "2027-03-05",
-   "price": 800.0,
-   "ret_date": "2027-03-10",
+   "out_date": "2027-03-04",
+   "price": 719.0,
+   "ret_date": "2027-03-08",
    "segments": [
     {
-     "arr": "2027-03-05T22:48",
-     "dep": "2027-03-05T18:36",
+     "arr": "2027-03-04T22:48",
+     "dep": "2027-03-04T18:36",
      "from": "EWR",
      "to": "GUA"
     }
    ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDUoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMDgoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-04|2027-03-09": {
+   "airlines": [
+    "United"
+   ],
+   "flight_no": "UA 1551",
+   "out_date": "2027-03-04",
+   "price": 719.0,
+   "ret_date": "2027-03-09",
+   "segments": [
+    {
+     "arr": "2027-03-04T22:48",
+     "dep": "2027-03-04T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMDkoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-04|2027-03-10": {
+   "airlines": [
+    "United"
+   ],
+   "flight_no": "UA 1551",
+   "out_date": "2027-03-04",
+   "price": 719.0,
+   "ret_date": "2027-03-10",
+   "segments": [
+    {
+     "arr": "2027-03-04T22:48",
+     "dep": "2027-03-04T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
   }
  },
  "searches": {
   "back|2027-03-08|abroad": [],
   "back|2027-03-08|any": [],
   "back|2027-03-08|long": [],
-  "back|2027-03-08|nonstop": [],
+  "back|2027-03-08|nonstop": [
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-08",
+    "direction": "back",
+    "flight_no": "UA 258",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 337.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T05:30",
+      "dep": "2027-03-08T23:57",
+      "from": "GUA",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDgoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "back|2027-03-09|abroad": [
    {
     "airlines": [
@@ -175,8 +232,8 @@
      "overnight": true,
      "start": "2027-03-09T16:30"
     },
-    "price": 409.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "price": 407.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:30",
@@ -212,7 +269,7 @@
      "start": "2027-03-09T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T08:16",
@@ -248,7 +305,7 @@
      "start": "2027-03-09T10:51"
     },
     "price": 613.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T10:51",
@@ -284,7 +341,7 @@
      "start": "2027-03-09T13:35"
     },
     "price": 1042.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:35",
@@ -321,7 +378,7 @@
      "start": "2027-03-09T13:55"
     },
     "price": 1629.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:55",
@@ -346,6 +403,42 @@
     ],
     "date": "2027-03-09",
     "direction": "back",
+    "flight_no": "B6 1382 / 572",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-09T20:55",
+     "minutes": 238,
+     "overnight": false,
+     "start": "2027-03-09T16:57"
+    },
+    "price": 337.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T16:57",
+      "dep": "2027-03-09T13:14",
+      "from": "GUA",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-09T23:49",
+      "dep": "2027-03-09T20:55",
+      "from": "FLL",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
     "flight_no": "B6 1382 / 1902",
     "kind": "regular",
     "layover": {
@@ -359,7 +452,7 @@
      "start": "2027-03-09T16:57"
     },
     "price": 337.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:57",
@@ -395,7 +488,7 @@
      "start": "2027-03-09T05:03"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:03",
@@ -431,7 +524,7 @@
      "start": "2027-03-09T20:05"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T20:05",
@@ -443,42 +536,6 @@
       "arr": "2027-03-10T00:57",
       "dep": "2027-03-09T21:40",
       "from": "MIA",
-      "to": "JFK"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "Avianca"
-    ],
-    "date": "2027-03-09",
-    "direction": "back",
-    "flight_no": "AV 555 / 566",
-    "kind": "regular",
-    "layover": {
-     "abroad": true,
-     "airport": "SAL",
-     "city": "San Salvador",
-     "country": "El Salvador",
-     "end": "2027-03-09T18:25",
-     "minutes": 115,
-     "overnight": false,
-     "start": "2027-03-09T16:30"
-    },
-    "price": 357.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-09T16:30",
-      "dep": "2027-03-09T15:40",
-      "from": "GUA",
-      "to": "SAL"
-     },
-     {
-      "arr": "2027-03-10T00:10",
-      "dep": "2027-03-09T18:25",
-      "from": "SAL",
       "to": "JFK"
      }
     ],
@@ -505,7 +562,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -541,7 +598,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -577,7 +634,7 @@
      "start": "2027-03-09T10:03"
     },
     "price": 347.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T10:03",
@@ -613,7 +670,7 @@
      "start": "2027-03-09T21:05"
     },
     "price": 367.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T21:05",
@@ -649,7 +706,7 @@
      "start": "2027-03-09T11:59"
     },
     "price": 546.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-09T11:59",
@@ -686,7 +743,7 @@
      "start": "2027-03-10T01:05"
     },
     "price": 1805.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T01:05",
@@ -715,7 +772,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 337.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -747,7 +804,7 @@
      "start": "2027-03-10T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -783,7 +840,7 @@
      "start": "2027-03-10T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T08:16",
@@ -819,7 +876,7 @@
      "start": "2027-03-10T10:51"
     },
     "price": 613.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T10:51",
@@ -856,7 +913,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1637.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -894,7 +951,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 329.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -930,7 +987,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 337.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -966,7 +1023,7 @@
      "start": "2027-03-10T05:03"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:03",
@@ -1002,7 +1059,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -1040,7 +1097,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -1076,7 +1133,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 343.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -1112,7 +1169,7 @@
      "start": "2027-03-10T10:03"
     },
     "price": 347.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T10:03",
@@ -1148,7 +1205,7 @@
      "start": "2027-03-10T05:03"
     },
     "price": 389.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:03",
@@ -1185,7 +1242,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1637.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -1214,7 +1271,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 337.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-11T05:30",
@@ -1235,7 +1292,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 355.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-11T00:25",
@@ -1248,42 +1305,6 @@
    }
   ],
   "out|2027-03-04|abroad": [
-   {
-    "airlines": [
-     "Air Canada"
-    ],
-    "date": "2027-03-04",
-    "direction": "out",
-    "flight_no": "AC 8631 / 1368",
-    "kind": "adventure",
-    "layover": {
-     "abroad": true,
-     "airport": "YUL",
-     "city": "Montreal",
-     "country": "Canada",
-     "end": "2027-03-04T17:25",
-     "minutes": 596,
-     "overnight": false,
-     "start": "2027-03-04T07:29"
-    },
-    "price": 293.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-04T07:29",
-      "dep": "2027-03-04T06:00",
-      "from": "LGA",
-      "to": "YUL"
-     },
-     {
-      "arr": "2027-03-04T22:00",
-      "dep": "2027-03-04T17:25",
-      "from": "YUL",
-      "to": "GUA"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
-   },
    {
     "airlines": [
      "Air Canada"
@@ -1303,7 +1324,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -1339,7 +1360,7 @@
      "start": "2027-03-05T04:06"
     },
     "price": 469.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T04:06",
@@ -1375,7 +1396,7 @@
      "start": "2027-03-04T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:55",
@@ -1580,7 +1601,7 @@
      "start": "2027-03-04T10:50"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T10:50",
@@ -1616,7 +1637,7 @@
      "start": "2027-03-04T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T11:11",
@@ -1652,7 +1673,7 @@
      "start": "2027-03-04T12:45"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T12:45",
@@ -1688,7 +1709,7 @@
      "start": "2027-03-05T00:21"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T00:21",
@@ -1724,7 +1745,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -1742,7 +1763,50 @@
     "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
    }
   ],
-  "out|2027-03-04|nonstop": [],
+  "out|2027-03-04|nonstop": [
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "UA 1551",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 363.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T22:48",
+      "dep": "2027-03-04T18:36",
+      "from": "EWR",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAGoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AV 653",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 487.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T06:00",
+      "dep": "2027-03-04T01:55",
+      "from": "JFK",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAGoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
   "out|2027-03-05|abroad": [
    {
     "airlines": [
@@ -1763,7 +1827,7 @@
      "start": "2027-03-05T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:55",
@@ -1799,7 +1863,7 @@
      "start": "2027-03-05T06:28"
     },
     "price": 529.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T06:28",
@@ -1835,7 +1899,7 @@
      "start": "2027-03-05T06:05"
     },
     "price": 1026.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T06:05",
@@ -1856,35 +1920,71 @@
   "out|2027-03-05|any": [
    {
     "airlines": [
-     "JetBlue"
+     "American"
     ],
     "date": "2027-03-05",
     "direction": "out",
-    "flight_no": "B6 1601 / 1483",
+    "flight_no": "AA 2017 / 2395",
     "kind": "regular",
     "layover": {
      "abroad": false,
-     "airport": "FLL",
-     "city": "Fort Lauderdale",
+     "airport": "MIA",
+     "city": "Miami",
      "country": "US",
-     "end": "2027-03-05T12:16",
-     "minutes": 65,
+     "end": "2027-03-05T13:17",
+     "minutes": 126,
      "overnight": false,
      "start": "2027-03-05T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T11:11",
-      "dep": "2027-03-05T07:59",
+      "dep": "2027-03-05T07:51",
       "from": "JFK",
-      "to": "FLL"
+      "to": "MIA"
      },
      {
-      "arr": "2027-03-05T14:15",
-      "dep": "2027-03-05T12:16",
-      "from": "FLL",
+      "arr": "2027-03-05T15:12",
+      "dep": "2027-03-05T13:17",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AA 442 / 1027",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-05T18:50",
+     "minutes": 150,
+     "overnight": false,
+     "start": "2027-03-05T16:20"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T16:20",
+      "dep": "2027-03-05T12:59",
+      "from": "LGA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-05T20:52",
+      "dep": "2027-03-05T18:50",
+      "from": "MIA",
       "to": "GUA"
      }
     ],
@@ -1909,7 +2009,7 @@
      "start": "2027-03-05T17:56"
     },
     "price": 280.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T17:56",
@@ -1932,67 +2032,31 @@
     ],
     "date": "2027-03-05",
     "direction": "out",
-    "flight_no": "B6 1505 / 1383",
+    "flight_no": "B6 105 / 1483",
     "kind": "regular",
     "layover": {
      "abroad": false,
      "airport": "FLL",
      "city": "Fort Lauderdale",
      "country": "US",
-     "end": "2027-03-05T09:55",
-     "minutes": 54,
+     "end": "2027-03-05T12:16",
+     "minutes": 80,
      "overnight": false,
-     "start": "2027-03-05T09:01"
+     "start": "2027-03-05T10:56"
     },
-    "price": 290.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "price": 319.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
-      "arr": "2027-03-05T09:01",
-      "dep": "2027-03-05T05:55",
+      "arr": "2027-03-05T10:56",
+      "dep": "2027-03-05T07:45",
       "from": "EWR",
       "to": "FLL"
      },
      {
-      "arr": "2027-03-05T11:49",
-      "dep": "2027-03-05T09:55",
+      "arr": "2027-03-05T14:15",
+      "dep": "2027-03-05T12:16",
       "from": "FLL",
-      "to": "GUA"
-     }
-    ],
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "United"
-    ],
-    "date": "2027-03-05",
-    "direction": "out",
-    "flight_no": "UA 1782 / 1902",
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "IAH",
-     "city": "Houston",
-     "country": "US",
-     "end": "2027-03-05T16:43",
-     "minutes": 343,
-     "overnight": false,
-     "start": "2027-03-05T11:00"
-    },
-    "price": 333.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-05T11:00",
-      "dep": "2027-03-05T07:45",
-      "from": "LGA",
-      "to": "IAH"
-     },
-     {
-      "arr": "2027-03-05T19:39",
-      "dep": "2027-03-05T16:43",
-      "from": "IAH",
       "to": "GUA"
      }
     ],
@@ -2008,7 +2072,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 444.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -2040,7 +2104,7 @@
      "start": "2027-03-05T08:45"
     },
     "price": 295.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T08:45",
@@ -2075,8 +2139,8 @@
      "overnight": false,
      "start": "2027-03-05T08:40"
     },
-    "price": 411.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "price": 395.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T08:40",
@@ -2111,8 +2175,8 @@
      "overnight": false,
      "start": "2027-03-05T07:30"
     },
-    "price": 459.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "price": 413.0,
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T07:30",
@@ -2148,7 +2212,7 @@
      "start": "2027-03-05T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:55",
@@ -2177,7 +2241,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 444.0,
-    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "seen": "2026-11-13T11:31:41.608677+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -2193,6 +2257,6 @@
  "told": {
   "adventure": 609.0,
   "any": 609.0,
-  "nonstop": 766.0
+  "nonstop": 700.0
  }
 }
