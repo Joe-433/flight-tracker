@@ -225,7 +225,7 @@ class Sweep(unittest.TestCase):
                             "out|2027-03-04|abroad": [leg("out", "2027-03-04", 80)]}}
         self.assertEqual(trip.merge(doc, [result], dt.datetime(2026, 11, 12, tzinfo=UTC)), (2, 1))
         self.assertEqual(doc["searches"]["out|2027-03-04|long"][0]["price"], 90.0)
-        self.assertEqual(doc["searches"]["out|2027-03-04|abroad"], [])
+        self.assertEqual(doc["searches"]["out|2027-03-04|abroad"][0]["price"], 80.0)  # empty keeps old
 
     def test_same_flight_from_two_searches_counts_once(self):
         doc = {"searches": {"out|2027-03-04|any": [leg("out", "2027-03-04", 364)],

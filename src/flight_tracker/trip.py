@@ -439,6 +439,11 @@ def merge(doc: Dict[str, Any], shard_results: List[Dict[str, Any]], now: dt.date
         for key, legs in (result.get("results") or {}).items():
             searched += 1
             found += 1 if legs else 0
+            if not legs and searches.get(key):
+                # Google sometimes says "no flights" for a search that had
+                # some minutes ago. Keep the old ones; legs_for() stops
+                # quoting them once they're a couple of scans old.
+                continue
             searches[key] = [dict(leg, seen=now.isoformat()) for leg in legs]
     doc["searches"] = searches
     return searched, found
