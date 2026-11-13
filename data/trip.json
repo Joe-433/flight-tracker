@@ -1,0 +1,2198 @@
+{
+ "hints": {
+  "AA|EWR|GUA|2027-03-04|280": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 85,
+   "max_saving": "35%",
+   "price_range": [
+    181,
+    526,
+    358
+   ],
+   "suggestion": "Wait"
+  },
+  "AA|JFK|GUA|2027-03-04|280": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 6,
+   "max_saving": "2%",
+   "price_range": [
+    275,
+    729,
+    389
+   ],
+   "suggestion": "Buy"
+  },
+  "AC|LGA|GUA|2027-03-04|293": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 31,
+   "max_saving": "16%",
+   "price_range": [
+    247,
+    415,
+    306
+   ],
+   "suggestion": "Buy"
+  },
+  "B6|GUA|LGA|2027-03-10|329": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 83,
+   "max_saving": "11%",
+   "price_range": [
+    294,
+    723,
+    395
+   ],
+   "suggestion": "Wait"
+  },
+  "UA|EWR|GUA|2027-03-05|444": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 70,
+   "max_saving": "40%",
+   "price_range": [
+    182,
+    547,
+    363
+   ],
+   "suggestion": "Wait"
+  },
+  "UA|GUA|EWR|2027-03-09|337": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 22,
+   "max_saving": "31%",
+   "price_range": [
+    231,
+    838,
+    387
+   ],
+   "suggestion": "Buy"
+  },
+  "UA|GUA|EWR|2027-03-10|337": {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "confidence": 22,
+   "max_saving": "31%",
+   "price_range": [
+    231,
+    838,
+    386
+   ],
+   "suggestion": "Buy"
+  }
+ },
+ "history": [
+  {
+   "adventure": 609.0,
+   "any": 609.0,
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "nonstop": 766.0
+  }
+ ],
+ "last_report": "2026-11-13T05:29:50.568903+00:00",
+ "last_scan": "2026-11-13T05:29:50.568903+00:00",
+ "reports": [
+  {
+   "at": "2026-11-13T05:29:50.568903+00:00",
+   "best": {
+    "adventure": 609.0,
+    "any": 609.0,
+    "nonstop": 766.0
+   },
+   "top": {
+    "adventure": [
+     "$280 + $329 = $609, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$280 + $329 = $609, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$293 + $329 = $622, Thu Mar 4 \u2192 Wed Mar 10, 6 nights"
+    ],
+    "any": [
+     "$280 + $329 = $609, Thu Mar 4 \u2192 Wed Mar 10, 6 nights"
+    ],
+    "nonstop": [
+     "$766 round trip, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$444 + $337 = $781, Fri Mar 5 \u2192 Wed Mar 10, 5 nights",
+     "$444 + $337 = $781, Fri Mar 5 \u2192 Tue Mar 9, 4 nights"
+    ]
+   }
+  }
+ ],
+ "roundtrips": {
+  "2027-03-04|2027-03-10": {
+   "airlines": [
+    "Avianca"
+   ],
+   "flight_no": "AV 653",
+   "out_date": "2027-03-04",
+   "price": 766.0,
+   "ret_date": "2027-03-10",
+   "segments": [
+    {
+     "arr": "2027-03-04T06:00",
+     "dep": "2027-03-04T01:55",
+     "from": "JFK",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNKRktyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDSkZLQgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-10": {
+   "airlines": [
+    "United"
+   ],
+   "flight_no": "UA 1551",
+   "out_date": "2027-03-05",
+   "price": 800.0,
+   "ret_date": "2027-03-10",
+   "segments": [
+    {
+     "arr": "2027-03-05T22:48",
+     "dep": "2027-03-05T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDUoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+  }
+ },
+ "searches": {
+  "back|2027-03-08|abroad": [],
+  "back|2027-03-08|any": [],
+  "back|2027-03-08|long": [],
+  "back|2027-03-08|nonstop": [],
+  "back|2027-03-09|abroad": [
+   {
+    "airlines": [
+     "Air Canada"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AC 1301 / 702",
+    "kind": "regular",
+    "layover": {
+     "abroad": true,
+     "airport": "YYZ",
+     "city": "Toronto",
+     "country": "Canada",
+     "end": "2027-03-10T07:20",
+     "minutes": 890,
+     "overnight": true,
+     "start": "2027-03-09T16:30"
+    },
+    "price": 409.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T16:30",
+      "dep": "2027-03-09T10:30",
+      "from": "GUA",
+      "to": "YYZ"
+     },
+     {
+      "arr": "2027-03-10T08:56",
+      "dep": "2027-03-10T07:20",
+      "from": "YYZ",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-09T18:33",
+     "minutes": 617,
+     "overnight": false,
+     "start": "2027-03-09T08:16"
+    },
+    "price": 546.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T08:16",
+      "dep": "2027-03-09T04:46",
+      "from": "GUA",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-09T23:49",
+      "dep": "2027-03-09T18:33",
+      "from": "PTY",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-09T18:33",
+     "minutes": 462,
+     "overnight": false,
+     "start": "2027-03-09T10:51"
+    },
+    "price": 613.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T10:51",
+      "dep": "2027-03-09T07:23",
+      "from": "GUA",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-09T23:49",
+      "dep": "2027-03-09T18:33",
+      "from": "PTY",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AV 743 / 20",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "BOG",
+     "city": "Bogot\u00e1",
+     "country": "Colombia",
+     "end": "2027-03-09T23:05",
+     "minutes": 570,
+     "overnight": false,
+     "start": "2027-03-09T13:35"
+    },
+    "price": 1042.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T13:35",
+      "dep": "2027-03-09T09:20",
+      "from": "GUA",
+      "to": "BOG"
+     },
+     {
+      "arr": "2027-03-10T05:00",
+      "dep": "2027-03-09T23:05",
+      "from": "BOG",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca",
+     "United"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AV 629 / UA 1649",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SJO",
+     "city": "San Jos\u00e9",
+     "country": "Costa Rica",
+     "end": "2027-03-09T23:28",
+     "minutes": 573,
+     "overnight": false,
+     "start": "2027-03-09T13:55"
+    },
+    "price": 1629.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T13:55",
+      "dep": "2027-03-09T12:25",
+      "from": "GUA",
+      "to": "SJO"
+     },
+     {
+      "arr": "2027-03-10T05:32",
+      "dep": "2027-03-09T23:28",
+      "from": "SJO",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-09|any": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "B6 1382 / 1902",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-09T20:55",
+     "minutes": 238,
+     "overnight": false,
+     "start": "2027-03-09T16:57"
+    },
+    "price": 337.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T16:57",
+      "dep": "2027-03-09T13:14",
+      "from": "GUA",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-09T23:52",
+      "dep": "2027-03-09T20:55",
+      "from": "FLL",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AA 2948 / 2847",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "DFW",
+     "city": "Dallas",
+     "country": "US",
+     "end": "2027-03-09T07:00",
+     "minutes": 117,
+     "overnight": true,
+     "start": "2027-03-09T05:03"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T05:03",
+      "dep": "2027-03-09T01:22",
+      "from": "GUA",
+      "to": "DFW"
+     },
+     {
+      "arr": "2027-03-09T11:29",
+      "dep": "2027-03-09T07:00",
+      "from": "DFW",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AA 1774 / 2077",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-09T21:40",
+     "minutes": 95,
+     "overnight": false,
+     "start": "2027-03-09T20:05"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T20:05",
+      "dep": "2027-03-09T16:12",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-10T00:57",
+      "dep": "2027-03-09T21:40",
+      "from": "MIA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AV 555 / 566",
+    "kind": "regular",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-09T18:25",
+     "minutes": 115,
+     "overnight": false,
+     "start": "2027-03-09T16:30"
+    },
+    "price": 357.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T16:30",
+      "dep": "2027-03-09T15:40",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-10T00:10",
+      "dep": "2027-03-09T18:25",
+      "from": "SAL",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-09|long": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AA 352 / 1530",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-09T17:41",
+     "minutes": 476,
+     "overnight": false,
+     "start": "2027-03-09T09:45"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T09:45",
+      "dep": "2027-03-09T06:00",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-09T20:59",
+      "dep": "2027-03-09T17:41",
+      "from": "MIA",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AA 352 / 2225",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-09T18:04",
+     "minutes": 499,
+     "overnight": false,
+     "start": "2027-03-09T09:45"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T09:45",
+      "dep": "2027-03-09T06:00",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-09T21:30",
+      "dep": "2027-03-09T18:04",
+      "from": "MIA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "UA 1901 / 700",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-09T17:20",
+     "minutes": 437,
+     "overnight": false,
+     "start": "2027-03-09T10:03"
+    },
+    "price": 347.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T10:03",
+      "dep": "2027-03-09T07:00",
+      "from": "GUA",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-09T21:53",
+      "dep": "2027-03-09T17:20",
+      "from": "IAH",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AV 589 / 660",
+    "kind": "regular",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-10T07:50",
+     "minutes": 645,
+     "overnight": true,
+     "start": "2027-03-09T21:05"
+    },
+    "price": 367.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T21:05",
+      "dep": "2027-03-09T20:15",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-10T13:35",
+      "dep": "2027-03-10T07:50",
+      "from": "SAL",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-09T22:52",
+     "minutes": 653,
+     "overnight": false,
+     "start": "2027-03-09T11:59"
+    },
+    "price": 546.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T11:59",
+      "dep": "2027-03-09T08:36",
+      "from": "GUA",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-10T04:08",
+      "dep": "2027-03-09T22:52",
+      "from": "PTY",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca",
+     "United"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "AV 654 / UA 3695",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "IAD",
+     "city": "Washington DC",
+     "country": "US",
+     "end": "2027-03-10T08:15",
+     "minutes": 430,
+     "overnight": true,
+     "start": "2027-03-10T01:05"
+    },
+    "price": 1805.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T01:05",
+      "dep": "2027-03-09T20:00",
+      "from": "GUA",
+      "to": "IAD"
+     },
+     {
+      "arr": "2027-03-10T09:31",
+      "dep": "2027-03-10T08:15",
+      "from": "IAD",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-09|nonstop": [
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "UA 258",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 337.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T05:30",
+      "dep": "2027-03-09T23:57",
+      "from": "GUA",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-10|abroad": [
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 579 / 566",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-10T18:25",
+     "minutes": 735,
+     "overnight": false,
+     "start": "2027-03-10T06:10"
+    },
+    "price": 374.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T06:10",
+      "dep": "2027-03-10T05:25",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-11T00:10",
+      "dep": "2027-03-10T18:25",
+      "from": "SAL",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-10T18:33",
+     "minutes": 617,
+     "overnight": false,
+     "start": "2027-03-10T08:16"
+    },
+    "price": 546.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T08:16",
+      "dep": "2027-03-10T04:46",
+      "from": "GUA",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-10T23:49",
+      "dep": "2027-03-10T18:33",
+      "from": "PTY",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-10T18:33",
+     "minutes": 462,
+     "overnight": false,
+     "start": "2027-03-10T10:51"
+    },
+    "price": 613.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T10:51",
+      "dep": "2027-03-10T07:23",
+      "from": "GUA",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-10T23:49",
+      "dep": "2027-03-10T18:33",
+      "from": "PTY",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca",
+     "United"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 555 / UA 339",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-10T23:54",
+     "minutes": 444,
+     "overnight": false,
+     "start": "2027-03-10T16:30"
+    },
+    "price": 1637.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T16:30",
+      "dep": "2027-03-10T15:40",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-11T05:31",
+      "dep": "2027-03-10T23:54",
+      "from": "SAL",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2egNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-10|any": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "B6 1382 / 572",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-10T20:55",
+     "minutes": 238,
+     "overnight": false,
+     "start": "2027-03-10T16:57"
+    },
+    "price": 329.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T16:57",
+      "dep": "2027-03-10T13:14",
+      "from": "GUA",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-10T23:49",
+      "dep": "2027-03-10T20:55",
+      "from": "FLL",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "B6 1382 / 1902",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-10T20:55",
+     "minutes": 238,
+     "overnight": false,
+     "start": "2027-03-10T16:57"
+    },
+    "price": 337.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T16:57",
+      "dep": "2027-03-10T13:14",
+      "from": "GUA",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-10T23:52",
+      "dep": "2027-03-10T20:55",
+      "from": "FLL",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AA 2948 / 2847",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "DFW",
+     "city": "Dallas",
+     "country": "US",
+     "end": "2027-03-10T07:07",
+     "minutes": 124,
+     "overnight": true,
+     "start": "2027-03-10T05:03"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T05:03",
+      "dep": "2027-03-10T01:22",
+      "from": "GUA",
+      "to": "DFW"
+     },
+     {
+      "arr": "2027-03-10T11:39",
+      "dep": "2027-03-10T07:07",
+      "from": "DFW",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AA 352 / 928",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-10T11:48",
+     "minutes": 123,
+     "overnight": false,
+     "start": "2027-03-10T09:45"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T09:45",
+      "dep": "2027-03-10T06:00",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-10T15:04",
+      "dep": "2027-03-10T11:48",
+      "from": "MIA",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-10|long": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AA 352 / 1530",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-10T17:41",
+     "minutes": 476,
+     "overnight": false,
+     "start": "2027-03-10T09:45"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T09:45",
+      "dep": "2027-03-10T06:00",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-10T20:59",
+      "dep": "2027-03-10T17:41",
+      "from": "MIA",
+      "to": "LGA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AA 352 / 2225",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-10T18:04",
+     "minutes": 499,
+     "overnight": false,
+     "start": "2027-03-10T09:45"
+    },
+    "price": 343.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T09:45",
+      "dep": "2027-03-10T06:00",
+      "from": "GUA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-10T21:30",
+      "dep": "2027-03-10T18:04",
+      "from": "MIA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "UA 1901 / 700",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-10T17:20",
+     "minutes": 437,
+     "overnight": false,
+     "start": "2027-03-10T10:03"
+    },
+    "price": 347.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T10:03",
+      "dep": "2027-03-10T07:00",
+      "from": "GUA",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-10T21:53",
+      "dep": "2027-03-10T17:20",
+      "from": "IAH",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AA 2948 / 2852",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "DFW",
+     "city": "Dallas",
+     "country": "US",
+     "end": "2027-03-10T12:05",
+     "minutes": 422,
+     "overnight": true,
+     "start": "2027-03-10T05:03"
+    },
+    "price": 389.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T05:03",
+      "dep": "2027-03-10T01:22",
+      "from": "GUA",
+      "to": "DFW"
+     },
+     {
+      "arr": "2027-03-10T16:32",
+      "dep": "2027-03-10T12:05",
+      "from": "DFW",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca",
+     "United"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 555 / UA 339",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-10T23:54",
+     "minutes": 444,
+     "overnight": false,
+     "start": "2027-03-10T16:30"
+    },
+    "price": 1637.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T16:30",
+      "dep": "2027-03-10T15:40",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-11T05:31",
+      "dep": "2027-03-10T23:54",
+      "from": "SAL",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2iAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "back|2027-03-10|nonstop": [
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "UA 258",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 337.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-11T05:30",
+      "dep": "2027-03-10T23:57",
+      "from": "GUA",
+      "to": "EWR"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 652",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 355.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-11T00:25",
+      "dep": "2027-03-10T18:50",
+      "from": "GUA",
+      "to": "JFK"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMTAoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-04|abroad": [
+   {
+    "airlines": [
+     "Air Canada"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AC 8631 / 1368",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "YUL",
+     "city": "Montreal",
+     "country": "Canada",
+     "end": "2027-03-04T17:25",
+     "minutes": 596,
+     "overnight": false,
+     "start": "2027-03-04T07:29"
+    },
+    "price": 293.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T07:29",
+      "dep": "2027-03-04T06:00",
+      "from": "LGA",
+      "to": "YUL"
+     },
+     {
+      "arr": "2027-03-04T22:00",
+      "dep": "2027-03-04T17:25",
+      "from": "YUL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Air Canada"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AC 8491 / 1368",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "YUL",
+     "city": "Montreal",
+     "country": "Canada",
+     "end": "2027-03-04T17:25",
+     "minutes": 534,
+     "overnight": false,
+     "start": "2027-03-04T08:31"
+    },
+    "price": 293.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T08:31",
+      "dep": "2027-03-04T06:55",
+      "from": "EWR",
+      "to": "YUL"
+     },
+     {
+      "arr": "2027-03-04T22:00",
+      "dep": "2027-03-04T17:25",
+      "from": "YUL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": null,
+    "kind": "regular",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-05T15:35",
+     "minutes": 689,
+     "overnight": true,
+     "start": "2027-03-05T04:06"
+    },
+    "price": 469.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T04:06",
+      "dep": "2027-03-04T22:56",
+      "from": "JFK",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-05T17:00",
+      "dep": "2027-03-05T15:35",
+      "from": "PTY",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AV 569 / 588",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-04T17:40",
+     "minutes": 465,
+     "overnight": false,
+     "start": "2027-03-04T09:55"
+    },
+    "price": 488.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T09:55",
+      "dep": "2027-03-04T05:50",
+      "from": "JFK",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-04T18:25",
+      "dep": "2027-03-04T17:40",
+      "from": "SAL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-04|any": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 1196 / 2241",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-04T10:10",
+     "minutes": 85,
+     "overnight": false,
+     "start": "2027-03-04T08:45"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T08:45",
+      "dep": "2027-03-04T05:30",
+      "from": "EWR",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-04T12:16",
+      "dep": "2027-03-04T10:10",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 1017 / 2241",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-04T10:10",
+     "minutes": 55,
+     "overnight": false,
+     "start": "2027-03-04T09:15"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T09:15",
+      "dep": "2027-03-04T06:00",
+      "from": "JFK",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-04T12:16",
+      "dep": "2027-03-04T10:10",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "B6 1601 / 1483",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-04T12:16",
+     "minutes": 65,
+     "overnight": false,
+     "start": "2027-03-04T11:11"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T11:11",
+      "dep": "2027-03-04T07:59",
+      "from": "JFK",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-04T14:15",
+      "dep": "2027-03-04T12:16",
+      "from": "FLL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 2779 / 1027",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-04T18:50",
+     "minutes": 54,
+     "overnight": false,
+     "start": "2027-03-04T17:56"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T17:56",
+      "dep": "2027-03-04T14:42",
+      "from": "JFK",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-04T20:52",
+      "dep": "2027-03-04T18:50",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AV 653",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 487.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T06:00",
+      "dep": "2027-03-04T01:55",
+      "from": "JFK",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-04|long": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 1370 / 1027",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-04T18:50",
+     "minutes": 480,
+     "overnight": false,
+     "start": "2027-03-04T10:50"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T10:50",
+      "dep": "2027-03-04T07:30",
+      "from": "EWR",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-04T20:52",
+      "dep": "2027-03-04T18:50",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 2017 / 1027",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-04T18:50",
+     "minutes": 459,
+     "overnight": false,
+     "start": "2027-03-04T11:11"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T11:11",
+      "dep": "2027-03-04T07:51",
+      "from": "JFK",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-04T20:52",
+      "dep": "2027-03-04T18:50",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 860 / 2455",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "DFW",
+     "city": "Dallas",
+     "country": "US",
+     "end": "2027-03-04T20:07",
+     "minutes": 442,
+     "overnight": false,
+     "start": "2027-03-04T12:45"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T12:45",
+      "dep": "2027-03-04T09:30",
+      "from": "JFK",
+      "to": "DFW"
+     },
+     {
+      "arr": "2027-03-04T23:23",
+      "dep": "2027-03-04T20:07",
+      "from": "DFW",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AA 1032 / 2241",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-05T10:10",
+     "minutes": 589,
+     "overnight": true,
+     "start": "2027-03-05T00:21"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T00:21",
+      "dep": "2027-03-04T21:00",
+      "from": "JFK",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-05T12:16",
+      "dep": "2027-03-05T10:10",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Air Canada"
+    ],
+    "date": "2027-03-04",
+    "direction": "out",
+    "flight_no": "AC 8491 / 1368",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "YUL",
+     "city": "Montreal",
+     "country": "Canada",
+     "end": "2027-03-04T17:25",
+     "minutes": 534,
+     "overnight": false,
+     "start": "2027-03-04T08:31"
+    },
+    "price": 293.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-04T08:31",
+      "dep": "2027-03-04T06:55",
+      "from": "EWR",
+      "to": "YUL"
+     },
+     {
+      "arr": "2027-03-04T22:00",
+      "dep": "2027-03-04T17:25",
+      "from": "YUL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-04|nonstop": [],
+  "out|2027-03-05|abroad": [
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AV 569 / 588",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-05T17:40",
+     "minutes": 465,
+     "overnight": false,
+     "start": "2027-03-05T09:55"
+    },
+    "price": 488.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T09:55",
+      "dep": "2027-03-05T05:50",
+      "from": "JFK",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-05T18:25",
+      "dep": "2027-03-05T17:40",
+      "from": "SAL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "COPA"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": null,
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "PTY",
+     "city": "Panama City",
+     "country": "Panama",
+     "end": "2027-03-05T15:35",
+     "minutes": 547,
+     "overnight": false,
+     "start": "2027-03-05T06:28"
+    },
+    "price": 529.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T06:28",
+      "dep": "2027-03-05T01:16",
+      "from": "JFK",
+      "to": "PTY"
+     },
+     {
+      "arr": "2027-03-05T17:00",
+      "dep": "2027-03-05T15:35",
+      "from": "PTY",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AV 245 / 742",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "BOG",
+     "city": "Bogot\u00e1",
+     "country": "Colombia",
+     "end": "2027-03-05T15:05",
+     "minutes": 540,
+     "overnight": false,
+     "start": "2027-03-05T06:05"
+    },
+    "price": 1026.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T06:05",
+      "dep": "2027-03-05T00:15",
+      "from": "JFK",
+      "to": "BOG"
+     },
+     {
+      "arr": "2027-03-05T17:25",
+      "dep": "2027-03-05T15:05",
+      "from": "BOG",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GmYSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBegNTQUx6A1BUWXoDTUVYegNDVU56A0JPR3oDTURFegNTSk96A1NEUXoDUFVKegNTQVB6A1lVTHoDWVlaiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-05|any": [
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "B6 1601 / 1483",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-05T12:16",
+     "minutes": 65,
+     "overnight": false,
+     "start": "2027-03-05T11:11"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T11:11",
+      "dep": "2027-03-05T07:59",
+      "from": "JFK",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-05T14:15",
+      "dep": "2027-03-05T12:16",
+      "from": "FLL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AA 2779 / 1027",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-05T18:50",
+     "minutes": 54,
+     "overnight": false,
+     "start": "2027-03-05T17:56"
+    },
+    "price": 280.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T17:56",
+      "dep": "2027-03-05T14:42",
+      "from": "JFK",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-05T20:52",
+      "dep": "2027-03-05T18:50",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "JetBlue"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "B6 1505 / 1383",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-05T09:55",
+     "minutes": 54,
+     "overnight": false,
+     "start": "2027-03-05T09:01"
+    },
+    "price": 290.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T09:01",
+      "dep": "2027-03-05T05:55",
+      "from": "EWR",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-05T11:49",
+      "dep": "2027-03-05T09:55",
+      "from": "FLL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "UA 1782 / 1902",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-05T16:43",
+     "minutes": 343,
+     "overnight": false,
+     "start": "2027-03-05T11:00"
+    },
+    "price": 333.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T11:00",
+      "dep": "2027-03-05T07:45",
+      "from": "LGA",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-05T19:39",
+      "dep": "2027-03-05T16:43",
+      "from": "IAH",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "UA 1551",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 444.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T22:48",
+      "dep": "2027-03-05T18:36",
+      "from": "EWR",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-05|long": [
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AA 1196 / 1027",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-05T18:50",
+     "minutes": 605,
+     "overnight": false,
+     "start": "2027-03-05T08:45"
+    },
+    "price": 295.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T08:45",
+      "dep": "2027-03-05T05:30",
+      "from": "EWR",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-05T20:52",
+      "dep": "2027-03-05T18:50",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "UA 492 / 1902",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-05T16:43",
+     "minutes": 483,
+     "overnight": false,
+     "start": "2027-03-05T08:40"
+    },
+    "price": 411.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T08:40",
+      "dep": "2027-03-05T06:00",
+      "from": "EWR",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-05T19:39",
+      "dep": "2027-03-05T16:43",
+      "from": "IAH",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "UA 3985 / 1523",
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAD",
+     "city": "Washington DC",
+     "country": "US",
+     "end": "2027-03-05T17:43",
+     "minutes": 613,
+     "overnight": false,
+     "start": "2027-03-05T07:30"
+    },
+    "price": 459.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T07:30",
+      "dep": "2027-03-05T06:05",
+      "from": "LGA",
+      "to": "IAD"
+     },
+     {
+      "arr": "2027-03-05T21:25",
+      "dep": "2027-03-05T17:43",
+      "from": "IAD",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AV 569 / 588",
+    "kind": "adventure",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-05T17:40",
+     "minutes": 465,
+     "overnight": false,
+     "start": "2027-03-05T09:55"
+    },
+    "price": 488.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T09:55",
+      "dep": "2027-03-05T05:50",
+      "from": "JFK",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-05T18:25",
+      "dep": "2027-03-05T17:40",
+      "from": "SAL",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GioSCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBiAGkA5ABhAdCAQFIAZgBAg==&hl=&curr=USD"
+   }
+  ],
+  "out|2027-03-05|nonstop": [
+   {
+    "airlines": [
+     "United"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "UA 1551",
+    "kind": "nonstop",
+    "layover": null,
+    "price": 444.0,
+    "seen": "2026-11-13T05:29:50.568903+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T22:48",
+      "dep": "2027-03-05T18:36",
+      "from": "EWR",
+      "to": "GUA"
+     }
+    ],
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAGoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   }
+  ]
+ },
+ "told": {
+  "adventure": 609.0,
+  "any": 609.0,
+  "nonstop": 766.0
+ }
+}
