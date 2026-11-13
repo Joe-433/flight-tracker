@@ -130,35 +130,40 @@ deadman:
   stale_hours: 6         # or: no usable price for this long
   renotify_hours: 24     # while still down, nag at most this often
 
-holiday:
-  # Christmas 2026 trip, set up 2026-11-10 for one week. Until `until`, every
-  # watch run does this INSTEAD of the regular sweep (holiday.py), and the
-  # regular sweep resumes on its own afterwards. To end it early, delete this
-  # section or set `until` to a past time.
-  until: "2026-11-18T00:00:00-08:00"
-  label: "Christmas"
-  # In the office Dec 13-17, so leave NY Fri Dec 18 - Thu Dec 24 (any of
-  # those days is fine; updated 2026-11-10). Come back after New Year's Eve (Thu Dec 31); Sat Jan 2 - Tue
-  # Jan 5 preferred, searched through Thu Jan 7. Ranges are [first, last],
-  # inclusive.
-  outbound_dates: ["2026-12-18", "2026-12-24"]
-  preferred_outbound: ["2026-12-18", "2026-12-24"]
-  return_dates: ["2027-01-01", "2027-01-07"]
-  preferred_return: ["2027-01-02", "2027-01-05"]
-  # (7 + 7 dates) x 5 LA airports = 70 one-way searches a scan, over 4
-  # runners (~18 each), plus up to 4 roundtrip checks. Every 6 hours, and
-  # right before the daily report.
+pause:
+  # Regular NY <-> LA sweep paused for the week of 2026-11-10 (asked for
+  # then); it resumes on its own. Delete or set to a past time to resume now.
+  regular_until: "2026-11-18T00:00:00-08:00"
+
+trip:
+  # Guatemala, March 2027 (trip.py). Friend is there Fri Mar 5 3pm - Tue Mar 9
+  # 2pm; the fixed point is the Acatenango hike pickup in Antigua, Sat Mar 6
+  # 7am. Searched as two one-way legs so each can be a different airline.
+  # Stops by itself at `until` (the buy-by date). To stop sooner -- e.g. once
+  # booked -- set `until` to a past time.
+  until: "2027-02-01T00:00:00-05:00"
+  name: "Guatemala"
+  home: "/m/02_286"          # New York: JFK, LGA and EWR in one search
+  away: "GUA"
+  # A day of give on each end: out Thu or Fri, landing no later than Friday
+  # night; back from late Monday night (after the last full day) through
+  # Wednesday. On a price tie, the longer
+  # stay wins.
+  outbound_dates: ["2027-03-04", "2027-03-05"]
+  arrive_by: "2027-03-05T23:30"
+  return_dates: ["2027-03-08", "2027-03-10"]
+  leave_after: "2027-03-08T21:00"
+  # (2 + 3 dates) x 4 searches = 20 requests a scan over 2 runners, plus up
+  # to 3 roundtrip checks. Every 6 hours, and before the daily report.
   scan_every_hours: 6
-  report_hour: 6            # daily, report.timezone (6am Pacific / 9am Eastern)
-  combos: 3
-  shards: 4
-  roundtrip_checks: 4
-  # No layovers preferred. A layover only counts if it's a real daytime stop
-  # in a big city: 8h+, at one of these airports, between 6am and midnight on
-  # one day. Even then it has to save $25 to rank above a nonstop.
-  nonstop_bonus_usd: 25
-  layover_min_hours: 8
+  report_hour: 6             # daily, report.timezone (6am Pacific / 9am Eastern)
+  per_section: 3
+  shards: 2
+  roundtrip_checks: 3
+  drop_alert_usd: 25
+  airhint: true
+  # A layover worth having: 7-15 hours, all of it between 6am and midnight.
+  layover_min_hours: 7
+  layover_max_hours: 15
   layover_day_hours: [6, 24]
-  layover_airports: [ATL, AUS, BNA, BOS, BWI, CLT, DAL, DCA, DEN, DFW, DTW, FLL,
-                     HOU, IAD, IAH, LAS, MCO, MDW, MIA, MSP, MSY, OAK, ORD, PDX,
-                     PHL, PHX, SAN, SEA, SFO, SJC, SLC, STL]
+  abroad_airports: [SAL, PTY, MEX, CUN, BOG, MDE, SJO, SDQ, PUJ, SAP, YUL, YYZ]

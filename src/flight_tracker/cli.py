@@ -1183,31 +1183,33 @@ def cmd_grid(args: argparse.Namespace) -> int:
 
 
 # ---------------------------------------------------------------------------
-# holiday mode (holiday.py): one-way legs on fixed dates, daily report
+# trip mode (trip.py): one trip as two one-way legs, daily report
 # ---------------------------------------------------------------------------
 
 
-def cmd_holiday_mode(args: argparse.Namespace) -> int:
-    """Print `holiday` or `regular`: which sweep this run should do."""
-    from . import holiday
+def cmd_trip_mode(args: argparse.Namespace) -> int:
+    """Print which sweeps this run should do: regular, trip, both or neither."""
+    from . import trip
 
-    mode = "holiday" if holiday.active(load_config(args.config)) else "regular"
-    print("mode: %s" % mode)
+    cfg = load_config(args.config)
+    regular = not trip.regular_paused(cfg)
+    watching = trip.active(cfg)
+    print("mode: regular=%s trip=%s" % (regular, watching))
     if args.github_output:
         with open(args.github_output, "a", encoding="utf-8") as fh:
-            fh.write("mode=%s\n" % mode)
+            fh.write("regular=%s\ntrip=%s\n" % (str(regular).lower(), str(watching).lower()))
     return 0
 
 
-def cmd_holiday_plan(args: argparse.Namespace) -> int:
-    from . import holiday
+def cmd_trip_plan(args: argparse.Namespace) -> int:
+    from . import trip
 
     cfg = load_config(args.config)
-    doc = holiday.load(args.holiday_state)
-    plan = holiday.make_plan(cfg, doc, force=args.force)
+    doc = trip.load(args.trip_state)
+    plan = trip.make_plan(cfg, doc, force=args.force)
     total = sum(len(s) for s in plan["shards"])
     print(
-        "holiday plan: %s, report %s, %d searches across %d shard(s)"
+        "trip plan: %s, report %s, %d searches across %d shard(s)"
         % ("scan" if plan["scan"] else "nothing due",
            "due" if plan["report_due"] else "not due", total, len(plan["shards"]))
     )
@@ -1220,16 +1222,17 @@ def cmd_holiday_plan(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_holiday_sweep(args: argparse.Namespace) -> int:
-    from . import holiday
+def cmd_trip_sweep(args: argparse.Namespace) -> int:
+    from . import trip
 
     cfg = load_config(args.config)
     with open(args.plan, "r", encoding="utf-8") as fh:
         plan = json.load(fh)
-    result = holiday.run_shard(cfg, plan, args.shard)
+    result = trip.run_shard(cfg, plan, args.shard)
     print(
-        "holiday shard %d: %d searches -> %d acceptable flights, %d errors"
-        % (args.shard, len(result["searched"]), len(result["legs"]), len(result["errors"]))
+        "trip shard %d: %d searches ok, %d failed, %d usable flights, %d errors"
+        % (args.shard, len(result["results"]), len(result["failed"]),
+           sum(len(v) for v in result["results"].values()), len(result["errors"]))
     )
     for error in result["errors"][:5]:
         print("  ! %s" % error[:200])
@@ -1238,11 +1241,37 @@ def cmd_holiday_sweep(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_holiday_apply(args: argparse.Namespace) -> int:
-    from . import holiday
+def _trip_hints(doc: Dict[str, object], cfg: Config, now: dt.datetime) -> None:
+    """Ask AirHint about every leg the report will show; cache for 12 hours."""
+    from . import airhint, trip
+
+    hints = dict(doc.get("hints") or {})
+    wanted = {}
+    for leg in trip.shown_legs(trip.sections(doc, cfg)):
+        wanted[trip.hint_key(leg)] = leg
+    for key, leg in wanted.items():
+        cached = hints.get(key)
+        age = _hours_since(cached.get("at"), now) if cached else None
+        if cached and age is not None and age < 12:
+            continue
+        code = trip.airline_code(leg)
+        if not code:
+            continue
+        segs = leg["segments"]
+        answer = airhint.predict(code, segs[0]["from"], segs[-1]["to"], leg["date"],
+                                 leg["price"], cfg.search.currency)
+        print("  airhint %s: %s" % (key, answer.get("suggestion") if answer else "no answer"))
+        if answer:
+            hints[key] = dict(answer, at=now.isoformat())
+        time.sleep(0.6)
+    doc["hints"] = {k: v for k, v in hints.items() if k in wanted}
+
+
+def cmd_trip_apply(args: argparse.Namespace) -> int:
+    from . import trip
 
     cfg = load_config(args.config)
-    doc = holiday.load(args.holiday_state)
+    doc = trip.load(args.trip_state)
     now = utcnow()
     plan: Dict[str, object] = {}
     if args.plan and os.path.exists(args.plan):
@@ -1256,87 +1285,121 @@ def cmd_holiday_apply(args: argparse.Namespace) -> int:
         except (OSError, ValueError) as exc:
             print("skipping unreadable result %s: %s" % (path, exc))
 
-    searched, found = holiday.merge_legs(doc, results, now)
+    before = dict(doc.get("searches") or {})
+    searched, found = trip.merge(doc, results, now)
+    if searched and not found:
+        # Every search "succeeded" with nothing: that's a block, not an empty
+        # sky. Keep the last prices and try again next run.
+        doc["searches"] = before
+        searched = 0
     errors = [e for r in results for e in (r.get("errors") or [])]
-    print("holiday apply: %d searches folded in, %d with a fare, %d errors"
-          % (searched, found, len(errors)))
+    failed = sum(len(r.get("failed") or []) for r in results)
+    print("trip apply: %d searches folded in, %d with a fare, %d failed, %d errors"
+          % (searched, found, failed, len(errors)))
     if searched:
         # Only a scan that actually searched resets the clock; if every shard
         # died, the next run tries again instead of waiting out the interval.
         doc["last_scan"] = now.isoformat()
-    if plan.get("scan"):
-        log = list(doc.get("scan_log") or [])
-        log.append({"at": now.isoformat(), "searched": searched, "found": found,
-                     "errors": len(errors)})
-        doc["scan_log"] = log[-60:]
 
-    if searched and not args.no_roundtrips and cfg.holiday.roundtrip_checks > 0:
+    if searched and not args.no_roundtrips and cfg.trip.roundtrip_checks > 0:
         try:
-            source = holiday.OneWaySource(cfg)
+            source = trip.TripSource(cfg)
             roundtrips: Dict[str, object] = {}
-            for i, (out_date, ret_date, airport, ny) in enumerate(holiday.roundtrip_targets(doc, cfg)):
+            for i, (out_date, ret_date, home) in enumerate(trip.roundtrip_targets(doc, cfg)):
                 if i:
                     time.sleep(random.uniform(1, 3))
-                rt = source.roundtrip(out_date, ret_date, airport, ny)
-                print("  roundtrip %s %s %s-%s: %s" % (
-                    out_date, ret_date, ny, airport, _money(rt["price"]) if rt else "none"))
+                rt = source.roundtrip(out_date, ret_date, home)
+                print("  roundtrip %s %s from %s: %s" % (
+                    out_date, ret_date, home, _money(rt["price"]) if rt else "none"))
                 if rt:
                     roundtrips["%s|%s" % (out_date, ret_date)] = rt
             doc["roundtrips"] = roundtrips
         except ScrapeError as exc:
             print("  roundtrip checks skipped: %s" % exc)
 
-    title, body, footer, top = holiday.report(doc, cfg, now)
-    failed = sum(len(r.get("failed") or []) for r in results)
-    if failed:
-        print("  %d searches failed; kept their last known prices" % failed)
-    if plan.get("scan") and not found:
-        body = (
-            "Heads up: this search came back empty (%d errors), so these are the "
-            "last prices we had.\n\n" % len(errors)
-        ) + body
-    for combo in top:
-        print("  %s" % holiday._short(combo))
+    if cfg.trip.airhint and not args.no_airhint:
+        _trip_hints(doc, cfg, now)
 
-    due = holiday.report_due(doc, cfg, now)
-    if (due or args.send) and not args.no_notify:
-        message = Message(title=title, body=body, footer=footer, color=GREEN)
-        sent = Notifier.from_env(force_console=args.console).send(message)
-        for name, ok, error in sent:
-            print("  report via %-8s %s" % (name, "ok" if ok else "FAILED: %s" % error))
+    parts = trip.sections(doc, cfg)
+    for key, combos in parts.items():
+        for combo in combos:
+            print("  %-9s %s" % (key, trip._short(combo)))
+
+    notifier = None if args.no_notify else Notifier.from_env(force_console=args.console)
+
+    def delivered(sent) -> bool:
         # The report is for Discord: if Discord is configured, only Discord
         # succeeding counts. A console-only print never does.
         names = {name for name, _, _ in sent}
         wanted = {"discord"} if "discord" in names else names - {"console"}
-        if any(ok for name, ok, _ in sent if name in wanted):
+        return any(ok for name, ok, _ in sent if name in wanted)
+
+    alerts = trip.drop_alerts(doc, cfg)
+    due = trip.report_due(doc, cfg, now)
+    sending_report = (due or args.send) and notifier is not None
+    if notifier is not None and alerts and not sending_report:
+        labels = {"nonstop": "nonstop trip", "adventure": "long-layover trip", "any": "cheapest trip"}
+        lines = [
+            "The %s fell to **%s** (was %s when last reported).\n%s" % (
+                labels[key], _money(combo["total"]), _money(low),
+                trip._block(0, combo, doc.get("hints") or {}))
+            for key, combo, low in alerts
+        ]
+        sent = notifier.send(Message(title="%s flights: price drop" % cfg.trip.name,
+                                     body=trip._fit("\n\n".join(lines)), color=GREEN))
+        if delivered(sent):
+            told = dict(doc.get("told") or {})
+            told.update({key: combo["total"] for key, combo, _ in alerts})
+            doc["told"] = told
+
+    if sending_report:
+        messages = trip.report(doc, cfg, now)
+        if plan.get("scan") and not found:
+            title, body, footer = messages[0]
+            messages[0] = (title, "Heads up: this search came back empty, so these are "
+                           "the last prices we had.\n\n" + body, footer)
+        ok = True
+        for title, body, footer in messages:
+            sent = notifier.send(Message(title=title, body=body, footer=footer, color=GREEN))
+            for name, good, error in sent:
+                print("  report via %-8s %s" % (name, "ok" if good else "FAILED: %s" % error))
+            ok = ok and delivered(sent)
+        if ok:
             doc["last_report"] = now.isoformat()
+            doc["told"] = trip.bests(doc, cfg)
             reports = list(doc.get("reports") or [])
             reports.append({
                 "at": now.isoformat(),
-                "best": top[0]["total"] if top else None,
-                "top": [holiday._short(c) for c in top],
+                "best": trip.bests(doc, cfg),
+                "top": {k: [trip._short(c) for c in v] for k, v in parts.items()},
             })
-            doc["reports"] = reports[-30:]
+            doc["reports"] = reports[-90:]
     elif due:
         print("  report due but notifications are off")
 
-    holiday.save(doc, args.holiday_state)
+    if searched:
+        history = list(doc.get("history") or [])
+        history.append(dict(trip.bests(doc, cfg), at=now.isoformat()))
+        doc["history"] = history[-400:]
+
+    trip.save(doc, args.trip_state)
     return 0
 
 
-def cmd_holiday_report(args: argparse.Namespace) -> int:
-    """Preview (or --send) the holiday report from saved state, no searching."""
-    from . import holiday
+def cmd_trip_report(args: argparse.Namespace) -> int:
+    """Preview (or --send) the trip report from saved state, no searching."""
+    from . import trip
 
     cfg = load_config(args.config)
-    doc = holiday.load(args.holiday_state)
-    title, body, footer, _top = holiday.report(doc, cfg, utcnow())
-    message = Message(title=title, body=body, footer=footer, color=GREEN)
-    if args.send:
-        sent = Notifier.from_env().send(message)
-        return 0 if any(ok for _, ok, _ in sent) else 1
-    print(message.as_text())
-    return 0
+    doc = trip.load(args.trip_state)
+    ok = True
+    for title, body, footer in trip.report(doc, cfg, utcnow()):
+        message = Message(title=title, body=body, footer=footer, color=GREEN)
+        if args.send:
+            ok = ok and any(good for _, good, _ in Notifier.from_env().send(message))
+        else:
+            print(message.as_text() + "\n")
+    return 0 if ok else 1
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1433,41 +1496,42 @@ def build_parser() -> argparse.ArgumentParser:
     verify.add_argument("--to", help="destination airport (default: first in config)")
     verify.set_defaults(func=cmd_verify)
 
-    def holiday_state(p: argparse.ArgumentParser) -> None:
-        p.add_argument("--holiday-state", dest="holiday_state",
-                       default=os.path.join("data", "holiday.json"))
+    def trip_state(p: argparse.ArgumentParser) -> None:
+        p.add_argument("--trip-state", dest="trip_state",
+                       default=os.path.join("data", "trip.json"))
 
-    hmode = sub.add_parser("holiday-mode", help="print holiday or regular")
-    hmode.add_argument("--github-output", dest="github_output")
-    hmode.set_defaults(func=cmd_holiday_mode)
+    tmode = sub.add_parser("trip-mode", help="print which sweeps should run")
+    tmode.add_argument("--github-output", dest="github_output")
+    tmode.set_defaults(func=cmd_trip_mode)
 
-    hplan = sub.add_parser("holiday-plan", help="holiday stage 1: is a scan due?")
-    holiday_state(hplan)
-    hplan.add_argument("--out", default="holiday-plan.json")
-    hplan.add_argument("--force", action="store_true", help="scan even if not due")
-    hplan.add_argument("--github-output", dest="github_output")
-    hplan.set_defaults(func=cmd_holiday_plan)
+    tplan = sub.add_parser("trip-plan", help="trip stage 1: is a scan due?")
+    trip_state(tplan)
+    tplan.add_argument("--out", default="trip-plan.json")
+    tplan.add_argument("--force", action="store_true", help="scan even if not due")
+    tplan.add_argument("--github-output", dest="github_output")
+    tplan.set_defaults(func=cmd_trip_plan)
 
-    hsweep = sub.add_parser("holiday-sweep", help="holiday stage 2: one shard")
-    hsweep.add_argument("--plan", default="holiday-plan.json")
-    hsweep.add_argument("--shard", type=int, required=True)
-    hsweep.add_argument("--out", required=True)
-    hsweep.set_defaults(func=cmd_holiday_sweep)
+    tsweep = sub.add_parser("trip-sweep", help="trip stage 2: one shard")
+    tsweep.add_argument("--plan", default="trip-plan.json")
+    tsweep.add_argument("--shard", type=int, required=True)
+    tsweep.add_argument("--out", required=True)
+    tsweep.set_defaults(func=cmd_trip_sweep)
 
-    happly = sub.add_parser("holiday-apply", help="holiday stage 3: rank, report")
-    holiday_state(happly)
-    happly.add_argument("--plan", default="holiday-plan.json")
-    happly.add_argument("results", nargs="*")
-    happly.add_argument("--no-notify", action="store_true")
-    happly.add_argument("--no-roundtrips", action="store_true")
-    happly.add_argument("--send", action="store_true", help="send the report even if not due")
-    happly.add_argument("--console", action="store_true")
-    happly.set_defaults(func=cmd_holiday_apply)
+    tapply = sub.add_parser("trip-apply", help="trip stage 3: rank, report")
+    trip_state(tapply)
+    tapply.add_argument("--plan", default="trip-plan.json")
+    tapply.add_argument("results", nargs="*")
+    tapply.add_argument("--no-notify", action="store_true")
+    tapply.add_argument("--no-roundtrips", action="store_true")
+    tapply.add_argument("--no-airhint", action="store_true")
+    tapply.add_argument("--send", action="store_true", help="send the report even if not due")
+    tapply.add_argument("--console", action="store_true")
+    tapply.set_defaults(func=cmd_trip_apply)
 
-    hreport = sub.add_parser("holiday-report", help="preview the holiday report")
-    holiday_state(hreport)
-    hreport.add_argument("--send", action="store_true")
-    hreport.set_defaults(func=cmd_holiday_report)
+    treport = sub.add_parser("trip-report", help="preview the trip report")
+    trip_state(treport)
+    treport.add_argument("--send", action="store_true")
+    treport.set_defaults(func=cmd_trip_report)
 
     return parser
 

@@ -58,11 +58,11 @@ def update(
 
     state.consecutive_failures = int(state.consecutive_failures or 0) + 1
     last_data = state.last_data
-    # Holiday mode pauses the regular sweep on purpose; that week without
+    # A configured pause stops the regular sweep on purpose; that time without
     # prices isn't an outage. Count staleness from when the pause ended.
     from .state import parse_ts
 
-    seen, until = parse_ts(last_data), parse_ts(cfg.holiday.until)
+    seen, until = parse_ts(last_data), parse_ts(cfg.pause.regular_until)
     if seen is not None and until is not None and seen < until <= now:
         last_data = until.isoformat()
     stale = hours_since(last_data, now)

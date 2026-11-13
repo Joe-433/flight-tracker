@@ -29,8 +29,8 @@ on:
       threshold:
         description: "Override the nonstop alert threshold (USD) for this run"
         required: false
-      holiday_force:
-        description: "Holiday mode: scan and send the report now, even if not due"
+      trip_force:
+        description: "Trip mode: scan and send the report now, even if not due"
         type: boolean
         default: false
       backend:
@@ -54,18 +54,19 @@ env:
   FT_DRILLS_PER_RUN: ${{ inputs.drills }}
   FT_THRESHOLD_USD: ${{ inputs.threshold }}
   FT_BACKEND: ${{ inputs.backend }}
-  FT_GRID: ${{ inputs.grid == false && '0' || '' }}
+  FT_GRID: ${{ github.event_name == 'workflow_dispatch' && inputs.grid == false && '0' || '' }}
 
 jobs:
-  # Holiday mode (config.yaml `holiday:`) replaces the regular sweep until its
-  # `until` passes, then the regular sweep resumes by itself. If the mode
-  # script errors, the answer is "regular", so a config typo can't silently
-  # stop the tracker.
+  # Which sweeps run (config.yaml): the regular one unless `pause` says
+  # otherwise, and the trip search while `trip.until` is in the future. If the
+  # mode script errors, the answer is "regular only", so a config typo can't
+  # silently stop the tracker.
   mode:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
-      mode: ${{ steps.mode.outputs.mode }}
+      regular: ${{ steps.mode.outputs.regular }}
+      trip: ${{ steps.mode.outputs.trip }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -74,22 +75,23 @@ jobs:
       - id: mode
         run: |
           pip install --quiet PyYAML
-          python -m flight_tracker holiday-mode --github-output "$GITHUB_OUTPUT" \
-            || echo "mode=regular" >> "$GITHUB_OUTPUT"
+          python -m flight_tracker trip-mode --github-output "$GITHUB_OUTPUT" \
+            || printf 'regular=true\ntrip=false\n' >> "$GITHUB_OUTPUT"
 
-  holiday:
+  trip:
     needs: mode
-    if: needs.mode.outputs.mode == 'holiday'
-    uses: ./.github/workflows/holiday.yml
+    if: needs.mode.outputs.trip == 'true'
+    uses: ./.github/workflows/trip.yml
     with:
-      # Unset on scheduled runs, which is "send".
-      notify: ${{ inputs.notify != false }}
-      force: ${{ inputs.holiday_force == true }}
+      # Inputs are null on scheduled runs, and null == false in Actions
+      # expressions, so ask the event, not the input.
+      notify: ${{ github.event_name != 'workflow_dispatch' || inputs.notify }}
+      force: ${{ inputs.trip_force == true }}
     secrets: inherit
 
   plan:
     needs: mode
-    if: needs.mode.outputs.mode != 'holiday'
+    if: needs.mode.outputs.regular != 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -145,11 +147,11 @@ jobs:
   apply:
     needs: [mode, plan, drill]
     # Always: a run whose plan or drills crashed must still reach the dead
-    # man's switch, or a total outage would be silent. Not in holiday mode,
+    # man's switch, or a total outage would be silent. Not while paused,
     # though: the regular sweep is paused, and its silence isn't an outage.
     # And only if the mode check itself ran: if it broke, plan was skipped
     # too, and an empty "sweep" would trip the dead man for nothing.
-    if: always() && needs.mode.result == 'success' && needs.mode.outputs.mode != 'holiday'
+    if: always() && needs.mode.result == 'success' && needs.mode.outputs.regular != 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -179,7 +181,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-          NOTIFY: ${{ inputs.notify == false && '--no-notify' || '' }}
+          NOTIFY: ${{ github.event_name == 'workflow_dispatch' && inputs.notify == false && '--no-notify' || '' }}
         run: |
           shopt -s nullglob
           python -m flight_tracker apply --plan plan.json --console $NOTIFY results/*.json

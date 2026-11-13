@@ -532,29 +532,33 @@ hearing about twice. Hard cap of `alerts.max_per_run` (3) per sweep.
 
 ---
 
-## Holiday mode (temporary)
+## Trip mode
 
-`holiday:` in config.yaml swaps the regular sweep for a one-off trip search
-until `holiday.until`, then the regular sweep resumes by itself. Set up
-2026-11-10 for Christmas: out Dec 18–24, back
-Jan 1–7 (Jan 2–5 preferred), any LA airport.
+`trip:` in config.yaml watches one specific trip alongside the regular sweep,
+until `trip.until`. Set up 2026-11-12 for Guatemala, March 2027: out Thu/Fri
+Mar 4-5 (landing by Friday night), back Mon evening - Wed Mar 8-10.
+`pause.regular_until` separately pauses the regular sweep.
 
-- Each leg is searched **one way**, so the outbound and return can be on
-  different airlines. The cheapest nonstop roundtrips for the best date pairs
-  are checked too, in case one ticket is cheaper.
-- **Nonstop preferred.** A layover only counts if it's 8h+, in a listed big
-  city, and between 6am and midnight on one day, and it has to save $25 to rank
-  above a nonstop. Anything else is dropped.
-- Rides on the same 30-minute trigger (`watch fares` calls `holiday.yml`).
-  It scans every 6 hours (70 searches across 4 runners) and posts the 3
-  cheapest trips to Discord once a day at 6am Pacific. State is in
-  `data/holiday.json`; `state.json` is left alone.
+- Each direction is searched **one way** on each date, four ways: nonstop, any
+  one-stop, one-stop with a 7-15h layover, and that same long layover through
+  airports outside the US. The last two use Google's layover-length filter, so
+  day-long stops that a plain search hides are found on purpose.
+- A layover counts as a **day out** only if it's 7-15 hours, between 6am and
+  midnight on one day, with no airport change.
+- The daily Discord report (6am Pacific) lists round-trip totals as
+  out + back = total: the 3 cheapest nonstop trips, the 3 cheapest trips with
+  a day out (one per city, with a slot kept for another country), and the
+  cheapest ordinary trip for comparison. Each leg carries AirHint's
+  buy-or-wait call (`airhint.py`).
+- Between reports, a new low $25+ under the previous one pings right away.
+- Scans every 6 hours: 20 searches over 2 runners. State: `data/trip.json`.
 
 ```bash
-python -m flight_tracker holiday-report     # preview from saved prices
+python -m flight_tracker trip-report            # preview from saved prices
+gh workflow run "watch fares" -f trip_force=true   # scan + report now
 ```
 
-To stop early, set `until` to a past time or delete the section.
+To stop (e.g. once booked), set `trip.until` to a past time.
 
 ---
 

@@ -1,14 +1,14 @@
-name: holiday fares
+name: trip fares
 
-# Holiday mode (src/flight_tracker/holiday.py), called by `watch fares` in
-# place of the regular sweep while config.yaml's `holiday.until` is in the
-# future. It rides on the same external 30-minute trigger; the plan stage
-# decides whether a scan is actually due (every 6h, and before the daily
-# report), so most calls end after one short job.
+# Trip mode (src/flight_tracker/trip.py), called by `watch fares` while
+# config.yaml's `trip.until` is in the future. It rides on the same external
+# 30-minute trigger; the plan stage decides whether a scan is actually due
+# (every 6h, and before the daily report), so most calls end after one short
+# job.
 #
-#   plan    scan due? split 80 one-way searches into shards
+#   plan    scan due? split the one-way searches into shards
 #   drill   one shard per runner, one IP each
-#   apply   merge, roundtrip checks, rank, daily Discord report, commit
+#   apply   merge, roundtrip checks, AirHint, rank, Discord report, commit
 
 on:
   workflow_call:
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # The branch tip, not the triggering commit: a run that queued
-          # behind another must see the holiday.json that run just pushed.
+          # behind another must see the trip.json that run just pushed.
           ref: ${{ github.ref_name }}
       - uses: actions/setup-python@v5
         with:
@@ -44,11 +44,11 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - id: plan
-        run: python -m flight_tracker holiday-plan --out holiday-plan.json --github-output "$GITHUB_OUTPUT" ${{ inputs.force && '--force' || '' }}
+        run: python -m flight_tracker trip-plan --out trip-plan.json --github-output "$GITHUB_OUTPUT" ${{ inputs.force && '--force' || '' }}
       - uses: actions/upload-artifact@v4
         with:
-          name: holiday-plan
-          path: holiday-plan.json
+          name: trip-plan
+          path: trip-plan.json
           retention-days: 3
 
   drill:
@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # The branch tip, not the triggering commit: a run that queued
-          # behind another must see the holiday.json that run just pushed.
+          # behind another must see the trip.json that run just pushed.
           ref: ${{ github.ref_name }}
       - uses: actions/setup-python@v5
         with:
@@ -73,16 +73,16 @@ jobs:
       - run: pip install -r requirements.txt
       - uses: actions/download-artifact@v4
         with:
-          name: holiday-plan
+          name: trip-plan
       - name: One-way searches, shard ${{ matrix.shard }}
         run: >-
-          python -m flight_tracker holiday-sweep --plan holiday-plan.json
-          --shard ${{ matrix.shard }} --out holiday-result-${{ matrix.shard }}.json
+          python -m flight_tracker trip-sweep --plan trip-plan.json
+          --shard ${{ matrix.shard }} --out trip-result-${{ matrix.shard }}.json
       - if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: holiday-result-${{ matrix.shard }}
-          path: holiday-result-${{ matrix.shard }}.json
+          name: trip-result-${{ matrix.shard }}
+          path: trip-result-${{ matrix.shard }}.json
           if-no-files-found: ignore
           retention-days: 3
 
@@ -96,7 +96,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           # The branch tip, not the triggering commit: a run that queued
-          # behind another must see the holiday.json that run just pushed.
+          # behind another must see the trip.json that run just pushed.
           ref: ${{ github.ref_name }}
       - uses: actions/setup-python@v5
         with:
@@ -106,12 +106,12 @@ jobs:
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with:
-          name: holiday-plan
+          name: trip-plan
       - uses: actions/download-artifact@v4
         continue-on-error: true
         with:
-          pattern: holiday-result-*
-          path: holiday-results
+          pattern: trip-result-*
+          path: trip-results
           merge-multiple: true
       - name: Rank, roundtrip checks, daily report
         env:
@@ -124,33 +124,33 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
           shopt -s nullglob
-          python -m flight_tracker holiday-apply --plan holiday-plan.json \
-            ${{ inputs.notify == false && '--no-notify' || '' }} ${{ inputs.force && '--send' || '' }} holiday-results/*.json
+          python -m flight_tracker trip-apply --plan trip-plan.json \
+            ${{ inputs.notify == false && '--no-notify' || '' }} ${{ inputs.force && '--send' || '' }} trip-results/*.json
 
-      - name: Commit holiday prices
+      - name: Commit trip prices
         run: |
           git config user.name "flight-tracker"
           git config user.email "actions@users.noreply.github.com"
-          if git diff --quiet -- data/holiday.json && [ -z "$(git ls-files --others -- data/holiday.json)" ]; then
+          if git diff --quiet -- data/trip.json && [ -z "$(git ls-files --others -- data/trip.json)" ]; then
             echo "no changes"
             exit 0
           fi
-          # Only this job writes data/holiday.json, and watch runs never
+          # Only this job writes data/trip.json, and watch runs never
           # overlap (concurrency group), so ours always wins: reset to the
           # remote and lay our file on top.
-          cp data/holiday.json /tmp/holiday.json
+          cp data/trip.json /tmp/trip.json
           for attempt in 1 2 3 4 5; do
             git fetch --quiet origin "$GITHUB_REF_NAME"
             git reset --quiet --hard "origin/$GITHUB_REF_NAME"
-            cp /tmp/holiday.json data/holiday.json
-            git add data/holiday.json
+            cp /tmp/trip.json data/trip.json
+            git add data/trip.json
             git diff --cached --quiet && { echo "remote already has this"; exit 0; }
-            git commit --quiet -m "chore: holiday prices $(date -u +%Y-%m-%dT%H:%MZ)"
+            git commit --quiet -m "chore: trip prices $(date -u +%Y-%m-%dT%H:%MZ)"
             if git push --quiet origin "HEAD:$GITHUB_REF_NAME"; then
               echo "pushed on attempt $attempt"
               exit 0
             fi
             sleep $((attempt * 5))
           done
-          echo "could not push holiday prices" >&2
+          echo "could not push trip prices" >&2
           exit 1
