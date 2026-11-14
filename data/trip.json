@@ -65,17 +65,6 @@
     363
    ],
    "suggestion": "Wait"
-  },
-  "UA|GUA|EWR|2027-03-08|377": {
-   "at": "2026-11-14T03:01:52.071051+00:00",
-   "confidence": 33,
-   "max_saving": "39%",
-   "price_range": [
-    230,
-    633,
-    373
-   ],
-   "suggestion": "Buy"
   }
  },
  "history": [
@@ -114,10 +103,16 @@
    "any": 609.0,
    "at": "2026-11-14T06:25:19.684219+00:00",
    "nonstop": 717.0
+  },
+  {
+   "adventure": 609.0,
+   "any": 514.0,
+   "at": "2026-11-14T06:54:38.855117+00:00",
+   "nonstop": 717.0
   }
  ],
- "last_report": "2026-11-14T06:25:19.684219+00:00",
- "last_scan": "2026-11-14T06:25:19.684219+00:00",
+ "last_report": "2026-11-14T06:54:38.855117+00:00",
+ "last_scan": "2026-11-14T06:54:38.855117+00:00",
  "reports": [
   {
    "at": "2026-11-13T05:29:50.568903+00:00",
@@ -187,17 +182,45 @@
      "$362 + $377 = $739, Thu Mar 4 \u2192 Mon Mar 8, 4 nights"
     ]
    }
+  },
+  {
+   "at": "2026-11-14T06:54:38.855117+00:00",
+   "best": {
+    "adventure": 609.0,
+    "any": 514.0,
+    "nonstop": 717.0
+   },
+   "top": {
+    "adventure": [
+     "$280 + $329 = $609, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$280 + $329 = $609, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$293 + $329 = $622, Thu Mar 4 \u2192 Wed Mar 10, 6 nights"
+    ],
+    "any": [
+     "$514 round-trip ticket on American, Thu Mar 4 \u2192 Tue Mar 9, 5 nights"
+    ],
+    "nonstop": [
+     "$362 + $355 = $717, Thu Mar 4 \u2192 Wed Mar 10, 6 nights",
+     "$718 round-trip ticket on United, Thu Mar 4 \u2192 Tue Mar 9, 5 nights",
+     "$718 round-trip ticket on United, Thu Mar 4 \u2192 Mon Mar 8, 4 nights"
+    ]
+   }
   }
  ],
  "roundtrips": {
-  "2027-03-04|2027-03-08": {
+  "2027-03-04|2027-03-08|0": {
    "airlines": [
     "United"
    ],
+   "back_after": "2027-03-08T21:00",
    "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
    "out_date": "2027-03-04",
    "price": 718.0,
    "ret_date": "2027-03-08",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:48",
@@ -206,16 +229,59 @@
      "to": "GUA"
     }
    ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMDgoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAGoLEgkvbS8wMl8yODZyBRIDR1VBGiQSCjIwMjctMDMtMDgoAEAVagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
   },
-  "2027-03-04|2027-03-09": {
+  "2027-03-04|2027-03-08|1": {
    "airlines": [
     "United"
    ],
+   "back_after": "2027-03-08T21:00",
+   "flight_no": "UA 2127 / 1751",
+   "kind": "regular",
+   "layover": {
+    "abroad": false,
+    "airport": "IAH",
+    "city": "Houston",
+    "country": "US",
+    "end": "2027-03-05T09:31",
+    "minutes": 652,
+    "overnight": true,
+    "start": "2027-03-04T22:39"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-04",
+   "price": 675.0,
+   "ret_date": "2027-03-08",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-04T22:39",
+     "dep": "2027-03-04T19:28",
+     "from": "EWR",
+     "to": "IAH"
+    },
+    {
+     "arr": "2027-03-05T12:26",
+     "dep": "2027-03-05T09:31",
+     "from": "IAH",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBGiQSCjIwMjctMDMtMDgoAUAVagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
+  },
+  "2027-03-04|2027-03-09|0": {
+   "airlines": [
+    "United"
+   ],
+   "back_after": null,
    "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
    "out_date": "2027-03-04",
    "price": 718.0,
    "ret_date": "2027-03-09",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:48",
@@ -224,16 +290,59 @@
      "to": "GUA"
     }
    ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMDkoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAGoLEgkvbS8wMl8yODZyBRIDR1VBGiISCjIwMjctMDMtMDkoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
   },
-  "2027-03-04|2027-03-10": {
+  "2027-03-04|2027-03-09|1": {
+   "airlines": [
+    "American"
+   ],
+   "back_after": null,
+   "flight_no": "AA 2728 / 1013",
+   "kind": "regular",
+   "layover": {
+    "abroad": false,
+    "airport": "DFW",
+    "city": "Dallas",
+    "country": "US",
+    "end": "2027-03-04T10:40",
+    "minutes": 84,
+    "overnight": false,
+    "start": "2027-03-04T09:16"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-04",
+   "price": 514.0,
+   "ret_date": "2027-03-09",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-04T09:16",
+     "dep": "2027-03-04T06:00",
+     "from": "EWR",
+     "to": "DFW"
+    },
+    {
+     "arr": "2027-03-04T14:01",
+     "dep": "2027-03-04T10:40",
+     "from": "DFW",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBGiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-04|2027-03-10|0": {
    "airlines": [
     "United"
    ],
+   "back_after": null,
    "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
    "out_date": "2027-03-04",
    "price": 718.0,
    "ret_date": "2027-03-10",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:48",
@@ -242,7 +351,228 @@
      "to": "GUA"
     }
    ],
-   "url": "https://www.google.com/travel/flights/search?tfs=GhwSCjIwMjctMDMtMDQoAGoFEgNFV1JyBRIDR1VBGhwSCjIwMjctMDMtMTAoAGoFEgNHVUFyBRIDRVdSQgEBSAGYAQE=&hl=&curr=USD"
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAGoLEgkvbS8wMl8yODZyBRIDR1VBGiISCjIwMjctMDMtMTAoAGoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-04|2027-03-10|1": {
+   "airlines": [
+    "American"
+   ],
+   "back_after": null,
+   "flight_no": "AA 2280 / 1013",
+   "kind": "regular",
+   "layover": {
+    "abroad": false,
+    "airport": "DFW",
+    "city": "Dallas",
+    "country": "US",
+    "end": "2027-03-04T10:40",
+    "minutes": 82,
+    "overnight": false,
+    "start": "2027-03-04T09:18"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-04",
+   "price": 561.0,
+   "ret_date": "2027-03-10",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-04T09:18",
+     "dep": "2027-03-04T06:00",
+     "from": "LGA",
+     "to": "DFW"
+    },
+    {
+     "arr": "2027-03-04T14:01",
+     "dep": "2027-03-04T10:40",
+     "from": "DFW",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDQoAWoLEgkvbS8wMl8yODZyBRIDR1VBGiISCjIwMjctMDMtMTAoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQE=&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-08|0": {
+   "airlines": [
+    "United"
+   ],
+   "back_after": "2027-03-08T21:00",
+   "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
+   "out_date": "2027-03-05",
+   "price": 800.0,
+   "ret_date": "2027-03-08",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T22:48",
+     "dep": "2027-03-05T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAFgXagsSCS9tLzAyXzI4NnIFEgNHVUEaJBIKMjAyNy0wMy0wOCgAQBVqBRIDR1VBcgsSCS9tLzAyXzI4NkIBAUgBmAEB&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-08|1": {
+   "airlines": [
+    "United"
+   ],
+   "back_after": "2027-03-08T21:00",
+   "flight_no": "UA 492 / 1902",
+   "kind": "adventure",
+   "layover": {
+    "abroad": false,
+    "airport": "IAH",
+    "city": "Houston",
+    "country": "US",
+    "end": "2027-03-05T16:43",
+    "minutes": 483,
+    "overnight": false,
+    "start": "2027-03-05T08:40"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-05",
+   "price": 750.0,
+   "ret_date": "2027-03-08",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T08:40",
+     "dep": "2027-03-05T06:00",
+     "from": "EWR",
+     "to": "IAH"
+    },
+    {
+     "arr": "2027-03-05T19:39",
+     "dep": "2027-03-05T16:43",
+     "from": "IAH",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAVgXagsSCS9tLzAyXzI4NnIFEgNHVUEaJBIKMjAyNy0wMy0wOCgBQBVqBRIDR1VBcgsSCS9tLzAyXzI4NkIBAUgBmAEB&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-09|0": {
+   "airlines": [
+    "United"
+   ],
+   "back_after": null,
+   "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
+   "out_date": "2027-03-05",
+   "price": 800.0,
+   "ret_date": "2027-03-09",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T22:48",
+     "dep": "2027-03-05T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAFgXagsSCS9tLzAyXzI4NnIFEgNHVUEaIhIKMjAyNy0wMy0wOSgAagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-09|1": {
+   "airlines": [
+    "JetBlue"
+   ],
+   "back_after": null,
+   "flight_no": "B6 1505 / 1483",
+   "kind": "regular",
+   "layover": {
+    "abroad": false,
+    "airport": "FLL",
+    "city": "Fort Lauderdale",
+    "country": "US",
+    "end": "2027-03-05T12:16",
+    "minutes": 195,
+    "overnight": false,
+    "start": "2027-03-05T09:01"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-05",
+   "price": 520.0,
+   "ret_date": "2027-03-09",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T09:01",
+     "dep": "2027-03-05T05:55",
+     "from": "EWR",
+     "to": "FLL"
+    },
+    {
+     "arr": "2027-03-05T14:15",
+     "dep": "2027-03-05T12:16",
+     "from": "FLL",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAVgXagsSCS9tLzAyXzI4NnIFEgNHVUEaIhIKMjAyNy0wMy0wOSgBagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-10|0": {
+   "airlines": [
+    "United"
+   ],
+   "back_after": null,
+   "flight_no": "UA 1551",
+   "kind": "nonstop",
+   "layover": null,
+   "max_stops": 0,
+   "out_date": "2027-03-05",
+   "price": 800.0,
+   "ret_date": "2027-03-10",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T22:48",
+     "dep": "2027-03-05T18:36",
+     "from": "EWR",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAFgXagsSCS9tLzAyXzI4NnIFEgNHVUEaIhIKMjAyNy0wMy0xMCgAagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
+  },
+  "2027-03-05|2027-03-10|1": {
+   "airlines": [
+    "American"
+   ],
+   "back_after": null,
+   "flight_no": "AA 442 / 1027",
+   "kind": "regular",
+   "layover": {
+    "abroad": false,
+    "airport": "MIA",
+    "city": "Miami",
+    "country": "US",
+    "end": "2027-03-05T18:50",
+    "minutes": 150,
+    "overnight": false,
+    "start": "2027-03-05T16:20"
+   },
+   "max_stops": 1,
+   "out_date": "2027-03-05",
+   "price": 561.0,
+   "ret_date": "2027-03-10",
+   "seen": "2026-11-14T06:54:38.855117+00:00",
+   "segments": [
+    {
+     "arr": "2027-03-05T16:20",
+     "dep": "2027-03-05T12:59",
+     "from": "LGA",
+     "to": "MIA"
+    },
+    {
+     "arr": "2027-03-05T20:52",
+     "dep": "2027-03-05T18:50",
+     "from": "MIA",
+     "to": "GUA"
+    }
+   ],
+   "url": "https://www.google.com/travel/flights/search?tfs=GiQSCjIwMjctMDMtMDUoAVgXagsSCS9tLzAyXzI4NnIFEgNHVUEaIhIKMjAyNy0wMy0xMCgBagUSA0dVQXILEgkvbS8wMl8yODZCAQFIAZgBAQ==&hl=&curr=USD"
   }
  },
  "searches": {
@@ -260,7 +590,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:30",
@@ -292,7 +622,7 @@
      "start": "2027-03-09T16:30"
     },
     "price": 407.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:30",
@@ -328,7 +658,7 @@
      "start": "2027-03-09T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T08:16",
@@ -364,7 +694,7 @@
      "start": "2027-03-09T13:35"
     },
     "price": 1042.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:35",
@@ -401,7 +731,7 @@
      "start": "2027-03-09T13:55"
     },
     "price": 1621.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:55",
@@ -439,7 +769,7 @@
      "start": "2027-03-09T05:03"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:03",
@@ -475,7 +805,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -511,7 +841,7 @@
      "start": "2027-03-09T16:30"
     },
     "price": 357.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:30",
@@ -547,7 +877,7 @@
      "start": "2027-03-09T21:05"
     },
     "price": 357.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T21:05",
@@ -585,7 +915,7 @@
      "start": "2027-03-09T05:03"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:03",
@@ -621,7 +951,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -657,7 +987,7 @@
      "start": "2027-03-09T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T20:05",
@@ -693,7 +1023,7 @@
      "start": "2027-03-09T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T06:10",
@@ -729,7 +1059,7 @@
      "start": "2027-03-09T10:03"
     },
     "price": 388.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-09T10:03",
@@ -766,7 +1096,7 @@
      "start": "2027-03-10T01:05"
     },
     "price": 1805.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T01:05",
@@ -795,7 +1125,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -827,7 +1157,7 @@
      "start": "2027-03-10T21:05"
     },
     "price": 367.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T21:05",
@@ -863,7 +1193,7 @@
      "start": "2027-03-10T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -899,7 +1229,7 @@
      "start": "2027-03-10T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T08:16",
@@ -935,7 +1265,7 @@
      "start": "2027-03-10T10:51"
     },
     "price": 613.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T10:51",
@@ -972,7 +1302,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1718.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -1010,7 +1340,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 329.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -1046,7 +1376,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 337.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -1082,7 +1412,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 337.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -1118,7 +1448,7 @@
      "start": "2027-03-10T19:50"
     },
     "price": 347.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T19:50",
@@ -1156,7 +1486,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -1192,7 +1522,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -1228,7 +1558,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -1264,7 +1594,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -1300,7 +1630,7 @@
      "start": "2027-03-10T05:03"
     },
     "price": 366.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:03",
@@ -1337,7 +1667,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1718.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -1366,7 +1696,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 355.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-11T00:25",
@@ -1387,7 +1717,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-11T05:30",
@@ -1419,7 +1749,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -1455,7 +1785,7 @@
      "start": "2027-03-05T04:06"
     },
     "price": 469.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T04:06",
@@ -1491,7 +1821,7 @@
      "start": "2027-03-04T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:55",
@@ -1529,7 +1859,7 @@
      "start": "2027-03-04T08:45"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:45",
@@ -1565,7 +1895,7 @@
      "start": "2027-03-04T09:15"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:15",
@@ -1601,7 +1931,7 @@
      "start": "2027-03-04T09:47"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:47",
@@ -1637,7 +1967,7 @@
      "start": "2027-03-04T17:56"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T17:56",
@@ -1673,7 +2003,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -1700,7 +2030,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 362.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T22:48",
@@ -1721,7 +2051,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 487.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -1753,7 +2083,7 @@
      "start": "2027-03-04T10:50"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T10:50",
@@ -1789,7 +2119,7 @@
      "start": "2027-03-04T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T11:11",
@@ -1825,7 +2155,7 @@
      "start": "2027-03-04T12:45"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T12:45",
@@ -1861,7 +2191,7 @@
      "start": "2027-03-05T00:21"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T00:21",
@@ -1897,7 +2227,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -1926,7 +2256,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 362.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T22:48",
@@ -1947,7 +2277,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 487.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -1979,7 +2309,7 @@
      "start": "2027-03-05T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:55",
@@ -2015,7 +2345,7 @@
      "start": "2027-03-05T06:28"
     },
     "price": 529.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T06:28",
@@ -2051,7 +2381,7 @@
      "start": "2027-03-05T06:05"
     },
     "price": 1026.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T06:05",
@@ -2089,7 +2419,7 @@
      "start": "2027-03-05T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T11:11",
@@ -2125,7 +2455,7 @@
      "start": "2027-03-05T16:20"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T16:20",
@@ -2161,7 +2491,7 @@
      "start": "2027-03-05T17:56"
     },
     "price": 280.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T17:56",
@@ -2197,7 +2527,7 @@
      "start": "2027-03-05T09:01"
     },
     "price": 286.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:01",
@@ -2224,7 +2554,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 444.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -2256,7 +2586,7 @@
      "start": "2027-03-05T08:45"
     },
     "price": 295.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T08:45",
@@ -2292,7 +2622,7 @@
      "start": "2027-03-05T08:40"
     },
     "price": 394.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T08:40",
@@ -2328,7 +2658,7 @@
      "start": "2027-03-05T07:30"
     },
     "price": 411.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T07:30",
@@ -2364,7 +2694,7 @@
      "start": "2027-03-05T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:55",
@@ -2393,7 +2723,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 444.0,
-    "seen": "2026-11-14T06:25:19.684219+00:00",
+    "seen": "2026-11-14T06:54:38.855117+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -2408,7 +2738,7 @@
  },
  "told": {
   "adventure": 609.0,
-  "any": 609.0,
+  "any": 514.0,
   "nonstop": 717.0
  }
 }
