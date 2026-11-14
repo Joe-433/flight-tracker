@@ -361,30 +361,43 @@ class TripSource:
             kept.append(leg)
         return kept
 
-    def roundtrip(self, out_date: str, ret_date: str, home_airport: str) -> Optional[Dict[str, Any]]:
-        """Cheapest nonstop roundtrip on one ticket, from a named home airport.
+    def roundtrip(self, out_date: str, ret_date: str, max_stops: int) -> Optional[Dict[str, Any]]:
+        """Cheapest round-trip ticket for one date pair, return already filtered.
 
-        Named, not the city code: the payload only details the outbound, so a
-        city-wide return could quietly land at a different airport.
+        Airlines often price a round trip well under two one-ways, so this is
+        searched for every date pair, nonstop and with up to one stop. The
+        trip's fixed points go to Google as time filters on each leg, so the
+        "from" price is for a return that actually fits -- Google's answer
+        only details the outbound, so the return can't be checked here.
         """
-        away = self.cfg.trip.away
-        query = self._query("round-trip", [
-            {"date": out_date, "from_airport": home_airport, "to_airport": away},
-            {"date": ret_date, "from_airport": away, "to_airport": home_airport},
-        ], max_stops=0)
+        t = self.cfg.trip
+        out = {"date": out_date, "from_airport": t.home, "to_airport": t.away}
+        back = {"date": ret_date, "from_airport": t.away, "to_airport": t.home}
+        if t.arrive_by and t.arrive_by[:10] == out_date:
+            out["latest_arrival_hour"] = int(t.arrive_by[11:13])
+        if t.leave_after and t.leave_after[:10] == ret_date:
+            back["earliest_departure_hour"] = int(t.leave_after[11:13])
+        query = self._query("round-trip", [out, back], max_stops=max_stops)
+        excluded = {a.strip().upper() for a in t.home_exclude}
         best = None
-        for item, flight_no in self._results(query, "roundtrip %s %s" % (out_date, ret_date)):
+        label = "roundtrip %s %s %d" % (out_date, ret_date, max_stops)
+        for item, flight_no in self._results(query, label):
             price = getattr(item, "price", None)
             segments = self._segments(item)
-            if not isinstance(price, (int, float)) or price <= 0 or len(segments) != 1:
+            if not isinstance(price, (int, float)) or price <= 0 or not segments:
                 continue
-            if not fits("out", segments, self.cfg):
+            if (segments[0]["from"] or "").upper() in excluded:
+                continue
+            kind, layover = classify(segments, self.cfg)
+            if kind is None or not fits("out", segments, self.cfg):
                 continue
             if best is None or price < best["price"]:
                 best = {
                     "out_date": out_date, "ret_date": ret_date, "price": float(price),
+                    "max_stops": max_stops, "kind": kind, "layover": layover,
                     "airlines": list(getattr(item, "airlines", []) or []),
                     "flight_no": flight_no, "segments": segments, "url": query.url(),
+                    "back_after": t.leave_after[:16] if "earliest_departure_hour" in back else None,
                 }
         return best
 
@@ -506,31 +519,45 @@ def nonstop_combos(doc: Dict[str, Any], cfg: Config) -> List[Dict[str, Any]]:
         if not outs or not backs:
             continue
         combo = _combo(outs[0], backs[0])
-        rt = roundtrips.get("%s|%s" % (o, b))
-        # A roundtrip price is for the cheapest return that day, whenever it
-        # leaves; only trust it on days when every departure fits.
-        anytime = not cfg.trip.leave_after or (b + "T00:00") >= cfg.trip.leave_after[:16]
-        if rt and anytime and float(rt["price"]) < combo["total"]:
-            combo = {
-                "kind": "roundtrip", "out_date": o, "ret_date": b, "roundtrip": rt,
-                "total": float(rt["price"]), "oneways_total": combo["total"],
-                "nights": _nights(o, b),
-            }
-        found.append(combo)
+        found.append(_cheaper(combo, roundtrips.get("%s|%s|0" % (o, b))))
     found.sort(key=lambda c: (c["total"], -c["nights"]))
     return found
 
 
 def any_combos(doc: Dict[str, Any], cfg: Config) -> List[Dict[str, Any]]:
-    """Cheapest trip per date pair with no adventure layover: the baseline."""
+    """Cheapest trip per date pair with no adventure layover: the baseline.
+
+    Either two one-way tickets or one round-trip ticket, whichever is less.
+    """
+    roundtrips = doc.get("roundtrips") or {}
     found = []
     for o, b in _pairs(cfg):
         outs = [l for l in legs_for(doc, cfg, "out", o) if l["kind"] != "adventure"]
         backs = [l for l in legs_for(doc, cfg, "back", b) if l["kind"] != "adventure"]
-        if outs and backs:
-            found.append(_combo(outs[0], backs[0]))
+        rts = [rt for rt in (roundtrips.get("%s|%s|1" % (o, b)), roundtrips.get("%s|%s|0" % (o, b))) if rt]
+        if not (outs and backs) and not rts:
+            continue
+        combo = _combo(outs[0], backs[0]) if outs and backs else None
+        for rt in sorted(rts, key=lambda r: r["price"]):
+            combo = _cheaper(combo, rt, o, b)
+        found.append(combo)
     found.sort(key=lambda c: (c["total"], -c["nights"]))
     return found
+
+
+def _cheaper(combo: Optional[Dict[str, Any]], rt: Optional[Dict[str, Any]],
+             o: Optional[str] = None, b: Optional[str] = None) -> Dict[str, Any]:
+    """The one-way pair, or the round-trip ticket if that's cheaper."""
+    if not rt or (combo is not None and float(rt["price"]) >= combo["total"]):
+        return combo  # type: ignore[return-value]
+    o = o or combo["out_date"]
+    b = b or combo["ret_date"]
+    return {
+        "kind": "roundtrip", "out_date": o, "ret_date": b, "roundtrip": rt,
+        "total": float(rt["price"]),
+        "oneways_total": combo["total"] if combo else None,
+        "nights": _nights(o, b),
+    }
 
 
 def adventure_combos(doc: Dict[str, Any], cfg: Config, limit: int) -> List[Dict[str, Any]]:
@@ -565,22 +592,13 @@ def adventure_combos(doc: Dict[str, Any], cfg: Config, limit: int) -> List[Dict[
     return top
 
 
-def roundtrip_targets(doc: Dict[str, Any], cfg: Config) -> List[Tuple[str, str, str]]:
-    """Date pairs worth a nonstop roundtrip search, with the home airport."""
-    targets: List[Tuple[str, str, str]] = []
-    saved = doc.get("roundtrips")
-    doc["roundtrips"] = {}  # rank by one-ways alone
-    try:
-        ranked = nonstop_combos(doc, cfg)
-    finally:
-        doc["roundtrips"] = saved or {}
-    for combo in ranked:
-        if len(targets) >= cfg.trip.roundtrip_checks:
-            break
-        target = (combo["out_date"], combo["ret_date"], combo["out"]["segments"][0]["from"])
-        if target not in targets:
-            targets.append(target)
-    return targets
+def roundtrip_targets(doc: Dict[str, Any], cfg: Config) -> List[Tuple[str, str, int]]:
+    """Every date pair, nonstop and up to one stop: (out, back, max_stops).
+
+    Capped at `roundtrip_checks` date pairs, longest stays first.
+    """
+    pairs = sorted(_pairs(cfg), key=lambda p: -_nights(*p))[: cfg.trip.roundtrip_checks]
+    return [(o, b, stops) for o, b in pairs for stops in (0, 1)]
 
 
 def shown_legs(sections: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -705,15 +723,26 @@ def _dates(combo: Dict[str, Any]) -> str:
 def _block(n: int, combo: Dict[str, Any], hints: Dict[str, Any]) -> str:
     if combo["kind"] == "roundtrip":
         rt = combo["roundtrip"]
-        seg = rt["segments"][0]
+        segs = rt["segments"]
         price = "[%s](%s)" % (_money(rt["price"]), rt["url"]) if rt.get("url") else _money(rt["price"])
+        saving = ""
+        if combo.get("oneways_total"):
+            saving = ", %s less than the cheapest two one-ways" % _money(combo["oneways_total"] - rt["price"])
+        stops = "nonstop" if rt.get("max_stops") == 0 else "up to 1 stop"
+        out_leg = dict(rt, date=rt["out_date"], kind=rt.get("kind") or "nonstop")
+        back_rule = "nonstop" if rt.get("max_stops") == 0 else "nonstop or 1 stop"
+        if rt.get("back_after"):
+            back_rule += ", leaving after %s" % _clock(rt["back_after"])
         return (
-            "**%d. %s round trip** · %s\n"
-            "One ticket on %s, %s cheaper than two one-ways. %s\n"
-            "Out %s %s → %s %s nonstop; pick the nonstop return when booking."
-            % (n, _money(rt["price"]), _dates(combo), ", ".join(rt.get("airlines") or []) or "?",
-               _money(combo["oneways_total"] - rt["price"]), price,
-               seg["from"], _clock(seg["dep"]), seg["to"], _clock(seg["arr"], rt["out_date"]))
+            "**%s%s round-trip ticket** · %s\n"
+            "One ticket on %s (%s)%s. %s\n"
+            "Out %s · %s %s → %s %s · %s\n"
+            "Back %s · pick the return when booking (%s)"
+            % ("%d. " % n if n else "", _money(rt["price"]), _dates(combo),
+               ", ".join(rt.get("airlines") or []) or "?", stops, saving, price,
+               _day(rt["out_date"]), segs[0]["from"], _clock(segs[0]["dep"]),
+               segs[-1]["to"], _clock(segs[-1]["arr"], rt["out_date"]), _stop_text(out_leg),
+               _day(rt["ret_date"]), back_rule)
         )
     return "**%s%s + %s = %s** · %s\n%s\n%s" % (
         "%d. " % n if n else "", _money(combo["out"]["price"]), _money(combo["back"]["price"]), _money(combo["total"]),
@@ -723,7 +752,8 @@ def _block(n: int, combo: Dict[str, Any], hints: Dict[str, Any]) -> str:
 
 def _short(combo: Dict[str, Any]) -> str:
     if combo["kind"] == "roundtrip":
-        return "%s round trip, %s" % (_money(combo["total"]), _dates(combo))
+        return "%s round-trip ticket on %s, %s" % (
+            _money(combo["total"]), ", ".join(combo["roundtrip"].get("airlines") or []) or "?", _dates(combo))
     return "%s + %s = %s, %s" % (_money(combo["out"]["price"]), _money(combo["back"]["price"]),
                                  _money(combo["total"]), _dates(combo))
 

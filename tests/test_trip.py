@@ -118,14 +118,28 @@ class Combos(unittest.TestCase):
         self.assertEqual(only_one[0]["out"]["layover"]["airport"], "YUL")  # abroad takes the last slot
 
     def test_roundtrip_only_when_cheaper(self):
-        self.doc["roundtrips"] = {"2027-03-04|2027-03-09": {
+        self.doc["roundtrips"] = {"2027-03-04|2027-03-09|0": {
             "out_date": "2027-03-04", "ret_date": "2027-03-09", "price": 720.0, "airlines": ["United"],
             "segments": [seg("EWR", "GUA", "2027-03-04T18:36", "2027-03-04T22:48")], "url": "u"}}
         self.assertEqual(trip.nonstop_combos(self.doc, cfg())[0]["kind"], "oneways")
-        self.doc["roundtrips"]["2027-03-04|2027-03-09"]["price"] = 650.0
+        self.doc["roundtrips"]["2027-03-04|2027-03-09|0"]["price"] = 650.0
         best = trip.nonstop_combos(self.doc, cfg())[0]
         self.assertEqual((best["kind"], best["total"]), ("roundtrip", 650.0))
-        self.assertEqual(trip.roundtrip_targets(self.doc, cfg())[0], ("2027-03-04", "2027-03-09", "JFK"))
+        targets = trip.roundtrip_targets(self.doc, cfg(roundtrip_checks=6))
+        self.assertEqual(len(targets), 6 * 2)
+        self.assertEqual(targets[0], ("2027-03-04", "2027-03-10", 0))
+
+    def test_connecting_roundtrip_beats_one_ways_in_cheapest(self):
+        self.doc["roundtrips"] = {"2027-03-04|2027-03-09|1": {
+            "out_date": "2027-03-04", "ret_date": "2027-03-09", "price": 514.0, "max_stops": 1,
+            "kind": "regular", "layover": None, "airlines": ["American"],
+            "segments": [seg("EWR", "DFW", "2027-03-04T06:00", "2027-03-04T09:16"),
+                         seg("DFW", "GUA", "2027-03-04T10:40", "2027-03-04T14:01")], "url": "u"}}
+        best = trip.any_combos(self.doc, cfg())[0]
+        self.assertEqual((best["kind"], best["total"], best["oneways_total"]), ("roundtrip", 514.0, 280.0 + 337.0))
+        messages = trip.report(self.doc, cfg(), dt.datetime(2026, 11, 14, tzinfo=UTC))
+        self.assertIn("$514 round-trip ticket on American", messages[0][1])
+        self.assertIn("$103 less than the cheapest two one-ways", messages[1][1])
 
     def test_report_format(self):
         self.doc["last_scan"] = "2026-11-12T14:00:00+00:00"
@@ -151,13 +165,6 @@ class Combos(unittest.TestCase):
         fired = trip.drop_alerts(self.doc, c)
         self.assertEqual([(k, was) for k, _, was in fired], [("nonstop", 730.0)])
         self.assertEqual(trip.drop_alerts(self.doc, c), fired)   # still owed until delivered
-
-    def test_roundtrip_ignored_when_return_time_matters(self):
-        c = cfg(leave_after="2027-03-09T10:00")
-        self.doc["roundtrips"] = {"2027-03-04|2027-03-09": {
-            "out_date": "2027-03-04", "ret_date": "2027-03-09", "price": 500.0, "airlines": ["United"],
-            "segments": [seg("EWR", "GUA", "2027-03-04T18:36", "2027-03-04T22:48")], "url": "u"}}
-        self.assertEqual(trip.nonstop_combos(self.doc, c)[0]["kind"], "oneways")
 
     def test_stale_legs_dropped(self):
         self.doc["last_scan"] = "2026-11-14T00:00:00+00:00"

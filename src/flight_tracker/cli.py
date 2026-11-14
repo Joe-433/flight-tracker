@@ -1305,14 +1305,22 @@ def cmd_trip_apply(args: argparse.Namespace) -> int:
         try:
             source = trip.TripSource(cfg)
             roundtrips: Dict[str, object] = {}
-            for i, (out_date, ret_date, home) in enumerate(trip.roundtrip_targets(doc, cfg)):
+            old = dict(doc.get("roundtrips") or {})
+            for i, (out_date, ret_date, stops) in enumerate(trip.roundtrip_targets(doc, cfg)):
                 if i:
                     time.sleep(random.uniform(1, 3))
-                rt = source.roundtrip(out_date, ret_date, home)
-                print("  roundtrip %s %s from %s: %s" % (
-                    out_date, ret_date, home, _money(rt["price"]) if rt else "none"))
+                key = "%s|%s|%d" % (out_date, ret_date, stops)
+                before = len(source.errors)
+                rt = source.roundtrip(out_date, ret_date, stops)
+                print("  roundtrip %s %s %s: %s" % (
+                    out_date, ret_date, "nonstop" if stops == 0 else "<=1 stop",
+                    _money(rt["price"]) if rt else "none"))
                 if rt:
-                    roundtrips["%s|%s" % (out_date, ret_date)] = rt
+                    roundtrips[key] = dict(rt, seen=now.isoformat())
+                elif len(source.errors) > before and key in old:
+                    # A failed search keeps the last price for one more scan.
+                    if (_hours_since(old[key].get("seen"), now) or 99) < 2.5 * cfg.trip.scan_every_hours:
+                        roundtrips[key] = old[key]
             doc["roundtrips"] = roundtrips
         except ScrapeError as exc:
             print("  roundtrip checks skipped: %s" % exc)

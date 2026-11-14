@@ -153,13 +153,15 @@ trip:
   arrive_by: "2027-03-05T23:30"
   return_dates: ["2027-03-08", "2027-03-10"]
   leave_after: "2027-03-08T21:00"
-  # (2 + 3 dates) x 4 searches = 20 requests a scan over 2 runners, plus up
-  # to 3 roundtrip checks. Every 6 hours, and before the daily report.
+  # (2 + 3 dates) x 4 searches = 20 one-way requests a scan over 2 runners,
+  # plus 2 round-trip-ticket searches (nonstop, up to 1 stop) for each of the
+  # 6 date pairs, since a round-trip ticket is often well under two one-ways.
+  # Every 6 hours, and before the daily report.
   scan_every_hours: 6
   report_hour: 6             # daily, report.timezone (6am Pacific / 9am Eastern)
   per_section: 3
   shards: 2
-  roundtrip_checks: 3
+  roundtrip_checks: 6        # date pairs
   drop_alert_usd: 25
   airhint: true
   # A layover worth having: 7-15 hours, all of it between 6am and midnight.
