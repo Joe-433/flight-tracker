@@ -1247,7 +1247,7 @@ def _trip_hints(doc: Dict[str, object], cfg: Config, now: dt.datetime) -> None:
 
     hints = dict(doc.get("hints") or {})
     wanted = {}
-    for leg in trip.shown_legs(trip.sections(doc, cfg)):
+    for leg in trip.shown_legs(trip.ranked(doc, cfg)[: cfg.trip.max_options]):
         wanted[trip.hint_key(leg)] = leg
     for key, leg in wanted.items():
         cached = hints.get(key)
@@ -1346,7 +1346,8 @@ def cmd_trip_apply(args: argparse.Namespace) -> int:
     due = trip.report_due(doc, cfg, now)
     sending_report = (due or args.send) and notifier is not None
     if notifier is not None and alerts and not sending_report:
-        labels = {"nonstop": "nonstop trip", "adventure": "long-layover trip", "any": "cheapest trip"}
+        labels = {"nonstop": "nonstop trip", "adventure": "long-layover trip",
+                  "any": "cheapest trip", "top": "cheapest trip"}
         lines = [
             "The %s fell to **%s** (was %s when last reported).\n%s" % (
                 labels[key], _money(combo["total"]), _money(low),

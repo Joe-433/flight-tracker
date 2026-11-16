@@ -151,7 +151,18 @@ class Trip:
     until: Optional[str] = None            # ISO timestamp with offset; None = off
     name: str = "Trip"
     home: str = ""                         # airport code or Google city MID
+    home_code: str = ""                    # the same as a city code ("NYC"), for other sites
+    home_airports: List[str] = field(default_factory=list)  # what counts as home
     home_exclude: List[str] = field(default_factory=list)
+    # google, skiplagged, skyscanner (Skyscanner prices come through AirHint).
+    sources: List[str] = field(default_factory=lambda: ["google", "skiplagged", "skyscanner"])
+    # Skiplagged hidden-city fares (get off at the layover) and self-transfer
+    # combos of separate tickets: cheaper, with strings attached.
+    hidden_city: bool = True
+    self_transfer: bool = True
+    max_options: int = 5                   # trips listed in a report
+    report_hours: List[int] = field(default_factory=list)   # local, in `timezone`
+    timezone: str = ""
     away: str = ""                         # airport code
     outbound_dates: List[str] = field(default_factory=list)   # [first, last]
     return_dates: List[str] = field(default_factory=list)     # [first, last]

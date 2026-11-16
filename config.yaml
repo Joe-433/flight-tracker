@@ -144,6 +144,8 @@ trip:
   until: "2027-02-01T00:00:00-05:00"
   name: "Guatemala"
   home: "/m/02_286"          # New York: JFK, LGA and EWR in one search
+  home_code: "NYC"           # the same, for Skiplagged and Skyscanner
+  home_airports: [JFK, LGA, EWR]
   away: "GUA"
   # A day of give on each end: out Thu or Fri, landing no later than Friday
   # night; back from late Monday night (after the last full day) through
@@ -156,10 +158,22 @@ trip:
   # (2 + 3 dates) x 4 searches = 20 one-way requests a scan over 2 runners,
   # plus 2 round-trip-ticket searches (nonstop, up to 1 stop) for each of the
   # 6 date pairs, since a round-trip ticket is often well under two one-ways.
-  # Every 6 hours, and before the daily report.
+  # Plus Skiplagged and Skyscanner once per direction and date (5 each).
+  # Every 6 hours, and before each report.
   scan_every_hours: 6
-  report_hour: 6             # daily, report.timezone (6am Pacific / 9am Eastern)
+  # Reports at 8am and 6pm New York time; each one lists the 5 cheapest
+  # trips, round-trip tickets and one-way pairs ranked together on price.
+  report_hours: [8, 18]
+  timezone: "America/New_York"
+  max_options: 5
   per_section: 3
+  # Price sources: Google Flights, Skiplagged (adds hidden-city fares and
+  # self-transfer combos Google doesn't show), and Skyscanner through
+  # AirHint's search (often the same flight cheaper via an agency). AirHint
+  # also gives each leg a buy-or-wait call (`airhint` below).
+  sources: [google, skiplagged, skyscanner]
+  hidden_city: true          # get off at the layover; personal item only
+  self_transfer: true        # separate tickets with a self-made connection
   shards: 2
   roundtrip_checks: 6        # date pairs
   drop_alert_usd: 25

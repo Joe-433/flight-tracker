@@ -543,19 +543,23 @@ Mar 4-5 (landing by Friday night), back Mon evening - Wed Mar 8-10.
   one-stop, one-stop with a 7-15h layover, and that same long layover through
   airports outside the US. The last two use Google's layover-length filter, so
   day-long stops that a plain search hides are found on purpose.
+- Two more price sources per direction and date: **Skiplagged** (hidden-city
+  fares, where you get off at the layover, and self-transfer combos Google
+  doesn't show) and **Skyscanner** through AirHint's search (often the same
+  flight cheaper via an agency). Plus a **round-trip ticket** search for every
+  date pair, since airlines often price those under two one-ways.
 - A layover counts as a **day out** only if it's 7-15 hours, between 6am and
   midnight on one day, with no airport change.
-- The daily Discord report (6am Pacific) lists round-trip totals as
-  out + back = total: the 3 cheapest nonstop trips, the 3 cheapest trips with
-  a day out (one per city, with a slot kept for another country), and the
-  cheapest ordinary trip for comparison. Each leg carries AirHint's
-  buy-or-wait call (`airhint.py`).
-- Between reports, a new low $25+ under the previous one pings right away.
-- Scans every 6 hours: 20 searches over 2 runners. State: `data/trip.json`.
+- Reports at **8am and 6pm New York time**: the 5 cheapest trips, round-trip
+  tickets and one-way pairs ranked together on price (no single flight leads
+  more than two entries). Hidden-city and separate-ticket legs are flagged
+  with what they require. Each leg carries AirHint's buy-or-wait call.
+- Between reports, a new low $25+ under the last reported price pings right away.
+- Scans every 6 hours and before each report. State: `data/trip.json`.
 
 ```bash
 python -m flight_tracker trip-report            # preview from saved prices
-gh workflow run "watch fares" -f trip_force=true   # scan + report now
+gh workflow run "watch fares" -R Joe-433/flight-tracker -f trip_force=true   # scan + report now
 ```
 
 To stop (e.g. once booked), set `trip.until` to a past time.

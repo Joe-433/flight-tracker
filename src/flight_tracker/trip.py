@@ -48,7 +48,8 @@ from .state import hours_since, parse_ts, utcnow
 
 DEFAULT_STATE = os.path.join("data", "trip.json")
 
-QUERIES = ("nonstop", "any", "long", "abroad")
+QUERIES = ("nonstop", "any", "long", "abroad", "skiplagged", "skyscanner")
+GOOGLE = ("nonstop", "any", "long", "abroad")
 KEEP_PER_KIND = 4
 
 # (direction, date, query). "out" flies home -> away, "back" away -> home.
@@ -110,17 +111,25 @@ def _days(span: List[str]) -> List[str]:
 
 
 def report_slot(cfg: Config, now: dt.datetime) -> dt.datetime:
-    """Today's report time if it has passed, else yesterday's. In UTC."""
+    """The most recent report time at or before `now`, in UTC.
+
+    Several times a day (`report_hours`), in local wall time (`timezone`), so
+    8am stays 8am across daylight saving.
+    """
     from zoneinfo import ZoneInfo
 
-    tz = ZoneInfo(cfg.report.timezone)
+    t = cfg.trip
+    tz = ZoneInfo(t.timezone or cfg.report.timezone)
     local = now.astimezone(tz)
-    slot = dt.datetime.combine(local.date(), dt.time(cfg.trip.report_hour), tzinfo=tz)
-    if slot > local:
-        slot = dt.datetime.combine(
-            local.date() - dt.timedelta(days=1), dt.time(cfg.trip.report_hour), tzinfo=tz
-        )
-    return slot.astimezone(dt.timezone.utc)
+    hours = sorted(set(t.report_hours or [t.report_hour]))
+    for back in (0, 1):
+        day = local.date() - dt.timedelta(days=back)
+        for hour in reversed(hours):
+            slot = dt.datetime.combine(day, dt.time(hour), tzinfo=tz)
+            if slot <= local:
+                return slot.astimezone(dt.timezone.utc)
+    return dt.datetime.combine(local.date() - dt.timedelta(days=1), dt.time(hours[-1]),
+                               tzinfo=tz).astimezone(dt.timezone.utc)
 
 
 def report_due(doc: Dict[str, Any], cfg: Config, now: dt.datetime) -> bool:
@@ -160,7 +169,8 @@ def save(doc: Dict[str, Any], path: str = DEFAULT_STATE) -> None:
 
 def items(cfg: Config) -> List[Item]:
     t = cfg.trip
-    queries = [q for q in QUERIES if q != "abroad" or t.abroad_airports]
+    queries = [q for q in QUERIES if (q != "abroad" or t.abroad_airports)
+               and (q in GOOGLE and "google" in t.sources or q in t.sources)]
     out = [("out", day, q) for day in _days(t.outbound_dates) for q in queries]
     back = [("back", day, q) for day in _days(t.return_dates) for q in queries]
     return out + back
@@ -317,6 +327,8 @@ class TripSource:
 
     def leg(self, direction: str, day: str, query_kind: str) -> List[Dict[str, Any]]:
         """The cheapest few itineraries of each kind from one search."""
+        if query_kind in ("skiplagged", "skyscanner"):
+            return self._extra(direction, day, query_kind)
         t = self.cfg.trip
         frm, to = (t.home, t.away) if direction == "out" else (t.away, t.home)
         spec: Dict[str, Any] = {"date": day, "from_airport": frm, "to_airport": to}
@@ -349,17 +361,44 @@ class TripSource:
                 "price": float(price),
                 "airlines": list(getattr(item, "airlines", []) or []),
                 "flight_no": flight_no, "segments": segments, "layover": layover,
-                "url": url,
+                "url": url, "source": "Google",
             })
-        found.sort(key=lambda leg: leg["price"])
-        kept: List[Dict[str, Any]] = []
-        counts: Dict[str, int] = {}
-        for leg in found:
-            if counts.get(leg["kind"], 0) >= KEEP_PER_KIND:
+        return _keep(found)
+
+    def _extra(self, direction: str, day: str, query_kind: str) -> List[Dict[str, Any]]:
+        """Skiplagged or Skyscanner (via AirHint) for one direction and date."""
+        from .sources import extra
+
+        t = self.cfg.trip
+        home_code = t.home_code or t.home
+        frm, to = (home_code, t.away) if direction == "out" else (t.away, home_code)
+        arrive_at = {t.away} if direction == "out" else set(t.home_airports or [t.home])
+        try:
+            if query_kind == "skiplagged":
+                rows = extra.skiplagged(frm, to, day, arrive_at)
+            else:
+                rows = extra.airhint(frm, to, day, self.cfg.search.currency)
+        except extra.SourceError as exc:
+            self.errors.append("%s %s %s: %s" % (query_kind, direction, day, exc))
+            return []
+        excluded = {a.strip().upper() for a in t.home_exclude}
+        found = []
+        for row in rows:
+            segments = row["segments"]
+            if not segments[0]["dep"].startswith(day):
                 continue
-            counts[leg["kind"]] = counts.get(leg["kind"], 0) + 1
-            kept.append(leg)
-        return kept
+            if row.get("hidden_city") and not t.hidden_city:
+                continue
+            if row.get("self_transfer") and not t.self_transfer:
+                continue
+            home_end = segments[0]["from"] if direction == "out" else segments[-1]["to"]
+            if (home_end or "").upper() in excluded:
+                continue
+            kind, layover = classify(segments, self.cfg)
+            if kind is None or not fits(direction, segments, self.cfg):
+                continue
+            found.append(dict(row, direction=direction, date=day, kind=kind, layover=layover))
+        return _keep(found)
 
     def roundtrip(self, out_date: str, ret_date: str, max_stops: int) -> Optional[Dict[str, Any]]:
         """Cheapest round-trip ticket for one date pair, return already filtered.
@@ -400,6 +439,24 @@ class TripSource:
                     "back_after": t.leave_after[:16] if "earliest_departure_hour" in back else None,
                 }
         return best
+
+
+def _keep(found: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """The cheapest few of each kind, and of each special ticket type.
+
+    Hidden-city and self-transfer fares are kept even when they don't make
+    the per-kind cut, so the report can weigh them on price.
+    """
+    found.sort(key=lambda leg: leg["price"])
+    kept: List[Dict[str, Any]] = []
+    counts: Dict[Tuple[Any, ...], int] = {}
+    for leg in found:
+        tag = (leg["kind"], bool(leg.get("hidden_city")), bool(leg.get("self_transfer")))
+        if counts.get(tag, 0) >= KEEP_PER_KIND:
+            continue
+        counts[tag] = counts.get(tag, 0) + 1
+        kept.append(leg)
+    return kept
 
 
 def _pause(cfg: Config, first: bool) -> None:
@@ -601,10 +658,11 @@ def roundtrip_targets(doc: Dict[str, Any], cfg: Config) -> List[Tuple[str, str, 
     return [(o, b, stops) for o, b in pairs for stops in (0, 1)]
 
 
-def shown_legs(sections: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+def shown_legs(sections: Any) -> List[Dict[str, Any]]:
     """Every one-way leg that appears in the report, once."""
     seen, legs = set(), []
-    for combos in sections.values():
+    groups = sections.values() if isinstance(sections, dict) else [sections]
+    for combos in groups:
         for combo in combos:
             if combo["kind"] != "oneways":
                 continue
@@ -614,6 +672,70 @@ def shown_legs(sections: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]
                     seen.add(ident)
                     legs.append(leg)
     return legs
+
+
+def _signature(combo: Dict[str, Any]) -> Tuple[Any, ...]:
+    if combo["kind"] == "roundtrip":
+        rt = combo["roundtrip"]
+        return ("rt", combo["out_date"], combo["ret_date"], rt.get("max_stops"), rt["price"])
+    return ("ow", _leg_id(combo["out"]), _leg_id(combo["back"]))
+
+
+def _stops(combo: Dict[str, Any]) -> int:
+    """Stops in the trip, both ways; a round trip's return counts at its limit."""
+    if combo["kind"] == "roundtrip":
+        rt = combo["roundtrip"]
+        return len(rt["segments"]) - 1 + (rt.get("max_stops") or 0)
+    return len(combo["out"]["segments"]) + len(combo["back"]["segments"]) - 2
+
+
+def ranked(doc: Dict[str, Any], cfg: Config) -> List[Dict[str, Any]]:
+    """Every distinct trip worth listing, cheapest first: what the report shows.
+
+    Price comes first. A round-trip ticket competes on equal terms with every
+    one-way pair, so when round trips are cheaper the list is mostly round
+    trips. Ties go to fewer stops, then the longer stay. Each date pair puts
+    forward its cheapest pair of any kind, its cheapest nonstop pair, both
+    round-trip tickets, and its day-out layover trips, so a nonstop or a
+    layover adventure still places when it's close on price.
+    """
+    roundtrips = doc.get("roundtrips") or {}
+    candidates: List[Dict[str, Any]] = []
+    for o, b in _pairs(cfg):
+        outs, backs = legs_for(doc, cfg, "out", o), legs_for(doc, cfg, "back", b)
+        pair = _combo(outs[0], backs[0]) if outs and backs else None
+        if pair:
+            candidates.append(pair)
+        n_out = [l for l in outs if l["kind"] == "nonstop"]
+        n_back = [l for l in backs if l["kind"] == "nonstop"]
+        if n_out and n_back:
+            candidates.append(_combo(n_out[0], n_back[0]))
+        for stops in (0, 1):
+            rt = roundtrips.get("%s|%s|%d" % (o, b, stops))
+            if rt:
+                combo = _cheaper(None, rt, o, b)
+                combo["oneways_total"] = pair["total"] if pair else None
+                candidates.append(combo)
+    candidates += adventure_combos(doc, cfg, 20)
+    seen, out = set(), []
+    uses: Dict[Tuple[Any, ...], int] = {}
+    held: List[Dict[str, Any]] = []
+    for combo in sorted(candidates, key=lambda c: (c["total"], _stops(c), -c["nights"])):
+        sig = _signature(combo)
+        if sig in seen:
+            continue
+        seen.add(sig)
+        # One flight paired with every return isn't five choices, it's one.
+        # A leg can lead at most two entries until the rest of the list is
+        # used up; extras wait at the back, still in price order.
+        legs = [] if combo["kind"] == "roundtrip" else [_leg_id(combo["out"]), _leg_id(combo["back"])]
+        if any(uses.get(leg, 0) >= 2 for leg in legs):
+            held.append(combo)
+            continue
+        for leg in legs:
+            uses[leg] = uses.get(leg, 0) + 1
+        out.append(combo)
+    return out + held
 
 
 def sections(doc: Dict[str, Any], cfg: Config) -> Dict[str, List[Dict[str, Any]]]:
@@ -712,8 +834,21 @@ def _leg_line(leg: Dict[str, Any], heading: str, hints: Dict[str, Any]) -> str:
         price = "[%s](%s)" % (price, leg["url"])
     line = "%s %s · %s · %s · %s · %s" % (
         heading, _day(leg["date"]), price, airline, route, _stop_text(leg))
+    notes = []
+    if leg.get("source") and leg["source"] != "Google":
+        via = " via %s" % leg["agent"] if leg.get("agent") and leg["source"] == "Skyscanner" else ""
+        notes.append("found on %s%s" % (leg["source"], via))
+    if leg.get("hidden_city"):
+        notes.append("\u26a0\ufe0f hidden-city: the ticket is to %s and you get off at %s. Personal item "
+                     "only (no checked or gate-checked bag), no frequent-flyer number"
+                     % (leg.get("ticket_to") or "?", segs[-1]["to"]))
+    if leg.get("self_transfer"):
+        notes.append("\u26a0\ufe0f separate tickets: you re-check in at the stop, and a late first "
+                     "flight isn't covered")
     hint = _hint_text(hints.get(hint_key(leg)))
-    return line + ("\n  *%s*" % hint if hint else "")
+    if hint:
+        notes.append(hint)
+    return line + "".join("\n  *%s*" % n for n in notes)
 
 
 def _dates(combo: Dict[str, Any]) -> str:
@@ -770,60 +905,53 @@ def _fit(text: str) -> str:
 
 
 def report(doc: Dict[str, Any], cfg: Config, now: dt.datetime) -> List[Tuple[str, str, str]]:
-    """The daily report as (title, body, footer) messages, one per section."""
+    """The report: the cheapest `max_options` trips, as one (title, body, footer)."""
     t = cfg.trip
-    parts = sections(doc, cfg)
     hints = doc.get("hints") or {}
-    nonstop, adventure, baseline = parts["nonstop"], parts["adventure"], parts["any"]
+    options = ranked(doc, cfg)[: t.max_options]
+    parts = sections(doc, cfg)
 
     take: List[str] = []
-    cheapest = min([c for c in (baseline[:1] + nonstop[:1])], key=lambda c: c["total"], default=None)
-    same = bool(nonstop) and cheapest is nonstop[0] or (
-        bool(nonstop) and bool(baseline) and baseline[0]["total"] == nonstop[0]["total"])
-    if cheapest and same:
-        take.append("Cheapest trip is nonstop both ways: **%s**." % _short(nonstop[0]))
-    else:
-        if baseline:
-            take.append("Cheapest trip: **%s** (with a regular connection)." % _short(baseline[0]))
-        if nonstop:
-            take.append("Cheapest nonstop both ways: **%s**." % _short(nonstop[0]))
-    if adventure:
-        star = adventure[0][adventure[0]["star"]]
-        take.append("Cheapest with a day out on the way: **%s**, %s in %s." % (
-            _short(adventure[0]), _hours(star["layover"]["minutes"]), star["layover"]["city"]))
+    if options:
+        best = options[0]
+        how = "one round-trip ticket" if best["kind"] == "roundtrip" else "two one-way tickets"
+        take.append("Cheapest: **%s** (%s)." % (_short(best), how))
+        rts = [c for c in options if c["kind"] == "roundtrip"]
+        pairs = [c for c in ranked(doc, cfg) if c["kind"] == "oneways"]
+        if rts and pairs and rts[0]["total"] < pairs[0]["total"]:
+            take.append("Round-trip tickets are cheaper right now: the best is %s under the "
+                        "cheapest two one-ways (%s)." % (
+                            _money(pairs[0]["total"] - rts[0]["total"]), _money(pairs[0]["total"])))
+    shown = {_signature(c) for c in options}
+    if parts["nonstop"] and not any(_stops(c) == 0 for c in options):
+        take.append("Cheapest nonstop both ways (not in the list): %s." % _short(parts["nonstop"][0]))
+    if parts["adventure"] and not any(_signature(c) in shown for c in parts["adventure"]):
+        a = parts["adventure"][0]
+        star = a[a["star"]]
+        take.append("Cheapest with a day out (not in the list): %s, %s in %s." % (
+            _short(a), _hours(star["layover"]["minutes"]), star["layover"]["city"]))
     previous = (doc.get("reports") or [])[-1:] or [{}]
-    for key, label in (("any", "cheapest trip"), ("nonstop", "cheapest nonstop trip")):
-        combos = parts[key]
-        before = (previous[0].get("best") or {}).get(key)
-        if combos and before:
-            change = combos[0]["total"] - float(before)
-            if abs(change) >= 1:
-                take.append("Since the last report the %s is %s %s (was %s)." % (
-                    label, _money(abs(change)), "cheaper" if change < 0 else "more expensive", _money(before)))
-    if not take:
+    before = (previous[0].get("best") or {}).get("top")
+    if options and before:
+        change = options[0]["total"] - float(before)
+        if abs(change) >= 1:
+            take.append("Since the last report the cheapest trip is %s %s (was %s)." % (
+                _money(abs(change)), "cheaper" if change < 0 else "more expensive", _money(before)))
+    if not options:
         take.append("No complete trip found yet: the last search didn't return a usable "
                     "flight in both directions.")
 
     age = hours_since(doc.get("last_scan"), now)
-    footer = " · ".join([
+    names = {"google": "Google Flights", "skiplagged": "Skiplagged", "skyscanner": "Skyscanner (via AirHint)"}
+    footer = " \u00b7 ".join([
         "Out %s, back %s" % (_span(t.outbound_dates), _span(t.return_dates)),
-        "prices are one-way base fares, added up",
+        "base fares from %s" % ", ".join(names.get(x, x) for x in t.sources),
         "checked %s" % ("just now" if age is not None and age < 1 else
                          "%.0fh ago" % age if age is not None else "never"),
     ])
-
-    first = ["\n".join(take), "**Nonstop both ways**"]
-    first += [_block(i, c, hints) for i, c in enumerate(nonstop, 1)] or [
-        "No nonstop found in both directions on these dates."]
-    second = ["**A day out on the way** (one %g–%gh daytime layover)" % (t.layover_min_hours, t.layover_max_hours)]
-    second += [_block(i, c, hints) for i, c in enumerate(adventure, 1)] or [
-        "No long daytime layover found on these dates."]
-    if baseline and not same:
-        second.append("**For comparison, the cheapest ordinary trip**\n" + _block(0, baseline[0], hints))
-    return [
-        ("%s flights · nonstop" % t.name, _fit("\n\n".join(first)), footer),
-        ("%s flights · layover adventures" % t.name, _fit("\n\n".join(second)), footer),
-    ]
+    body = ["\n".join(take)] + [_block(i, c, hints) for i, c in enumerate(options, 1)]
+    return [("%s flights \u00b7 the %d cheapest" % (t.name, len(options) or t.max_options),
+             _fit("\n\n".join(body)), footer)]
 
 
 def _span(span: List[str]) -> str:
@@ -838,8 +966,12 @@ def _span(span: List[str]) -> str:
 
 
 def bests(doc: Dict[str, Any], cfg: Config) -> Dict[str, float]:
-    """Cheapest total per section, for history and drop alerts."""
-    return {key: combos[0]["total"] for key, combos in sections(doc, cfg).items() if combos}
+    """Cheapest total per section and overall ("top"), for history and alerts."""
+    found = {key: combos[0]["total"] for key, combos in sections(doc, cfg).items() if combos}
+    top = ranked(doc, cfg)[:1]
+    if top:
+        found["top"] = top[0]["total"]
+    return found
 
 
 def drop_alerts(doc: Dict[str, Any], cfg: Config) -> List[Tuple[str, Dict[str, Any], float]]:

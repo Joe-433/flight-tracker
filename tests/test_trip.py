@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import re
 import unittest
 
 from helpers import make_config
@@ -138,21 +139,22 @@ class Combos(unittest.TestCase):
         best = trip.any_combos(self.doc, cfg())[0]
         self.assertEqual((best["kind"], best["total"], best["oneways_total"]), ("roundtrip", 514.0, 280.0 + 337.0))
         messages = trip.report(self.doc, cfg(), dt.datetime(2026, 11, 14, tzinfo=UTC))
-        self.assertIn("$514 round-trip ticket on American", messages[0][1])
-        self.assertIn("$103 less than the cheapest two one-ways", messages[1][1])
+        body = messages[0][1]
+        self.assertIn("Cheapest: **$514 round-trip ticket on American", body)
+        self.assertIn("Round-trip tickets are cheaper right now", body)
 
     def test_report_format(self):
         self.doc["last_scan"] = "2026-11-12T14:00:00+00:00"
-        self.doc["reports"] = [{"best": {"any": 650.0}}]
+        self.doc["reports"] = [{"best": {"top": 650.0}}]
         self.doc["hints"] = {"UA|JFK|GUA|2027-03-04|364": {"suggestion": "Wait", "confidence": 66, "max_saving": "40%"}}
         messages = trip.report(self.doc, cfg(), dt.datetime(2026, 11, 12, 14, 30, tzinfo=UTC))
-        first, second = messages[0][1], messages[1][1]
-        self.assertIn("**1. $364 + $337 = $701** · Thu Mar 4 → Tue Mar 9, 5 nights", first)
-        self.assertIn("AirHint: wait, 66% sure it drops (up to 40%)", first)
-        self.assertIn("$41 cheaper (was $650)", first)
-        self.assertIn("in Montreal, Canada (8:31am–5:25pm)", second)
-        self.assertIn("cheapest ordinary trip", second)
-        self.assertTrue(all(len(m[1]) <= 4096 for m in messages))
+        self.assertEqual(len(messages), 1)
+        title, body, footer = messages[0]
+        self.assertIn("the 5 cheapest", title)
+        self.assertIn("Cheapest: **$260 + $329 = $589", body)
+        self.assertIn("$61 cheaper (was $650)", body)
+        self.assertEqual(len(re.findall(r"^\*\*\d\. ", body, re.M)), 5)
+        self.assertTrue(len(body) <= 4096)
 
     def test_empty_report(self):
         messages = trip.report({}, cfg(), dt.datetime(2026, 11, 12, tzinfo=UTC))
@@ -174,6 +176,36 @@ class Combos(unittest.TestCase):
         self.assertEqual(trip.nonstop_combos(self.doc, cfg()), [])
 
 
+class Ranking(unittest.TestCase):
+    def test_round_trips_and_pairs_ranked_together_on_price(self):
+        doc = doc_with(leg("out", "2027-03-04", 280, via="MIA", land="11:11", leave="13:17"),
+                       leg("back", "2027-03-09", 337, dep="23:57", arr="23:59"))
+        rt = lambda price, stops: {"out_date": "2027-03-04", "ret_date": "2027-03-09", "price": price,
+                                   "max_stops": stops, "kind": "regular", "layover": None,
+                                   "airlines": ["American"], "url": "u",
+                                   "segments": [seg("EWR", "GUA", "2027-03-04T06:00", "2027-03-04T14:01")]}
+        doc["roundtrips"] = {"2027-03-04|2027-03-09|1": rt(514.0, 1), "2027-03-04|2027-03-09|0": rt(718.0, 0)}
+        order = [(c["kind"], c["total"]) for c in trip.ranked(doc, cfg())]
+        self.assertEqual(order, [("roundtrip", 514.0), ("oneways", 617.0), ("roundtrip", 718.0)])
+
+    def test_hidden_city_and_source_notes(self):
+        out = leg("out", "2027-03-04", 280)
+        back = dict(leg("back", "2027-03-09", 241, via="IAD", land="06:12", leave="09:00", dep="01:05", arr="14:24"),
+                    source="Skiplagged", hidden_city=True, ticket_to="ROC")
+        back["segments"][-1]["to"] = "EWR"
+        text = trip._leg_line(back, "Back", {})
+        self.assertIn("found on Skiplagged", text)
+        self.assertIn("ticket is to ROC and you get off at EWR", text)
+        self.assertNotIn("found on", trip._leg_line(out, "Out", {}))
+
+    def test_report_slots_twice_a_day_eastern(self):
+        c = cfg(report_hours=[8, 18], timezone="America/New_York")
+        slot = lambda h, m: trip.report_slot(c, dt.datetime(2026, 11, 16, h, m, tzinfo=UTC))
+        self.assertEqual(slot(12, 30), dt.datetime(2026, 11, 16, 13, 0, tzinfo=UTC) - dt.timedelta(days=1) + dt.timedelta(hours=10))  # 6pm ET yesterday = 23:00 UTC
+        self.assertEqual(slot(13, 30), dt.datetime(2026, 11, 16, 13, 0, tzinfo=UTC))  # 8am ET
+        self.assertEqual(slot(23, 30), dt.datetime(2026, 11, 16, 23, 0, tzinfo=UTC))  # 6pm ET
+
+
 class Timing(unittest.TestCase):
     def test_modes(self):
         c = cfg()
@@ -193,7 +225,7 @@ class Timing(unittest.TestCase):
         self.assertFalse(trip.make_plan(c, doc, now)["scan"])
         doc["last_scan"] = "2026-11-13T11:00:00+00:00"
         plan = trip.make_plan(c, doc, now)
-        self.assertEqual(sum(len(s) for s in plan["shards"]), (2 + 3) * 4)
+        self.assertEqual(sum(len(s) for s in plan["shards"]), (2 + 3) * 6)
         # a pending report rescans at most hourly
         doc = {"last_report": "2026-11-12T14:05:00+00:00", "last_scan": "2026-11-13T17:40:00+00:00"}
         self.assertFalse(trip.make_plan(c, doc, now)["scan"])
