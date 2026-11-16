@@ -11,25 +11,25 @@
    ],
    "suggestion": "Wait"
   },
-  "DM|GUA|EWR|2027-03-09|234": {
-   "at": "2026-11-16T15:20:27.262158+00:00",
-   "confidence": 5,
-   "max_saving": null,
-   "price_range": [
-    234,
-    585,
-    370
-   ],
-   "suggestion": "Buy"
-  },
-  "F9|LGA|GUA|2027-03-05|247": {
-   "at": "2026-11-16T15:20:27.262158+00:00",
-   "confidence": 29,
-   "max_saving": "16%",
+  "F9|LGA|GUA|2027-03-05|266": {
+   "at": "2026-11-16T21:33:14.690431+00:00",
+   "confidence": 85,
+   "max_saving": "22%",
    "price_range": [
     208,
-    390,
+    389,
     292
+   ],
+   "suggestion": "Wait"
+  },
+  "UA|GUA|EWR|2027-03-09|241": {
+   "at": "2026-11-16T21:33:14.690431+00:00",
+   "confidence": 10,
+   "max_saving": "3%",
+   "price_range": [
+    233,
+    584,
+    370
    ],
    "suggestion": "Buy"
   },
@@ -161,10 +161,17 @@
    "at": "2026-11-16T15:25:22.142863+00:00",
    "nonstop": 590.0,
    "top": 481.0
+  },
+  {
+   "adventure": 507.0,
+   "any": 507.0,
+   "at": "2026-11-16T21:33:14.690431+00:00",
+   "nonstop": 590.0,
+   "top": 507.0
   }
  ],
  "last_report": "2026-11-16T15:25:22.142863+00:00",
- "last_scan": "2026-11-16T15:25:22.142863+00:00",
+ "last_scan": "2026-11-16T21:33:14.690431+00:00",
  "reports": [
   {
    "at": "2026-11-13T05:29:50.568903+00:00",
@@ -421,7 +428,7 @@
    "out_date": "2027-03-04",
    "price": 675.0,
    "ret_date": "2027-03-08",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:39",
@@ -450,7 +457,7 @@
    "out_date": "2027-03-04",
    "price": 689.0,
    "ret_date": "2027-03-09",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:48",
@@ -466,34 +473,34 @@
     "American"
    ],
    "back_after": null,
-   "flight_no": "AA 2728 / 1013",
+   "flight_no": "AA 1196 / 2241",
    "kind": "regular",
    "layover": {
     "abroad": false,
-    "airport": "DFW",
-    "city": "Dallas",
+    "airport": "MIA",
+    "city": "Miami",
     "country": "US",
-    "end": "2027-03-04T10:40",
-    "minutes": 84,
+    "end": "2027-03-04T10:10",
+    "minutes": 85,
     "overnight": false,
-    "start": "2027-03-04T09:16"
+    "start": "2027-03-04T08:45"
    },
    "max_stops": 1,
    "out_date": "2027-03-04",
-   "price": 514.0,
+   "price": 534.0,
    "ret_date": "2027-03-09",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
-     "arr": "2027-03-04T09:16",
-     "dep": "2027-03-04T06:00",
+     "arr": "2027-03-04T08:45",
+     "dep": "2027-03-04T05:30",
      "from": "EWR",
-     "to": "DFW"
+     "to": "MIA"
     },
     {
-     "arr": "2027-03-04T14:01",
-     "dep": "2027-03-04T10:40",
-     "from": "DFW",
+     "arr": "2027-03-04T12:16",
+     "dep": "2027-03-04T10:10",
+     "from": "MIA",
      "to": "GUA"
     }
    ],
@@ -511,7 +518,7 @@
    "out_date": "2027-03-04",
    "price": 689.0,
    "ret_date": "2027-03-10",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-04T22:48",
@@ -543,7 +550,7 @@
    "out_date": "2027-03-04",
    "price": 561.0,
    "ret_date": "2027-03-10",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-04T09:18",
@@ -572,7 +579,7 @@
    "out_date": "2027-03-05",
    "price": 719.0,
    "ret_date": "2027-03-08",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-05T22:48",
@@ -588,27 +595,27 @@
     "United"
    ],
    "back_after": "2027-03-08T21:00",
-   "flight_no": "UA 2726 / 1902",
-   "kind": "regular",
+   "flight_no": "UA 492 / 1902",
+   "kind": "adventure",
    "layover": {
     "abroad": false,
     "airport": "IAH",
     "city": "Houston",
     "country": "US",
     "end": "2027-03-05T16:43",
-    "minutes": 277,
+    "minutes": 483,
     "overnight": false,
-    "start": "2027-03-05T12:06"
+    "start": "2027-03-05T08:40"
    },
    "max_stops": 1,
    "out_date": "2027-03-05",
-   "price": 766.0,
+   "price": 756.0,
    "ret_date": "2027-03-08",
-   "seen": "2026-11-16T15:20:27.262158+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
-     "arr": "2027-03-05T12:06",
-     "dep": "2027-03-05T08:50",
+     "arr": "2027-03-05T08:40",
+     "dep": "2027-03-05T06:00",
      "from": "EWR",
      "to": "IAH"
     },
@@ -633,7 +640,7 @@
    "out_date": "2027-03-05",
    "price": 719.0,
    "ret_date": "2027-03-09",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-05T22:48",
@@ -646,37 +653,37 @@
   },
   "2027-03-05|2027-03-09|1": {
    "airlines": [
-    "COPA"
+    "JetBlue"
    ],
    "back_after": null,
-   "flight_no": null,
+   "flight_no": "B6 105 / 1483",
    "kind": "regular",
    "layover": {
-    "abroad": true,
-    "airport": "PTY",
-    "city": "Panama City",
-    "country": "Panama",
-    "end": "2027-03-05T07:24",
-    "minutes": 56,
+    "abroad": false,
+    "airport": "FLL",
+    "city": "Fort Lauderdale",
+    "country": "US",
+    "end": "2027-03-05T12:16",
+    "minutes": 80,
     "overnight": false,
-    "start": "2027-03-05T06:28"
+    "start": "2027-03-05T10:56"
    },
    "max_stops": 1,
    "out_date": "2027-03-05",
-   "price": 603.0,
+   "price": 573.0,
    "ret_date": "2027-03-09",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
-     "arr": "2027-03-05T06:28",
-     "dep": "2027-03-05T01:16",
-     "from": "JFK",
-     "to": "PTY"
+     "arr": "2027-03-05T10:56",
+     "dep": "2027-03-05T07:45",
+     "from": "EWR",
+     "to": "FLL"
     },
     {
-     "arr": "2027-03-05T08:49",
-     "dep": "2027-03-05T07:24",
-     "from": "PTY",
+     "arr": "2027-03-05T14:15",
+     "dep": "2027-03-05T12:16",
+     "from": "FLL",
      "to": "GUA"
     }
    ],
@@ -694,7 +701,7 @@
    "out_date": "2027-03-05",
    "price": 719.0,
    "ret_date": "2027-03-10",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-05T22:48",
@@ -726,7 +733,7 @@
    "out_date": "2027-03-05",
    "price": 561.0,
    "ret_date": "2027-03-10",
-   "seen": "2026-11-16T15:25:22.142863+00:00",
+   "seen": "2026-11-16T21:33:14.690431+00:00",
    "segments": [
     {
      "arr": "2027-03-05T14:23",
@@ -759,7 +766,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:30",
@@ -865,7 +872,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:30",
@@ -877,7 +884,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/UA/GUA/EWR/2027-03-08/USD?price=377&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C258%2525257C11990%2525257C2027-03-08T23%2525253A57%2525257C11442%2525257C2027-03-09T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df70a996a-1611-46ce-aaef-61f09982b11a%252526ticket_price%25253D376.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D83c4414a-7c6d-4c37-98b0-49c57da2edd7%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBcYsptBgAK2sVKY0AAAA%2525257C-5926598211000620349%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBcYsptBgAK2sVKY0AAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C3493019400583882886%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A15%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_UA_US_uair"
+    "url": "https://book.airhint.com/book/UA/GUA/EWR/2027-03-08/USD?price=377&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C258%2525257C11990%2525257C2027-03-08T23%2525253A57%2525257C11442%2525257C2027-03-09T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D9e9254bf-0d7d-47b1-acea-7e8068a0361a%252526ticket_price%25253D376.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D1c98492d-03e6-4c51-8285-d89f2b7290e5%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBcYsptBgAK2sVKY0AAAA%2525257C-5926598211000620349%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBcYsptBgAK2sVKY0AAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C3493019400583882886%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A31%2525253A51%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_UA_US_uair"
    },
    {
     "agent": "Hop2",
@@ -891,7 +898,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 447.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:30",
@@ -903,7 +910,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AD/GUA/EWR/2027-03-08/USD?price=447&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32531%2525257C258%2525257C11990%2525257C2027-03-08T23%2525253A57%2525257C11442%2525257C2027-03-09T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32531%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df70a996a-1611-46ce-aaef-61f09982b11a%252526ticket_price%25253D446.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D83c4414a-7c6d-4c37-98b0-49c57da2edd7%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257C8050115917925891378%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-97356309236865059%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A40%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AD_US_hop2"
+    "url": "https://book.airhint.com/book/AD/GUA/EWR/2027-03-08/USD?price=447&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32531%2525257C258%2525257C11990%2525257C2027-03-08T23%2525253A57%2525257C11442%2525257C2027-03-09T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32531%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D9e9254bf-0d7d-47b1-acea-7e8068a0361a%252526ticket_price%25253D446.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D1c98492d-03e6-4c51-8285-d89f2b7290e5%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257C8050115917925891378%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-97356309236865059%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A31%2525253A52%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AD_US_hop2"
    },
    {
     "agent": "Hop2",
@@ -926,7 +933,7 @@
      "start": "2027-03-08T23:15"
     },
     "price": 1817.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-08T23:15",
@@ -944,7 +951,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/EWR/2027-03-08/USD?price=1817&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C641%2525257C11990%2525257C2027-03-08T21%2525253A45%2525257C16319%2525257C2027-03-08T23%2525253A15%2525257C90%2525257CYEOB2BR9%2525257CY%2525257CEconomy_Main%2525253Bflight%2525257C-32540%2525257C1079%2525257C16319%2525257C2027-03-09T09%2525253A05%2525257C11442%2525257C2027-03-09T15%2525253A19%2525257C314%2525257CVNA4A0DN%2525257CV%2525257CEconomy_Main%252526carriers%25253D-32540%252526operators%25253D-31793%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df70a996a-1611-46ce-aaef-61f09982b11a%252526ticket_price%25253D1816.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D83c4414a-7c6d-4c37-98b0-49c57da2edd7%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257C-5577631845451138904%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C3174961417944828367%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A40%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AV_US_hop2"
+    "url": "https://book.airhint.com/book/AV/GUA/EWR/2027-03-08/USD?price=1817&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11990.11442.2027-03-08%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C641%2525257C11990%2525257C2027-03-08T21%2525253A45%2525257C16319%2525257C2027-03-08T23%2525253A15%2525257C90%2525257CYEOB2BR9%2525257CY%2525257CEconomy_Main%2525253Bflight%2525257C-32540%2525257C1079%2525257C16319%2525257C2027-03-09T09%2525253A05%2525257C11442%2525257C2027-03-09T15%2525253A19%2525257C314%2525257CVNA4A0DN%2525257CV%2525257CEconomy_Main%252526carriers%25253D-32540%252526operators%25253D-31793%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D9e9254bf-0d7d-47b1-acea-7e8068a0361a%252526ticket_price%25253D1816.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D1c98492d-03e6-4c51-8285-d89f2b7290e5%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257C-5577631845451138904%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNBwf_sdNiMmBUYAkgGXNDAAAAA%2525257CAAIBAQEAAQfrAwgIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C3174961417944828367%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A31%2525253A52%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AV_US_hop2"
    }
   ],
   "back|2027-03-09|abroad": [
@@ -967,7 +974,7 @@
      "start": "2027-03-09T16:30"
     },
     "price": 402.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:30",
@@ -1004,7 +1011,7 @@
      "start": "2027-03-09T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T08:16",
@@ -1041,7 +1048,7 @@
      "start": "2027-03-09T13:35"
     },
     "price": 1042.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:35",
@@ -1079,7 +1086,7 @@
      "start": "2027-03-09T13:55"
     },
     "price": 1621.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T13:55",
@@ -1105,6 +1112,43 @@
     ],
     "date": "2027-03-09",
     "direction": "back",
+    "flight_no": "AA 2948 / 2925",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "DFW",
+     "city": "Dallas",
+     "country": "US",
+     "end": "2027-03-09T08:26",
+     "minutes": 203,
+     "overnight": true,
+     "start": "2027-03-09T05:03"
+    },
+    "price": 352.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T05:03",
+      "dep": "2027-03-09T01:22",
+      "from": "GUA",
+      "to": "DFW"
+     },
+     {
+      "arr": "2027-03-09T12:59",
+      "dep": "2027-03-09T08:26",
+      "from": "DFW",
+      "to": "LGA"
+     }
+    ],
+    "source": "Google",
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
     "flight_no": "AA 352 / 581",
     "kind": "regular",
     "layover": {
@@ -1118,7 +1162,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -1155,7 +1199,7 @@
      "start": "2027-03-09T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T20:05",
@@ -1179,7 +1223,7 @@
     ],
     "date": "2027-03-09",
     "direction": "back",
-    "flight_no": "B6 1382 / 572",
+    "flight_no": "B6 1382 / 1902",
     "kind": "regular",
     "layover": {
      "abroad": false,
@@ -1192,7 +1236,7 @@
      "start": "2027-03-09T16:57"
     },
     "price": 356.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:57",
@@ -1201,46 +1245,9 @@
       "to": "FLL"
      },
      {
-      "arr": "2027-03-09T23:49",
+      "arr": "2027-03-09T23:52",
       "dep": "2027-03-09T20:55",
       "from": "FLL",
-      "to": "LGA"
-     }
-    ],
-    "source": "Google",
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDkoAWoFEgNHVUFyCxIJL20vMDJfMjg2QgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "Avianca"
-    ],
-    "date": "2027-03-09",
-    "direction": "back",
-    "flight_no": "AV 555 / 566",
-    "kind": "regular",
-    "layover": {
-     "abroad": true,
-     "airport": "SAL",
-     "city": "San Salvador",
-     "country": "El Salvador",
-     "end": "2027-03-09T18:25",
-     "minutes": 115,
-     "overnight": false,
-     "start": "2027-03-09T16:30"
-    },
-    "price": 357.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-09T16:30",
-      "dep": "2027-03-09T15:40",
-      "from": "GUA",
-      "to": "SAL"
-     },
-     {
-      "arr": "2027-03-10T00:10",
-      "dep": "2027-03-09T18:25",
-      "from": "SAL",
       "to": "JFK"
      }
     ],
@@ -1268,7 +1275,7 @@
      "start": "2027-03-09T05:03"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:03",
@@ -1305,7 +1312,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -1342,7 +1349,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -1379,7 +1386,7 @@
      "start": "2027-03-09T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T20:05",
@@ -1416,7 +1423,7 @@
      "start": "2027-03-09T05:03"
     },
     "price": 366.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:03",
@@ -1453,7 +1460,7 @@
      "start": "2027-03-09T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T06:10",
@@ -1490,8 +1497,8 @@
      "overnight": true,
      "start": "2027-03-10T01:05"
     },
-    "price": 845.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 1805.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T01:05",
@@ -1521,7 +1528,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -1535,6 +1542,47 @@
    }
   ],
   "back|2027-03-09|skiplagged": [
+   {
+    "agent": null,
+    "airlines": [
+     "United Airlines"
+    ],
+    "date": "2027-03-09",
+    "direction": "back",
+    "flight_no": "UA 1562 / UA 2823",
+    "hidden_city": true,
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "IAD",
+     "city": "Washington DC",
+     "country": "US",
+     "end": "2027-03-09T12:35",
+     "minutes": 383,
+     "overnight": false,
+     "start": "2027-03-09T06:12"
+    },
+    "price": 241.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-09T06:12",
+      "dep": "2027-03-09T01:05",
+      "from": "GUA",
+      "to": "IAD"
+     },
+     {
+      "arr": "2027-03-09T14:24",
+      "dep": "2027-03-09T12:35",
+      "from": "IAD",
+      "to": "EWR"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skiplagged",
+    "ticket_to": "ROC",
+    "url": "https://skiplagged.com/flights/GUA/NYC/2027-03-09"
+   },
    {
     "agent": null,
     "airlines": [
@@ -1555,8 +1603,8 @@
      "overnight": true,
      "start": "2027-03-09T23:45"
     },
-    "price": 234.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 241.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T23:45",
@@ -1583,47 +1631,6 @@
     ],
     "date": "2027-03-09",
     "direction": "back",
-    "flight_no": "UA 1562 / UA 2823",
-    "hidden_city": true,
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "IAD",
-     "city": "Washington DC",
-     "country": "US",
-     "end": "2027-03-09T12:35",
-     "minutes": 383,
-     "overnight": false,
-     "start": "2027-03-09T06:12"
-    },
-    "price": 241.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-09T06:12",
-      "dep": "2027-03-09T01:05",
-      "from": "GUA",
-      "to": "IAD"
-     },
-     {
-      "arr": "2027-03-09T14:24",
-      "dep": "2027-03-09T12:35",
-      "from": "IAD",
-      "to": "EWR"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skiplagged",
-    "ticket_to": "ROC",
-    "url": "https://skiplagged.com/flights/GUA/NYC/2027-03-09"
-   },
-   {
-    "agent": null,
-    "airlines": [
-     "United Airlines"
-    ],
-    "date": "2027-03-09",
-    "direction": "back",
     "flight_no": "UA 1562 / UA 1831",
     "hidden_city": true,
     "kind": "adventure",
@@ -1638,7 +1645,7 @@
      "start": "2027-03-09T06:12"
     },
     "price": 241.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T06:12",
@@ -1679,7 +1686,7 @@
      "start": "2027-03-09T05:04"
     },
     "price": 241.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T05:04",
@@ -1720,7 +1727,7 @@
      "start": "2027-03-09T06:12"
     },
     "price": 246.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T06:12",
@@ -1761,7 +1768,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 254.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -1802,7 +1809,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 254.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -1834,7 +1841,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 258.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -1869,7 +1876,7 @@
      "start": "2027-03-09T10:03"
     },
     "price": 263.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T10:03",
@@ -1909,8 +1916,8 @@
      "overnight": false,
      "start": "2027-03-09T06:10"
     },
-    "price": 343.37,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 342.79,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T06:10",
@@ -1950,8 +1957,8 @@
      "overnight": false,
      "start": "2027-03-09T21:05"
     },
-    "price": 343.37,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 342.79,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T21:05",
@@ -1991,8 +1998,8 @@
      "overnight": false,
      "start": "2027-03-09T16:30"
     },
-    "price": 343.37,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 342.79,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T16:30",
@@ -2033,7 +2040,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -2074,7 +2081,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -2115,7 +2122,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -2156,7 +2163,7 @@
      "start": "2027-03-09T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-09T09:45",
@@ -2188,7 +2195,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -2214,7 +2221,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 416.99,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:30",
@@ -2631,7 +2638,7 @@
      "start": "2027-03-10T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -2668,7 +2675,7 @@
      "start": "2027-03-10T08:16"
     },
     "price": 546.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T08:16",
@@ -2705,7 +2712,7 @@
      "start": "2027-03-10T10:51"
     },
     "price": 613.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T10:51",
@@ -2743,7 +2750,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1718.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -2782,7 +2789,7 @@
      "start": "2027-03-10T16:57"
     },
     "price": 348.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:57",
@@ -2819,7 +2826,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -2856,7 +2863,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -2893,7 +2900,7 @@
      "start": "2027-03-10T06:10"
     },
     "price": 357.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -2932,7 +2939,7 @@
      "start": "2027-03-10T05:03"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T05:03",
@@ -2969,7 +2976,7 @@
      "start": "2027-03-10T09:45"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T09:45",
@@ -3006,7 +3013,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -3043,7 +3050,7 @@
      "start": "2027-03-10T20:05"
     },
     "price": 352.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T20:05",
@@ -3080,7 +3087,7 @@
      "start": "2027-03-10T06:10"
     },
     "price": 374.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -3118,7 +3125,7 @@
      "start": "2027-03-10T16:30"
     },
     "price": 1718.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T16:30",
@@ -3148,7 +3155,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 355.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-11T00:25",
@@ -3170,7 +3177,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-11T05:30",
@@ -4134,7 +4141,7 @@
      "start": "2027-03-10T18:30"
     },
     "price": 278.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T18:30",
@@ -4152,48 +4159,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/F9/GUA/LGA/2027-03-10/USD?price=278&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fcfus%25252F1%25252F11990.13522.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32289%2525257C186%2525257C11990%2525257C2027-03-10T14%2525253A27%2525257C13933%2525257C2027-03-10T18%2525253A30%2525257C183%2525257CC21XMN3%2525257CE%2525257C-%2525253Bflight%2525257C-32289%2525257C2432%2525257C13933%2525257C2027-03-10T20%2525253A34%2525257C13522%2525257C2027-03-10T23%2525253A15%2525257C161%2525257CC21XMN3%2525257CE%2525257C-%252526carriers%25253D-32289%252526operators%25253D-32289%2525253B-32289%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D278.24%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257C-5699093521061645422%2525257C2%25252524H4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C7185745898528110376%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A53%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_LGA_F9_US_cfus"
-   },
-   {
-    "agent": "Cheap Flights Fares",
-    "airlines": [
-     "Arajet"
-    ],
-    "date": "2027-03-10",
-    "direction": "back",
-    "flight_no": "DM 4605 / DM 2310",
-    "hidden_city": false,
-    "kind": "regular",
-    "layover": {
-     "abroad": true,
-     "airport": "SDQ",
-     "city": "Santo Domingo",
-     "country": "Dominican Republic",
-     "end": "2027-03-11T06:10",
-     "minutes": 505,
-     "overnight": true,
-     "start": "2027-03-10T21:45"
-    },
-    "price": 325.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-10T21:45",
-      "dep": "2027-03-10T16:15",
-      "from": "GUA",
-      "to": "SDQ"
-     },
-     {
-      "arr": "2027-03-11T09:30",
-      "dep": "2027-03-11T06:10",
-      "from": "SDQ",
-      "to": "EWR"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skyscanner",
-    "ticket_to": null,
-    "url": "https://book.airhint.com/book/DM/GUA/EWR/2027-03-10/USD?price=325&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fcfus%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-30638%2525257C4605%2525257C11990%2525257C2027-03-10T16%2525253A15%2525257C16168%2525257C2027-03-10T21%2525253A45%2525257C210%2525257CDBASOW%2525257CD%2525257C-%2525253Bflight%2525257C-30638%2525257C2310%2525257C16168%2525257C2027-03-11T06%2525253A10%2525257C11442%2525257C2027-03-11T09%2525253A30%2525257C260%2525257CDBASOW%2525257CD%2525257C-%252526carriers%25253D-30638%252526operators%25253D-30638%2525253B-30638%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D325.16%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257C-5819345590800665826%2525257C2%25252524H4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C4319566917042767381%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A53%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_DM_US_cfus"
+    "url": "https://book.airhint.com/book/F9/GUA/LGA/2027-03-10/USD?price=278&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fcfus%25252F1%25252F11990.13522.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32289%2525257C186%2525257C11990%2525257C2027-03-10T14%2525253A27%2525257C13933%2525257C2027-03-10T18%2525253A30%2525257C183%2525257CC21XMN3%2525257CE%2525257C-%2525253Bflight%2525257C-32289%2525257C2432%2525257C13933%2525257C2027-03-10T20%2525253A34%2525257C13522%2525257C2027-03-10T23%2525253A15%2525257C161%2525257CC21XMN3%2525257CE%2525257C-%252526carriers%25253D-32289%252526operators%25253D-32289%2525253B-32289%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D278.24%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257C-5699093521061645422%2525257C2%25252524H4sIAAAAAAAA_-PS42JJTistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYARF7uQTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C7185745898528110376%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_LGA_F9_US_cfus"
    },
    {
     "agent": "Kiwi.com",
@@ -4216,8 +4182,8 @@
      "overnight": false,
      "start": "2027-03-10T19:08"
     },
-    "price": 327.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 330.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T19:08",
@@ -4235,52 +4201,10 @@
     "self_transfer": true,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/Q6/GUA/EWR/2027-03-10/USD?price=327&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fskyp%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31047%2525257C4003%2525257C11990%2525257C2027-03-10T15%2525253A22%2525257C13933%2525257C2027-03-10T19%2525253A08%2525257C166%2525257CALSSC1%2525257CA%2525257C-%2525253Bflight%2525257C-32171%2525257C1728%2525257C13933%2525257C2027-03-10T21%2525253A06%2525257C11442%2525257C2027-03-10T23%2525253A47%2525257C161%2525257CPI2QBZY1%2525257CL%2525257C-%252526carriers%25253D-31047%2525252C-32171%252526operators%25253D-31047%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D327.00%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257C4469456332410765417%2525257C2%25252524H4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-4159960142310113341%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A15%2525253A18%252526transfer_protection%25253Dprotected%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_B6%2FQ6_US_skyp"
+    "url": "https://book.airhint.com/book/Q6/GUA/EWR/2027-03-10/USD?price=330&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fskyp%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31047%2525257C4003%2525257C11990%2525257C2027-03-10T15%2525253A22%2525257C13933%2525257C2027-03-10T19%2525253A08%2525257C166%2525257CALSSC1%2525257CA%2525257C-%2525253Bflight%2525257C-32171%2525257C1728%2525257C13933%2525257C2027-03-10T21%2525253A06%2525257C11442%2525257C2027-03-10T23%2525253A47%2525257C161%2525257CPI2QBZY1%2525257CL%2525257C-%252526carriers%25253D-31047%2525252C-32171%252526operators%25253D-31047%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D330.00%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257C2094549827184685509%2525257C2%25252524H4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C7164440965333959058%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A36%252526transfer_protection%25253Dprotected%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_Q6%2FB6_US_skyp"
    },
    {
-    "agent": "Kiwi.com",
-    "airlines": [
-     "Frontier Airlines",
-     "jetBlue"
-    ],
-    "date": "2027-03-10",
-    "direction": "back",
-    "flight_no": "F9 186 / B6 1728",
-    "hidden_city": false,
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "MCO",
-     "city": "Orlando",
-     "country": "US",
-     "end": "2027-03-10T21:06",
-     "minutes": 156,
-     "overnight": false,
-     "start": "2027-03-10T18:30"
-    },
-    "price": 342.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-10T18:30",
-      "dep": "2027-03-10T14:27",
-      "from": "GUA",
-      "to": "MCO"
-     },
-     {
-      "arr": "2027-03-10T23:47",
-      "dep": "2027-03-10T21:06",
-      "from": "MCO",
-      "to": "EWR"
-     }
-    ],
-    "self_transfer": true,
-    "source": "Skyscanner",
-    "ticket_to": null,
-    "url": "https://book.airhint.com/book/F9/GUA/EWR/2027-03-10/USD?price=342&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fskyp%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32289%2525257C186%2525257C11990%2525257C2027-03-10T14%2525253A27%2525257C13933%2525257C2027-03-10T18%2525253A30%2525257C183%2525257C-%2525257CC%2525257C-%2525253Bflight%2525257C-32171%2525257C1728%2525257C13933%2525257C2027-03-10T21%2525253A06%2525257C11442%2525257C2027-03-10T23%2525253A47%2525257C161%2525257CPI2QBZY1%2525257CL%2525257C-%252526carriers%25253D-32289%2525252C-32171%252526operators%25253D-32289%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D342.00%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257C-1615291878130344342%2525257C2%25252524H4sIAAAAAAAA_-Oy4mIpzq4sEOLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYi1tQ8XXenKubQYBcAZqecpTwAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C2418388210220933541%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A15%2525253A18%252526transfer_protection%25253Dprotected%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_F9%2FB6_US_skyp"
-   },
-   {
-    "agent": "Super.com",
+    "agent": "Justfly.com",
     "airlines": [
      "Avianca"
     ],
@@ -4290,8 +4214,8 @@
     "hidden_city": false,
     "kind": "nonstop",
     "layover": null,
-    "price": 355.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 347.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-11T00:25",
@@ -4303,10 +4227,10 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=355&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fspus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C652%2525257C11990%2525257C2027-03-10T18%2525253A50%2525257C12712%2525257C2027-03-11T00%2525253A25%2525257C275%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D354.54%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257C-150107311364701492%2525257C2%25252524H4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C698431231277168162%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A56%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_spus"
+    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=347&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fjfus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C652%2525257C11990%2525257C2027-03-10T18%2525253A50%2525257C12712%2525257C2027-03-11T00%2525253A25%2525257C275%2525257C-%2525257CS%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D346.95%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257C-4849504346222615105%2525257C2%25252524H4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C2920457743383782014%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A41%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_jfus"
    },
    {
-    "agent": "Super.com",
+    "agent": "Justfly.com",
     "airlines": [
      "Avianca"
     ],
@@ -4325,8 +4249,8 @@
      "overnight": false,
      "start": "2027-03-10T21:05"
     },
-    "price": 355.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 348.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T21:05",
@@ -4344,10 +4268,10 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=355&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fspus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C589%2525257C11990%2525257C2027-03-10T20%2525253A15%2525257C16086%2525257C2027-03-10T21%2525253A05%2525257C50%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32540%2525257C568%2525257C16086%2525257C2027-03-10T22%2525253A45%2525257C12712%2525257C2027-03-11T04%2525253A20%2525257C275%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31794%2525253B-31794%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D355.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257C-6485183018515712357%2525257C2%25252524H4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-5728174439382430267%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A56%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_spus"
+    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=348&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fjfus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C589%2525257C11990%2525257C2027-03-10T20%2525253A15%2525257C16086%2525257C2027-03-10T21%2525253A05%2525257C50%2525257C-%2525257CS%2525257C-%2525253Bflight%2525257C-32540%2525257C568%2525257C16086%2525257C2027-03-10T22%2525253A45%2525257C12712%2525257C2027-03-11T04%2525253A20%2525257C275%2525257C-%2525257CS%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31794%2525253B-31794%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D347.95%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257C-3130734275197181987%2525257C2%25252524H4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C5179198395898090031%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A41%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_jfus"
    },
    {
-    "agent": "Super.com",
+    "agent": "Justfly.com",
     "airlines": [
      "Avianca"
     ],
@@ -4366,8 +4290,8 @@
      "overnight": false,
      "start": "2027-03-10T06:10"
     },
-    "price": 355.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 348.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T06:10",
@@ -4385,7 +4309,48 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=355&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fspus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C579%2525257C11990%2525257C2027-03-10T05%2525253A25%2525257C16086%2525257C2027-03-10T06%2525253A10%2525257C45%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32540%2525257C660%2525257C16086%2525257C2027-03-10T07%2525253A50%2525257C12712%2525257C2027-03-10T13%2525253A35%2525257C285%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31794%2525253B-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D355.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257C-3411993676415469859%2525257C2%25252524H4sIAAAAAAAA_-PS42IpLigtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAypj-bTAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C3727637338171315354%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A56%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_spus"
+    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=348&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fjfus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C579%2525257C11990%2525257C2027-03-10T05%2525253A25%2525257C16086%2525257C2027-03-10T06%2525253A10%2525257C45%2525257C-%2525257CS%2525257C-%2525253Bflight%2525257C-32540%2525257C660%2525257C16086%2525257C2027-03-10T07%2525253A50%2525257C12712%2525257C2027-03-10T13%2525253A35%2525257C285%2525257C-%2525257CS%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31794%2525253B-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D347.95%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257C7038335362296446363%2525257C2%25252524H4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C6931628931331848721%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A41%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_jfus"
+   },
+   {
+    "agent": "Justfly.com",
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 555 / AV 566",
+    "hidden_city": false,
+    "kind": "regular",
+    "layover": {
+     "abroad": true,
+     "airport": "SAL",
+     "city": "San Salvador",
+     "country": "El Salvador",
+     "end": "2027-03-10T18:25",
+     "minutes": 115,
+     "overnight": false,
+     "start": "2027-03-10T16:30"
+    },
+    "price": 348.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T16:30",
+      "dep": "2027-03-10T15:40",
+      "from": "GUA",
+      "to": "SAL"
+     },
+     {
+      "arr": "2027-03-11T00:10",
+      "dep": "2027-03-10T18:25",
+      "from": "SAL",
+      "to": "JFK"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skyscanner",
+    "ticket_to": null,
+    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=348&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fjfus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C555%2525257C11990%2525257C2027-03-10T15%2525253A40%2525257C16086%2525257C2027-03-10T16%2525253A30%2525257C50%2525257C-%2525257CS%2525257C-%2525253Bflight%2525257C-32540%2525257C566%2525257C16086%2525257C2027-03-10T18%2525253A25%2525257C12712%2525257C2027-03-11T00%2525253A10%2525257C285%2525257C-%2525257CS%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31794%2525253B-31794%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D347.95%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257C-5556015104526901652%2525257C2%25252524H4sIAAAAAAAA_-PS42LJSistFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAd6P24TAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C8706158560859738603%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A41%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_jfus"
    },
    {
     "agent": "United",
@@ -4399,7 +4364,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 377.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-11T05:30",
@@ -4411,10 +4376,159 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/UA/GUA/EWR/2027-03-10/USD?price=377&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C258%2525257C11990%2525257C2027-03-10T23%2525253A57%2525257C11442%2525257C2027-03-11T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D376.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257C-4181703598803474389%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C2341085219541749079%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A55%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_UA_US_uair"
+    "url": "https://book.airhint.com/book/UA/GUA/EWR/2027-03-10/USD?price=377&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C258%2525257C11990%2525257C2027-03-10T23%2525253A57%2525257C11442%2525257C2027-03-11T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D376.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257C-4181703598803474389%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C2341085219541749079%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_UA_US_uair"
    },
    {
-    "agent": "CheapOair",
+    "agent": "Ovago",
+    "airlines": [
+     "Copa"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "CM 258",
+    "hidden_city": false,
+    "kind": "nonstop",
+    "layover": null,
+    "price": 448.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-11T05:30",
+      "dep": "2027-03-10T23:57",
+      "from": "GUA",
+      "to": "EWR"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skyscanner",
+    "ticket_to": null,
+    "url": "https://book.airhint.com/book/CM/GUA/EWR/2027-03-10/USD?price=448&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fovgo%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32407%2525257C258%2525257C11990%2525257C2027-03-10T23%2525253A57%2525257C11442%2525257C2027-03-11T05%2525253A30%2525257C273%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32407%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D447.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257C-9162788314092058431%2525257C2%25252524H4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C4553818860245189176%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_CM_US_ovgo"
+   },
+   {
+    "agent": "Ovago",
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 1901 / AV 1894",
+    "hidden_city": false,
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-10T17:35",
+     "minutes": 452,
+     "overnight": false,
+     "start": "2027-03-10T10:03"
+    },
+    "price": 458.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T10:03",
+      "dep": "2027-03-10T07:00",
+      "from": "GUA",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-10T21:59",
+      "dep": "2027-03-10T17:35",
+      "from": "IAH",
+      "to": "LGA"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skyscanner",
+    "ticket_to": null,
+    "url": "https://book.airhint.com/book/AV/GUA/LGA/2027-03-10/USD?price=458&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fovgo%25252F1%25252F11990.13522.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C1901%2525257C11990%2525257C2027-03-10T07%2525253A00%2525257C12389%2525257C2027-03-10T10%2525253A03%2525257C183%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%2525253Bflight%2525257C-32540%2525257C1894%2525257C12389%2525257C2027-03-10T17%2525253A35%2525257C13522%2525257C2027-03-10T21%2525253A59%2525257C204%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32540%252526operators%25253D-31722%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D458.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257C-3147283980881869642%2525257C2%25252524H4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C2086138144308812414%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_LGA_AV_US_ovgo"
+   },
+   {
+    "agent": "Ovago",
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "AV 1901 / AV 404",
+    "hidden_city": false,
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAH",
+     "city": "Houston",
+     "country": "US",
+     "end": "2027-03-10T18:25",
+     "minutes": 502,
+     "overnight": false,
+     "start": "2027-03-10T10:03"
+    },
+    "price": 458.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T10:03",
+      "dep": "2027-03-10T07:00",
+      "from": "GUA",
+      "to": "IAH"
+     },
+     {
+      "arr": "2027-03-10T22:54",
+      "dep": "2027-03-10T18:25",
+      "from": "IAH",
+      "to": "EWR"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skyscanner",
+    "ticket_to": null,
+    "url": "https://book.airhint.com/book/AV/GUA/EWR/2027-03-10/USD?price=458&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fovgo%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C1901%2525257C11990%2525257C2027-03-10T07%2525253A00%2525257C12389%2525257C2027-03-10T10%2525253A03%2525257C183%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%2525253Bflight%2525257C-32540%2525257C404%2525257C12389%2525257C2027-03-10T18%2525253A25%2525257C11442%2525257C2027-03-10T22%2525253A54%2525257C209%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32540%252526operators%25253D-31722%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D458.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257C6292247587783180935%2525257C2%25252524H4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C550938903093358218%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AV_US_ovgo"
+   },
+   {
+    "agent": "Ovago",
+    "airlines": [
+     "Copa"
+    ],
+    "date": "2027-03-10",
+    "direction": "back",
+    "flight_no": "CM 1562 / CM 4062",
+    "hidden_city": false,
+    "kind": "adventure",
+    "layover": {
+     "abroad": false,
+     "airport": "IAD",
+     "city": "Washington DC",
+     "country": "US",
+     "end": "2027-03-10T17:15",
+     "minutes": 663,
+     "overnight": false,
+     "start": "2027-03-10T06:12"
+    },
+    "price": 458.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-10T06:12",
+      "dep": "2027-03-10T01:05",
+      "from": "GUA",
+      "to": "IAD"
+     },
+     {
+      "arr": "2027-03-10T18:48",
+      "dep": "2027-03-10T17:15",
+      "from": "IAD",
+      "to": "LGA"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skyscanner",
+    "ticket_to": null,
+    "url": "https://book.airhint.com/book/CM/GUA/LGA/2027-03-10/USD?price=458&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fovgo%25252F1%25252F11990.13522.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32407%2525257C1562%2525257C11990%2525257C2027-03-10T01%2525253A05%2525257C12387%2525257C2027-03-10T06%2525253A12%2525257C247%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%2525253Bflight%2525257C-32407%2525257C4062%2525257C12387%2525257C2027-03-10T17%2525253A15%2525257C13522%2525257C2027-03-10T18%2525253A48%2525257C93%2525257CSNA0A0BN%2525257CN%2525257CEconomy_Basic%252526carriers%25253D-32407%252526operators%25253D-31722%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D458.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257C5520520272684986512%2525257C2%25252524H4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-5272695831503202532%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_LGA_CM_US_ovgo"
+   },
+   {
+    "agent": "Ovago",
     "airlines": [
      "Alaska Airlines"
     ],
@@ -4433,8 +4547,8 @@
      "overnight": false,
      "start": "2027-03-10T11:36"
     },
-    "price": 518.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 527.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-10T11:36",
@@ -4452,132 +4566,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AS/GUA/EWR/2027-03-10/USD?price=518&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fchpo%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32593%2525257C1354%2525257C11990%2525257C2027-03-10T08%2525253A00%2525257C13416%2525257C2027-03-10T11%2525253A36%2525257C336%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32593%2525257C1558%2525257C13416%2525257C2027-03-10T22%2525253A00%2525257C11442%2525257C2027-03-11T06%2525253A35%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32593%252526operators%25253D-32593%2525253B-32593%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D518.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJzijIF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYq5tBgFwDTyXm3NQAAAA%2525257C7159981445841023584%2525257C2%25252524H4sIAAAAAAAA_-My5mJJzijIF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYq5tBgFwDTyXm3NQAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-6086377290974035132%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A20%2525253A03%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AS_US_chpo"
-   },
-   {
-    "agent": "Gotogate",
-    "airlines": [
-     "Avianca",
-     "Alaska Airlines"
-    ],
-    "date": "2027-03-10",
-    "direction": "back",
-    "flight_no": "AV 640 / AS 1558",
-    "hidden_city": false,
-    "kind": "adventure",
-    "layover": {
-     "abroad": false,
-     "airport": "LAX",
-     "city": "Los Angeles",
-     "country": "US",
-     "end": "2027-03-10T22:00",
-     "minutes": 620,
-     "overnight": false,
-     "start": "2027-03-10T11:40"
-    },
-    "price": 787.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-10T11:40",
-      "dep": "2027-03-10T08:15",
-      "from": "GUA",
-      "to": "LAX"
-     },
-     {
-      "arr": "2027-03-11T06:35",
-      "dep": "2027-03-10T22:00",
-      "from": "LAX",
-      "to": "EWR"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skyscanner",
-    "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/EWR/2027-03-10/USD?price=787&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fgtus%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C640%2525257C11990%2525257C2027-03-10T08%2525253A15%2525257C13416%2525257C2027-03-10T11%2525253A40%2525257C325%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32593%2525257C1558%2525257C13416%2525257C2027-03-10T22%2525253A00%2525257C11442%2525257C2027-03-11T06%2525253A35%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%2525252C-32593%252526operators%25253D-31793%2525253B-32593%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D786.89%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJLyktFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYq5tBgFwBcVQegNQAAAA%2525257C111476560899204868%2525257C2%25252524H4sIAAAAAAAA_-My5mJJLyktFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYq5tBgFwBcVQegNQAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C5282774807622509407%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A53%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AS%2FAV_US_gtus"
-   },
-   {
-    "agent": "BYOjet US",
-    "airlines": [
-     "Avianca"
-    ],
-    "date": "2027-03-10",
-    "direction": "back",
-    "flight_no": "AV 165 / AV 244",
-    "hidden_city": false,
-    "kind": "adventure",
-    "layover": {
-     "abroad": true,
-     "airport": "BOG",
-     "city": "Bogot\u00e1",
-     "country": "Colombia",
-     "end": "2027-03-10T16:40",
-     "minutes": 620,
-     "overnight": false,
-     "start": "2027-03-10T06:20"
-    },
-    "price": 1063.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-10T06:20",
-      "dep": "2027-03-10T02:00",
-      "from": "GUA",
-      "to": "BOG"
-     },
-     {
-      "arr": "2027-03-10T22:35",
-      "dep": "2027-03-10T16:40",
-      "from": "BOG",
-      "to": "JFK"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skyscanner",
-    "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/JFK/2027-03-10/USD?price=1063&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fbyus%25252F1%25252F11990.12712.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C165%2525257C11990%2525257C2027-03-10T02%2525253A00%2525257C10069%2525257C2027-03-10T06%2525253A20%2525257C200%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32540%2525257C244%2525257C10069%2525257C2027-03-10T16%2525253A40%2525257C12712%2525257C2027-03-10T22%2525253A35%2525257C355%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-32540%2525253B-31943%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D1062.65%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-PS42JJqiwtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAq2fZmjAAAAA%2525257C2468194241202371864%2525257C2%25252524H4sIAAAAAAAA_-PS42JJqiwtFuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYAq2fZmjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-3203009593755949111%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A24%2525253A50%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_JFK_AV_US_byus"
-   },
-   {
-    "agent": "United",
-    "airlines": [
-     "Avianca",
-     "United"
-    ],
-    "date": "2027-03-10",
-    "direction": "back",
-    "flight_no": "AV 555 / UA 339",
-    "hidden_city": false,
-    "kind": "adventure",
-    "layover": {
-     "abroad": true,
-     "airport": "SAL",
-     "city": "San Salvador",
-     "country": "El Salvador",
-     "end": "2027-03-10T23:54",
-     "minutes": 444,
-     "overnight": false,
-     "start": "2027-03-10T16:30"
-    },
-    "price": 1718.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-10T16:30",
-      "dep": "2027-03-10T15:40",
-      "from": "GUA",
-      "to": "SAL"
-     },
-     {
-      "arr": "2027-03-11T05:31",
-      "dep": "2027-03-10T23:54",
-      "from": "SAL",
-      "to": "EWR"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skyscanner",
-    "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/GUA/EWR/2027-03-10/USD?price=1718&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C555%2525257C11990%2525257C2027-03-10T15%2525253A40%2525257C16086%2525257C2027-03-10T16%2525253A30%2525257C50%2525257CYEOB2BR9%2525257CY%2525257C-%2525253Bflight%2525257C-31722%2525257C339%2525257C16086%2525257C2027-03-10T23%2525253A54%2525257C11442%2525257C2027-03-11T05%2525253A31%2525257C277%2525257CHNA0A0DL%2525257CH%2525257C-%252526carriers%25253D-32540%2525252C-31722%252526operators%25253D-31794%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D32b6ab4b-70c5-4f87-b262-2d8e6d0c5736%252526ticket_price%25253D1717.99%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D96e6c596-7187-483f-809b-15fac2608f69%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257C-2772391319284873209%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBcYsptBgAIk7XOc0AAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-8802647697618281415%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A14%2525253A55%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AV%2FUA_US_uair"
+    "url": "https://book.airhint.com/book/AS/GUA/EWR/2027-03-10/USD?price=527&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fovgo%25252F1%25252F11990.11442.2027-03-10%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32593%2525257C1354%2525257C11990%2525257C2027-03-10T08%2525253A00%2525257C13416%2525257C2027-03-10T11%2525253A36%2525257C336%2525257CSH2OASBN%2525257CX%2525257CEconomy_Basic%2525253Bflight%2525257C-32593%2525257C1558%2525257C13416%2525257C2027-03-10T22%2525253A00%2525257C11442%2525257C2027-03-11T06%2525253A35%2525257C335%2525257CQH5OXUBN%2525257CX%2525257CEconomy_Basic%252526carriers%25253D-32593%252526operators%25253D-32593%2525253B-32593%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253Df4a1c3ce-510e-4de4-a335-0580d021b9e4%252526ticket_price%25253D527.09%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D03a2e4c0-69ca-439d-a4d3-d2e279d83c09%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257C7657194231942611139%2525257C2%25252524H4sIAAAAAAAA_-PS42LJL0vPF-LluBarxGFpamZubGpsIsXL0aOrxGFkbmpsbmpipNCw9NAdNiMmBUYASoxmIjAAAAA%2525257CAAIBAQEAAQfrAwoIOTU2NzM1MzQIMjc1Mzc1NDIC%2525257C-2069722301943346489%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A32%2525253A37%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DGUA_EWR_AS_US_ovgo"
    }
   ],
   "out|2027-03-04|abroad": [
@@ -4600,7 +4589,7 @@
      "start": "2027-03-04T07:29"
     },
     "price": 293.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T07:29",
@@ -4637,7 +4626,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -4674,7 +4663,7 @@
      "start": "2027-03-05T04:06"
     },
     "price": 469.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T04:06",
@@ -4702,7 +4691,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 487.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -4733,7 +4722,7 @@
      "start": "2027-03-04T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:55",
@@ -4772,7 +4761,7 @@
      "start": "2027-03-04T08:45"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:45",
@@ -4809,7 +4798,7 @@
      "start": "2027-03-04T09:15"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:15",
@@ -4846,7 +4835,7 @@
      "start": "2027-03-04T09:47"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:47",
@@ -4883,7 +4872,7 @@
      "start": "2027-03-04T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T11:11",
@@ -4920,7 +4909,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -4948,7 +4937,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 487.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -4981,7 +4970,7 @@
      "start": "2027-03-04T10:50"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T10:50",
@@ -5018,7 +5007,7 @@
      "start": "2027-03-04T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T11:11",
@@ -5055,7 +5044,7 @@
      "start": "2027-03-04T12:45"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T12:45",
@@ -5092,7 +5081,7 @@
      "start": "2027-03-05T00:21"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T00:21",
@@ -5129,7 +5118,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 293.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -5159,7 +5148,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 333.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T22:48",
@@ -5181,7 +5170,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 487.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -5666,7 +5655,7 @@
      "start": "2027-03-04T09:09"
     },
     "price": 297.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:09",
@@ -5684,7 +5673,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/B6/LGA/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F13522.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1471%2525257C13522%2525257C2027-03-04T06%2525253A00%2525257C11560%2525257C2027-03-04T09%2525253A09%2525257C189%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C5842661033993803140%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-6066572331695497171%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DLGA_GUA_B6_US_wfus"
+    "url": "https://book.airhint.com/book/B6/LGA/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F13522.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1471%2525257C13522%2525257C2027-03-04T06%2525253A00%2525257C11560%2525257C2027-03-04T09%2525253A09%2525257C189%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C5842661033993803140%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-6066572331695497171%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DLGA_GUA_B6_US_wfus"
    },
    {
     "agent": "Wizfair",
@@ -5707,7 +5696,7 @@
      "start": "2027-03-04T09:01"
     },
     "price": 297.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T09:01",
@@ -5725,7 +5714,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/B6/EWR/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1505%2525257C11442%2525257C2027-03-04T05%2525253A55%2525257C11560%2525257C2027-03-04T09%2525253A01%2525257C186%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-9222798112208093380%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C3773699149526865971%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_B6_US_wfus"
+    "url": "https://book.airhint.com/book/B6/EWR/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1505%2525257C11442%2525257C2027-03-04T05%2525253A55%2525257C11560%2525257C2027-03-04T09%2525253A01%2525257C186%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-9222798112208093380%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C3773699149526865971%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_B6_US_wfus"
    },
    {
     "agent": "Wizfair",
@@ -5748,7 +5737,7 @@
      "start": "2027-03-04T08:58"
     },
     "price": 297.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:58",
@@ -5766,7 +5755,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/B6/JFK/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1%2525257C12712%2525257C2027-03-04T05%2525253A50%2525257C11560%2525257C2027-03-04T08%2525253A58%2525257C188%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-8981619017647885729%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C4203322182849163551%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_B6_US_wfus"
+    "url": "https://book.airhint.com/book/B6/JFK/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1%2525257C12712%2525257C2027-03-04T05%2525253A50%2525257C11560%2525257C2027-03-04T08%2525253A58%2525257C188%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1383%2525257C11560%2525257C2027-03-04T09%2525253A55%2525257C11990%2525257C2027-03-04T11%2525253A49%2525257C174%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-8981619017647885729%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C4203322182849163551%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_B6_US_wfus"
    },
    {
     "agent": "Wizfair",
@@ -5789,7 +5778,7 @@
      "start": "2027-03-04T11:11"
     },
     "price": 297.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T11:11",
@@ -5807,7 +5796,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/B6/JFK/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1601%2525257C12712%2525257C2027-03-04T07%2525253A59%2525257C11560%2525257C2027-03-04T11%2525253A11%2525257C192%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1483%2525257C11560%2525257C2027-03-04T12%2525253A16%2525257C11990%2525257C2027-03-04T14%2525253A15%2525257C179%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-7048632952784622984%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-5298775240593360106%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_B6_US_wfus"
+    "url": "https://book.airhint.com/book/B6/JFK/GUA/2027-03-04/USD?price=297&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fwfus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32171%2525257C1601%2525257C12712%2525257C2027-03-04T07%2525253A59%2525257C11560%2525257C2027-03-04T11%2525253A11%2525257C192%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32171%2525257C1483%2525257C11560%2525257C2027-03-04T12%2525253A16%2525257C11990%2525257C2027-03-04T14%2525253A15%2525257C179%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32171%252526operators%25253D-32171%2525253B-32171%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D296.67%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257C-7048632952784622984%2525257C2%25252524H4sIAAAAAAAA_-PS42IpTystFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAw3xJvzAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-5298775240593360106%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A22%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_B6_US_wfus"
    },
    {
     "agent": "CheapOair",
@@ -5830,7 +5819,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 298.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -5848,7 +5837,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AC/EWR/GUA/2027-03-04/USD?price=298&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fchpo%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32695%2525257C8491%2525257C11442%2525257C2027-03-04T06%2525253A55%2525257C18395%2525257C2027-03-04T08%2525253A31%2525257C96%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32695%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32695%252526operators%25253D-31542%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D297.70%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257C7570187904221927513%2525257C2%25252524H4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-1665310742790102392%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A23%2525253A47%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_AC_US_chpo"
+    "url": "https://book.airhint.com/book/AC/EWR/GUA/2027-03-04/USD?price=298&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fchpo%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32695%2525257C8491%2525257C11442%2525257C2027-03-04T06%2525253A55%2525257C18395%2525257C2027-03-04T08%2525253A31%2525257C96%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32695%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32695%252526operators%25253D-31542%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D297.70%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257C7570187904221927513%2525257C2%25252524H4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-1665310742790102392%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T19%2525253A21%2525253A17%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_AC_US_chpo"
    },
    {
     "agent": "CheapOair",
@@ -5871,7 +5860,7 @@
      "start": "2027-03-04T07:29"
     },
     "price": 298.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T07:29",
@@ -5889,7 +5878,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AC/LGA/GUA/2027-03-04/USD?price=298&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fchpo%25252F1%25252F13522.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32695%2525257C8631%2525257C13522%2525257C2027-03-04T06%2525253A00%2525257C18395%2525257C2027-03-04T07%2525253A29%2525257C89%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32695%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32695%252526operators%25253D-31542%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D297.70%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257C-3918527871684025794%2525257C2%25252524H4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C3665134428897066822%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A23%2525253A47%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DLGA_GUA_AC_US_chpo"
+    "url": "https://book.airhint.com/book/AC/LGA/GUA/2027-03-04/USD?price=298&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fchpo%25252F1%25252F13522.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32695%2525257C8631%2525257C13522%2525257C2027-03-04T06%2525253A00%2525257C18395%2525257C2027-03-04T07%2525253A29%2525257C89%2525257C-%2525257C-%2525257C-%2525253Bflight%2525257C-32695%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32695%252526operators%25253D-31542%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D297.70%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257C-3918527871684025794%2525257C2%25252524H4sIAAAAAAAA_-My5mJJzijIF-Ll6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYq5tBgFwDAL8AgNQAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C3665134428897066822%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T19%2525253A21%2525253A17%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DLGA_GUA_AC_US_chpo"
    },
    {
     "agent": "United",
@@ -5912,7 +5901,7 @@
      "start": "2027-03-04T08:40"
     },
     "price": 319.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:40",
@@ -5930,7 +5919,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/UA/EWR/GUA/2027-03-04/USD?price=319&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C492%2525257C11442%2525257C2027-03-04T06%2525253A00%2525257C12389%2525257C2027-03-04T08%2525253A40%2525257C220%2525257CSNA4A0BN%2525257CN%2525257C-%2525253Bflight%2525257C-31722%2525257C1902%2525257C12389%2525257C2027-03-04T16%2525253A43%2525257C11990%2525257C2027-03-04T19%2525253A39%2525257C176%2525257CSNA4A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D319.00%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257C-3381558350302191200%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C2383709222220507307%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A21%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_UA_US_uair"
+    "url": "https://book.airhint.com/book/UA/EWR/GUA/2027-03-04/USD?price=319&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C492%2525257C11442%2525257C2027-03-04T06%2525253A00%2525257C12389%2525257C2027-03-04T08%2525253A40%2525257C220%2525257CSNA4A0BN%2525257CN%2525257C-%2525253Bflight%2525257C-31722%2525257C1902%2525257C12389%2525257C2027-03-04T16%2525253A43%2525257C11990%2525257C2027-03-04T19%2525253A39%2525257C176%2525257CSNA4A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%2525253B-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D319.00%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257C-3381558350302191200%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C2383709222220507307%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A21%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_UA_US_uair"
    },
    {
     "agent": "United",
@@ -5944,7 +5933,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 332.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T22:48",
@@ -5956,7 +5945,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/UA/EWR/GUA/2027-03-04/USD?price=332&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C1551%2525257C11442%2525257C2027-03-04T18%2525253A36%2525257C11990%2525257C2027-03-04T22%2525253A48%2525257C312%2525257CSNA4A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D332.50%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257C-4932850012584980089%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C5461042119412195065%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A21%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_UA_US_uair"
+    "url": "https://book.airhint.com/book/UA/EWR/GUA/2027-03-04/USD?price=332&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fuair%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Fairli%25252Fflights%25253Fitinerary%25253Dflight%2525257C-31722%2525257C1551%2525257C11442%2525257C2027-03-04T18%2525253A36%2525257C11990%2525257C2027-03-04T22%2525253A48%2525257C312%2525257CSNA4A0BN%2525257CN%2525257C-%252526carriers%25253D-31722%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D332.50%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257C-4932850012584980089%2525257C2%25252524H4sIAAAAAAAA_-My4mIpTcwsEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBcYsptBgAIKgY4w0AAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C5461042119412195065%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A21%252526pqid%25253Dfalse%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_UA_US_uair"
    },
    {
     "agent": "Hop2",
@@ -5979,7 +5968,7 @@
      "start": "2027-03-04T08:31"
     },
     "price": 363.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T08:31",
@@ -5997,7 +5986,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/CM/EWR/GUA/2027-03-04/USD?price=363&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32407%2525257C8491%2525257C11442%2525257C2027-03-04T06%2525253A55%2525257C18395%2525257C2027-03-04T08%2525253A31%2525257C96%2525257CKKYE42BA%2525257CK%2525257CEconomy_Basic%2525253Bflight%2525257C-32407%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257CKKYE42BA%2525257CK%2525257CEconomy_Basic%252526carriers%25253D-32407%252526operators%25253D-32695%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D363.39%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257C2967268527420798601%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C5906584366351885892%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A23%2525253A44%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_CM_US_hop2"
+    "url": "https://book.airhint.com/book/CM/EWR/GUA/2027-03-04/USD?price=363&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32407%2525257C8491%2525257C11442%2525257C2027-03-04T06%2525253A55%2525257C18395%2525257C2027-03-04T08%2525253A31%2525257C96%2525257CKKYE42BA%2525257CK%2525257CEconomy_Basic%2525253Bflight%2525257C-32407%2525257C1368%2525257C18395%2525257C2027-03-04T17%2525253A25%2525257C11990%2525257C2027-03-04T22%2525253A00%2525257C335%2525257CKKYE42BA%2525257CK%2525257CEconomy_Basic%252526carriers%25253D-32407%252526operators%25253D-32695%2525253B-32695%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D363.39%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257C2967268527420798601%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C5906584366351885892%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A31%2525253A08%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_CM_US_hop2"
    },
    {
     "agent": "Hop2",
@@ -6011,7 +6000,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 460.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T22:48",
@@ -6023,7 +6012,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/EWR/GUA/2027-03-04/USD?price=460&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C1551%2525257C11442%2525257C2027-03-04T18%2525253A36%2525257C11990%2525257C2027-03-04T22%2525253A48%2525257C312%2525257CWNA4A0DN%2525257CW%2525257CEconomy_Main%252526carriers%25253D-32540%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D460.44%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257C6230910271472920667%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-1172596015290986428%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A23%2525253A44%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_AV_US_hop2"
+    "url": "https://book.airhint.com/book/AV/EWR/GUA/2027-03-04/USD?price=460&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fhop2%25252F1%25252F11442.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C1551%2525257C11442%2525257C2027-03-04T18%2525253A36%2525257C11990%2525257C2027-03-04T22%2525253A48%2525257C312%2525257CWNA4A0DN%2525257CW%2525257CEconomy_Main%252526carriers%25253D-32540%252526operators%25253D-31722%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D460.44%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257C-6402231166570990529%2525257C2%25252524H4sIAAAAAAAA_-PS42LJyC8wEuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAqjxALjAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C-8509666028854081256%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T21%2525253A31%2525253A08%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DEWR_GUA_AV_US_hop2"
    },
    {
     "agent": "Super.com",
@@ -6037,7 +6026,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 478.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-04T06:00",
@@ -6049,7 +6038,7 @@
     "self_transfer": false,
     "source": "Skyscanner",
     "ticket_to": null,
-    "url": "https://book.airhint.com/book/AV/JFK/GUA/2027-03-04/USD?price=478&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fspus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C653%2525257C12712%2525257C2027-03-04T01%2525253A55%2525257C11990%2525257C2027-03-04T06%2525253A00%2525257C305%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253De87f2a86-1717-4bad-8f78-a47ec9ef5672%252526ticket_price%25253D478.11%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253Dd248abeb-a8c3-48df-8bff-acaeefb229a9%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpLigtFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAJtfp9DAAAAA%2525257C-7890504685130748158%2525257C2%25252524H4sIAAAAAAAA_-PS42IpLigtFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAJtfp9DAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C2494061935483119420%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A25%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_AV_US_spus"
+    "url": "https://book.airhint.com/book/AV/JFK/GUA/2027-03-04/USD?price=478&channel=web&adults=1&children=0&infants=0&cabin_class=Y&affiliate=Skyscanner&data-affiliate=https%3A%2F%2Fagw.skyscnr.com%2Fv1%2Fredirect%3FpageUrl%3Dhttps%253A%252F%252Fskyscanner.pxf.io%252Fc%252F2014450%252F1103265%252F13416%253Fu%253Dhttps%25253A%25252F%25252Fwww.skyscanner.com%25252Ftransport_deeplink%25252F4.0%25252FUS%25252Fen-GB%25252FUSD%25252Fspus%25252F1%25252F12712.11990.2027-03-04%25252Fair%25252Ftrava%25252Fflights%25253Fitinerary%25253Dflight%2525257C-32540%2525257C653%2525257C12712%2525257C2027-03-04T01%2525253A55%2525257C11990%2525257C2027-03-04T06%2525253A00%2525257C305%2525257C-%2525257C-%2525257C-%252526carriers%25253D-32540%252526operators%25253D-31793%252526passengers%25253D1%252526channel%25253Ddataapi%252526cabin_class%25253Deconomy%252526fps_session_id%25253D5ee98148-4032-4cae-b375-1c40b3ced55a%252526ticket_price%25253D478.11%252526is_npt%25253Dfalse%252526is_multipart%25253Dfalse%252526client_id%25253Dskyscanner_b2b%252526request_id%25253D01d3f027-2fcf-48b7-8022-d448275f1baa%252526q_ids%25253DH4sIAAAAAAAA_-PS42IpLigtFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAJtfp9DAAAAA%2525257C-7890504685130748158%2525257C2%25252524H4sIAAAAAAAA_-PS42IpLigtFuLl6NFV4jAyNzU2NzUxkuLluBarxGFpamZubGpsotBwedEdNiMmBUYAJtfp9DAAAAA%2525257CAAIBAQEAAQfrAwQIMjc1Mzc1NDIIOTU2NzM1MzQC%2525257C2494061935483119420%2525257C2%252526q_sources%25253DJACQUARD%252526commercial_filters%25253Dfalse%252526q_datetime_utc%25253D2026-11-16T15%2525253A08%2525253A25%252526pqid%25253Dtrue%252526fare_type%25253Dbase_fare%252526api_pbs%25253Dtrue%252526app_id%25253DL34pExWQ1zr7fwmxDtGADnkCeChAeui7I3jL8z2avbVBSQSumsr9MbC6DytSuJZa%26impactMediaPartnerId%3D2014450%26sharedid%3DJFK_GUA_AV_US_spus"
    }
   ],
   "out|2027-03-05|abroad": [
@@ -6185,12 +6174,49 @@
      "start": "2027-03-05T10:05"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T10:05",
       "dep": "2027-03-05T06:46",
       "from": "LGA",
+      "to": "MIA"
+     },
+     {
+      "arr": "2027-03-05T15:12",
+      "dep": "2027-03-05T13:17",
+      "from": "MIA",
+      "to": "GUA"
+     }
+    ],
+    "source": "Google",
+    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
+   },
+   {
+    "airlines": [
+     "American"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AA 2017 / 2395",
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MIA",
+     "city": "Miami",
+     "country": "US",
+     "end": "2027-03-05T13:17",
+     "minutes": 126,
+     "overnight": false,
+     "start": "2027-03-05T11:11"
+    },
+    "price": 280.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T11:11",
+      "dep": "2027-03-05T07:51",
+      "from": "JFK",
       "to": "MIA"
      },
      {
@@ -6222,7 +6248,7 @@
      "start": "2027-03-05T14:23"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T14:23",
@@ -6259,7 +6285,7 @@
      "start": "2027-03-05T17:56"
     },
     "price": 295.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T17:56",
@@ -6270,43 +6296,6 @@
      {
       "arr": "2027-03-05T20:52",
       "dep": "2027-03-05T18:50",
-      "from": "MIA",
-      "to": "GUA"
-     }
-    ],
-    "source": "Google",
-    "url": "https://www.google.com/travel/flights/search?tfs=GiISCjIwMjctMDMtMDUoAWoLEgkvbS8wMl8yODZyBRIDR1VBQgEBSAGYAQI=&hl=&curr=USD"
-   },
-   {
-    "airlines": [
-     "American"
-    ],
-    "date": "2027-03-05",
-    "direction": "out",
-    "flight_no": "AA 2138 / 2395",
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "MIA",
-     "city": "Miami",
-     "country": "US",
-     "end": "2027-03-05T13:17",
-     "minutes": 120,
-     "overnight": false,
-     "start": "2027-03-05T11:17"
-    },
-    "price": 319.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-05T11:17",
-      "dep": "2027-03-05T07:52",
-      "from": "LGA",
-      "to": "MIA"
-     },
-     {
-      "arr": "2027-03-05T15:12",
-      "dep": "2027-03-05T13:17",
       "from": "MIA",
       "to": "GUA"
      }
@@ -6335,7 +6324,7 @@
      "start": "2027-03-05T10:50"
     },
     "price": 353.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T10:50",
@@ -6372,7 +6361,7 @@
      "start": "2027-03-05T08:40"
     },
     "price": 400.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T08:40",
@@ -6409,7 +6398,7 @@
      "start": "2027-03-05T09:55"
     },
     "price": 488.0,
-    "seen": "2026-11-16T15:20:27.262158+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:55",
@@ -6439,7 +6428,7 @@
     "kind": "nonstop",
     "layover": null,
     "price": 363.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -6453,89 +6442,6 @@
    }
   ],
   "out|2027-03-05|skiplagged": [
-   {
-    "agent": null,
-    "airlines": [
-     "Frontier Airlines",
-     "Volaris Costa Rica"
-    ],
-    "date": "2027-03-05",
-    "direction": "out",
-    "flight_no": "F9 2431 / Q6 4002",
-    "hidden_city": false,
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "MCO",
-     "city": "Orlando",
-     "country": "US",
-     "end": "2027-03-05T11:48",
-     "minutes": 133,
-     "overnight": false,
-     "start": "2027-03-05T09:35"
-    },
-    "price": 247.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-05T09:35",
-      "dep": "2027-03-05T06:30",
-      "from": "LGA",
-      "to": "MCO"
-     },
-     {
-      "arr": "2027-03-05T13:52",
-      "dep": "2027-03-05T11:48",
-      "from": "MCO",
-      "to": "GUA"
-     }
-    ],
-    "self_transfer": true,
-    "source": "Skiplagged",
-    "ticket_to": null,
-    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
-   },
-   {
-    "agent": null,
-    "airlines": [
-     "JetBlue Airways"
-    ],
-    "date": "2027-03-05",
-    "direction": "out",
-    "flight_no": "B6 1601 / B6 1483",
-    "hidden_city": false,
-    "kind": "regular",
-    "layover": {
-     "abroad": false,
-     "airport": "FLL",
-     "city": "Fort Lauderdale",
-     "country": "US",
-     "end": "2027-03-05T12:16",
-     "minutes": 65,
-     "overnight": false,
-     "start": "2027-03-05T11:11"
-    },
-    "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-05T11:11",
-      "dep": "2027-03-05T07:59",
-      "from": "JFK",
-      "to": "FLL"
-     },
-     {
-      "arr": "2027-03-05T14:15",
-      "dep": "2027-03-05T12:16",
-      "from": "FLL",
-      "to": "GUA"
-     }
-    ],
-    "self_transfer": false,
-    "source": "Skiplagged",
-    "ticket_to": null,
-    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
-   },
    {
     "agent": null,
     "airlines": [
@@ -6557,7 +6463,7 @@
      "start": "2027-03-05T11:11"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T11:11",
@@ -6598,7 +6504,7 @@
      "start": "2027-03-05T10:05"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T10:05",
@@ -6639,7 +6545,7 @@
      "start": "2027-03-05T14:23"
     },
     "price": 280.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T14:23",
@@ -6660,7 +6566,7 @@
     "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
    },
    {
-    "agent": "Kiwi",
+    "agent": null,
     "airlines": [
      "Frontier Airlines",
      "Volaris Costa Rica"
@@ -6680,8 +6586,8 @@
      "overnight": false,
      "start": "2027-03-05T09:35"
     },
-    "price": 295.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 285.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:35",
@@ -6697,6 +6603,47 @@
      }
     ],
     "self_transfer": true,
+    "source": "Skiplagged",
+    "ticket_to": null,
+    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
+   },
+   {
+    "agent": null,
+    "airlines": [
+     "JetBlue Airways"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "B6 1471 / B6 1383",
+    "hidden_city": false,
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "FLL",
+     "city": "Fort Lauderdale",
+     "country": "US",
+     "end": "2027-03-05T09:55",
+     "minutes": 46,
+     "overnight": false,
+     "start": "2027-03-05T09:09"
+    },
+    "price": 291.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T09:09",
+      "dep": "2027-03-05T06:00",
+      "from": "LGA",
+      "to": "FLL"
+     },
+     {
+      "arr": "2027-03-05T11:49",
+      "dep": "2027-03-05T09:55",
+      "from": "FLL",
+      "to": "GUA"
+     }
+    ],
+    "self_transfer": false,
     "source": "Skiplagged",
     "ticket_to": null,
     "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
@@ -6722,7 +6669,7 @@
      "start": "2027-03-05T11:11"
     },
     "price": 295.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T11:11",
@@ -6763,7 +6710,7 @@
      "start": "2027-03-05T10:05"
     },
     "price": 295.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T10:05",
@@ -6779,6 +6726,48 @@
      }
     ],
     "self_transfer": false,
+    "source": "Skiplagged",
+    "ticket_to": null,
+    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
+   },
+   {
+    "agent": "Kiwi",
+    "airlines": [
+     "Frontier Airlines",
+     "Volaris Costa Rica"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "F9 2431 / Q6 4002",
+    "hidden_city": false,
+    "kind": "regular",
+    "layover": {
+     "abroad": false,
+     "airport": "MCO",
+     "city": "Orlando",
+     "country": "US",
+     "end": "2027-03-05T11:48",
+     "minutes": 133,
+     "overnight": false,
+     "start": "2027-03-05T09:35"
+    },
+    "price": 296.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T09:35",
+      "dep": "2027-03-05T06:30",
+      "from": "LGA",
+      "to": "MCO"
+     },
+     {
+      "arr": "2027-03-05T13:52",
+      "dep": "2027-03-05T11:48",
+      "from": "MCO",
+      "to": "GUA"
+     }
+    ],
+    "self_transfer": true,
     "source": "Skiplagged",
     "ticket_to": null,
     "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
@@ -6804,7 +6793,7 @@
      "start": "2027-03-05T11:17"
     },
     "price": 319.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T11:17",
@@ -6845,7 +6834,7 @@
      "start": "2027-03-05T09:15"
     },
     "price": 319.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T09:15",
@@ -6877,7 +6866,33 @@
     "kind": "nonstop",
     "layover": null,
     "price": 363.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "seen": "2026-11-16T21:33:14.690431+00:00",
+    "segments": [
+     {
+      "arr": "2027-03-05T22:48",
+      "dep": "2027-03-05T18:36",
+      "from": "EWR",
+      "to": "GUA"
+     }
+    ],
+    "self_transfer": false,
+    "source": "Skiplagged",
+    "ticket_to": null,
+    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
+   },
+   {
+    "agent": null,
+    "airlines": [
+     "Avianca"
+    ],
+    "date": "2027-03-05",
+    "direction": "out",
+    "flight_no": "AV 1551",
+    "hidden_city": false,
+    "kind": "nonstop",
+    "layover": null,
+    "price": 450.44,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T22:48",
@@ -6912,8 +6927,8 @@
      "overnight": false,
      "start": "2027-03-05T14:10"
     },
-    "price": 428.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 455.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
       "arr": "2027-03-05T14:10",
@@ -6936,67 +6951,41 @@
    {
     "agent": "Kiwi",
     "airlines": [
-     "Aeromexico",
+     "JetBlue Airways",
      "Volaris"
     ],
     "date": "2027-03-05",
     "direction": "out",
-    "flight_no": "AM 411 / Y4 900",
+    "flight_no": "B6 751 / Y4 3930",
     "hidden_city": false,
     "kind": "regular",
     "layover": {
      "abroad": true,
-     "airport": "MEX",
-     "city": "Mexico City",
+     "airport": "CUN",
+     "city": "Canc\u00fan",
      "country": "Mexico",
-     "end": "2027-03-05T18:55",
-     "minutes": 410,
+     "end": "2027-03-05T13:06",
+     "minutes": 136,
      "overnight": false,
-     "start": "2027-03-05T12:05"
+     "start": "2027-03-05T10:50"
     },
-    "price": 428.0,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
+    "price": 488.0,
+    "seen": "2026-11-16T21:33:14.690431+00:00",
     "segments": [
      {
-      "arr": "2027-03-05T12:05",
-      "dep": "2027-03-05T07:04",
-      "from": "EWR",
-      "to": "MEX"
+      "arr": "2027-03-05T10:50",
+      "dep": "2027-03-05T06:30",
+      "from": "JFK",
+      "to": "CUN"
      },
      {
-      "arr": "2027-03-05T20:49",
-      "dep": "2027-03-05T18:55",
-      "from": "MEX",
+      "arr": "2027-03-05T13:42",
+      "dep": "2027-03-05T13:06",
+      "from": "CUN",
       "to": "GUA"
      }
     ],
     "self_transfer": true,
-    "source": "Skiplagged",
-    "ticket_to": null,
-    "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
-   },
-   {
-    "agent": null,
-    "airlines": [
-     "Avianca"
-    ],
-    "date": "2027-03-05",
-    "direction": "out",
-    "flight_no": "AV 1551",
-    "hidden_city": false,
-    "kind": "nonstop",
-    "layover": null,
-    "price": 450.44,
-    "seen": "2026-11-16T15:25:22.142863+00:00",
-    "segments": [
-     {
-      "arr": "2027-03-05T22:48",
-      "dep": "2027-03-05T18:36",
-      "from": "EWR",
-      "to": "GUA"
-     }
-    ],
-    "self_transfer": false,
     "source": "Skiplagged",
     "ticket_to": null,
     "url": "https://skiplagged.com/flights/NYC/GUA/2027-03-05"
