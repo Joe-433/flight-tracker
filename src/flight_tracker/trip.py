@@ -245,7 +245,9 @@ def classify(segments: List[Dict[str, Any]], cfg: Config) -> Tuple[Optional[str]
         "abroad": bool(country) and country != "US",
         "minutes": minutes, "start": land, "end": leave, "overnight": overnight,
     }
-    long_enough = t.layover_min_hours * 60 <= minutes <= t.layover_max_hours * 60
+    if minutes > t.layover_max_hours * 60:
+        return None, layover  # a day in an airport (or a hostel) isn't a connection
+    long_enough = t.layover_min_hours * 60 <= minutes
     return ("adventure" if (long_enough and daytime) else "regular"), layover
 
 
@@ -862,7 +864,11 @@ def _block(n: int, combo: Dict[str, Any], hints: Dict[str, Any]) -> str:
         price = "[%s](%s)" % (_money(rt["price"]), rt["url"]) if rt.get("url") else _money(rt["price"])
         saving = ""
         if combo.get("oneways_total"):
-            saving = ", %s less than the cheapest two one-ways" % _money(combo["oneways_total"] - rt["price"])
+            diff = combo["oneways_total"] - rt["price"]
+            if diff >= 1:
+                saving = ", %s less than two one-ways on these dates" % _money(diff)
+            elif diff <= -1:
+                saving = ", %s more than two one-ways on these dates" % _money(-diff)
         stops = "nonstop" if rt.get("max_stops") == 0 else "up to 1 stop"
         out_leg = dict(rt, date=rt["out_date"], kind=rt.get("kind") or "nonstop")
         back_rule = "nonstop" if rt.get("max_stops") == 0 else "nonstop or 1 stop"

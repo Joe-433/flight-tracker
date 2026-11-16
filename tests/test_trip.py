@@ -73,6 +73,10 @@ class Classify(unittest.TestCase):
         self.assertEqual([short[0], night[0], dawn[0]], ["regular"] * 3)
         self.assertTrue(night[1]["overnight"])
 
+    def test_layover_over_the_max_is_unusable(self):
+        self.assertIsNone(self.kind(seg("EWR", "GDL", "2027-03-04T06:30", "2027-03-04T11:13"),
+                                    seg("GDL", "GUA", "2027-03-05T11:58", "2027-03-05T14:07"))[0])
+
     def test_airport_change_and_two_stops_unusable(self):
         self.assertIsNone(self.kind(seg("EWR", "DCA", "2027-03-04T09:00", "2027-03-04T10:29"),
                                     seg("IAD", "GUA", "2027-03-04T17:43", "2027-03-04T21:25"))[0])
