@@ -157,7 +157,11 @@ class Combos(unittest.TestCase):
         self.assertIn("the 5 cheapest", title)
         self.assertIn("Cheapest: **$260 + $329 = $589", body)
         self.assertIn("$61 cheaper (was $650)", body)
-        self.assertEqual(len(re.findall(r"^\*\*\d\. ", body, re.M)), 5)
+        self.assertEqual(len(re.findall(r"^\*\*\d\.\*\* ", body, re.M)), 5)
+        table = body.split("```")[1].strip().splitlines()
+        self.assertEqual(table[0].split(), ["#", "Price", "Leave", "Return", "Out", "Back"])
+        self.assertEqual(len(table), 6)
+        self.assertTrue(all(len(line) <= 60 for line in table))
         self.assertTrue(len(body) <= 4096)
 
     def test_empty_report(self):

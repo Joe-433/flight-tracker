@@ -825,32 +825,82 @@ def _stop_text(leg: Dict[str, Any]) -> str:
     return "stop in %s, %s%s" % (where, _hours(lay["minutes"]), " overnight" if lay.get("overnight") else "")
 
 
-def _leg_line(leg: Dict[str, Any], heading: str, hints: Dict[str, Any]) -> str:
+def _codes(leg: Dict[str, Any]) -> str:
+    """Airline codes on the leg, in order: "UA", "F9/Y4"."""
+    codes: List[str] = []
+    for part in (leg.get("flight_no") or "").split("/"):
+        code = part.strip().split(" ", 1)[0].upper()
+        if re.fullmatch(r"[A-Z0-9]{2}", code) and code not in codes:
+            codes.append(code)
+    for name in leg.get("airlines") or []:
+        key = name.strip().lower()
+        code = AIRLINE_CODES.get(key) or next(
+            (c for n, c in AIRLINE_CODES.items() if key.startswith(n)), name.strip()[:6])
+        if code and code not in codes and len(codes) < len(leg["segments"]):
+            codes.append(code)
+    return "/".join(codes) or "?"
+
+
+def _flags(leg: Dict[str, Any]) -> str:
+    lay = leg.get("layover") or {}
+    marks = [("s", leg.get("self_transfer")), ("h", leg.get("hidden_city")),
+             ("o", lay.get("overnight")), ("d", leg.get("kind") == "adventure")]
+    return "".join(m for m, on in marks if on)
+
+
+def _cell(leg: Dict[str, Any]) -> str:
+    """Out/Back column: "UA direct", "AA MIA", "F9/Y4 MCO s"."""
     segs = leg["segments"]
-    airline = ", ".join(leg.get("airlines") or []) or "?"
-    route = "%s %s → %s %s" % (
-        segs[0]["from"], _clock(segs[0]["dep"]), segs[-1]["to"], _clock(segs[-1]["arr"], leg["date"]),
-    )
+    where = "direct" if len(segs) == 1 else "/".join(s["to"] for s in segs[:-1])
+    return " ".join(x for x in (_codes(leg), where, _flags(leg)) if x)
+
+
+def _short_day(value: str) -> str:
+    return dt.date.fromisoformat(value).strftime("%a %-m/%-d")
+
+
+def _table(options: List[Dict[str, Any]]) -> str:
+    rows = [("#", "Price", "Leave", "Return", "Out", "Back")]
+    for n, combo in enumerate(options, 1):
+        if combo["kind"] == "roundtrip":
+            rt = combo["roundtrip"]
+            out = _cell(dict(rt, date=rt["out_date"], kind=rt.get("kind") or "nonstop"))
+            back = "same ticket"
+        else:
+            out, back = _cell(combo["out"]), _cell(combo["back"])
+        rows.append((str(n), _money(combo["total"]), _short_day(combo["out_date"]),
+                     _short_day(combo["ret_date"]), out, back))
+    widths = [max(len(r[i]) for r in rows) for i in range(len(rows[0]))]
+    lines = ["  ".join(c.ljust(w) for c, w in zip(r, widths)).rstrip() for r in rows]
+    return "```\n%s\n```" % "\n".join(lines)
+
+
+LEGEND = ("direct = nonstop, otherwise the stop airport · **s** separate tickets · "
+          "**h** hidden-city · **o** overnight stop · **d** long daytime layover")
+
+
+def _leg_line(leg: Dict[str, Any], heading: str, hints: Dict[str, Any]) -> str:
+    """One leg in the details: link, times, stop, where it was found, warnings."""
+    segs = leg["segments"]
     price = _money(leg["price"])
     if leg.get("url"):
         price = "[%s](%s)" % (price, leg["url"])
-    line = "%s %s · %s · %s · %s · %s" % (
-        heading, _day(leg["date"]), price, airline, route, _stop_text(leg))
-    notes = []
+    bits = ["%s %s %s %s → %s %s" % (
+        heading, price, segs[0]["from"], _clock(segs[0]["dep"]),
+        segs[-1]["to"], _clock(segs[-1]["arr"], leg["date"]))]
+    if leg.get("layover"):
+        bits.append(_stop_text(leg))
     if leg.get("source") and leg["source"] != "Google":
         via = " via %s" % leg["agent"] if leg.get("agent") and leg["source"] == "Skyscanner" else ""
-        notes.append("found on %s%s" % (leg["source"], via))
+        bits.append("found on %s%s" % (leg["source"], via))
     if leg.get("hidden_city"):
-        notes.append("\u26a0\ufe0f hidden-city: the ticket is to %s and you get off at %s. Personal item "
-                     "only (no checked or gate-checked bag), no frequent-flyer number"
-                     % (leg.get("ticket_to") or "?", segs[-1]["to"]))
+        bits.append("⚠️ ticket is to %s and you get off at %s" % (leg.get("ticket_to") or "?", segs[-1]["to"]))
     if leg.get("self_transfer"):
-        notes.append("\u26a0\ufe0f separate tickets: you re-check in at the stop, and a late first "
-                     "flight isn't covered")
+        bits.append("⚠️ separate tickets")
     hint = _hint_text(hints.get(hint_key(leg)))
     if hint:
-        notes.append(hint)
-    return line + "".join("\n  *%s*" % n for n in notes)
+        bits.append(hint.replace(", unlikely to get cheaper", ""))
+    return " · ".join(bits)
 
 
 def _dates(combo: Dict[str, Any]) -> str:
@@ -858,6 +908,8 @@ def _dates(combo: Dict[str, Any]) -> str:
 
 
 def _block(n: int, combo: Dict[str, Any], hints: Dict[str, Any]) -> str:
+    """Details for row n, under the table."""
+    head = "**%d.**" % n if n else ""
     if combo["kind"] == "roundtrip":
         rt = combo["roundtrip"]
         segs = rt["segments"]
@@ -866,29 +918,19 @@ def _block(n: int, combo: Dict[str, Any], hints: Dict[str, Any]) -> str:
         if combo.get("oneways_total"):
             diff = combo["oneways_total"] - rt["price"]
             if diff >= 1:
-                saving = ", %s less than two one-ways on these dates" % _money(diff)
+                saving = " · %s less than two one-ways" % _money(diff)
             elif diff <= -1:
-                saving = ", %s more than two one-ways on these dates" % _money(-diff)
-        stops = "nonstop" if rt.get("max_stops") == 0 else "up to 1 stop"
-        out_leg = dict(rt, date=rt["out_date"], kind=rt.get("kind") or "nonstop")
+                saving = " · %s more than two one-ways" % _money(-diff)
         back_rule = "nonstop" if rt.get("max_stops") == 0 else "nonstop or 1 stop"
         if rt.get("back_after"):
-            back_rule += ", leaving after %s" % _clock(rt["back_after"])
-        return (
-            "**%s%s round-trip ticket** · %s\n"
-            "One ticket on %s (%s)%s. %s\n"
-            "Out %s · %s %s → %s %s · %s\n"
-            "Back %s · pick the return when booking (%s)"
-            % ("%d. " % n if n else "", _money(rt["price"]), _dates(combo),
-               ", ".join(rt.get("airlines") or []) or "?", stops, saving, price,
-               _day(rt["out_date"]), segs[0]["from"], _clock(segs[0]["dep"]),
-               segs[-1]["to"], _clock(segs[-1]["arr"], rt["out_date"]), _stop_text(out_leg),
-               _day(rt["ret_date"]), back_rule)
-        )
-    return "**%s%s + %s = %s** · %s\n%s\n%s" % (
-        "%d. " % n if n else "", _money(combo["out"]["price"]), _money(combo["back"]["price"]), _money(combo["total"]),
-        _dates(combo), _leg_line(combo["out"], "Out", hints), _leg_line(combo["back"], "Back", hints),
-    )
+            back_rule += ", after %s" % _clock(rt["back_after"])
+        return "%s Round-trip ticket %s on %s%s\n Out %s %s → %s %s · pick the return when booking (%s)" % (
+            head, price, ", ".join(rt.get("airlines") or []) or "?", saving,
+            segs[0]["from"], _clock(segs[0]["dep"]), segs[-1]["to"],
+            _clock(segs[-1]["arr"], rt["out_date"]), back_rule)
+    return "%s %s + %s = %s\n %s\n %s" % (
+        head, _money(combo["out"]["price"]), _money(combo["back"]["price"]), _money(combo["total"]),
+        _leg_line(combo["out"], "Out", hints), _leg_line(combo["back"], "Back", hints))
 
 
 def _short(combo: Dict[str, Any]) -> str:
@@ -955,7 +997,9 @@ def report(doc: Dict[str, Any], cfg: Config, now: dt.datetime) -> List[Tuple[str
         "checked %s" % ("just now" if age is not None and age < 1 else
                          "%.0fh ago" % age if age is not None else "never"),
     ])
-    body = ["\n".join(take)] + [_block(i, c, hints) for i, c in enumerate(options, 1)]
+    body = ["\n".join(take)]
+    if options:
+        body += [_table(options), LEGEND, "\n".join(_block(i, c, hints) for i, c in enumerate(options, 1))]
     return [("%s flights \u00b7 the %d cheapest" % (t.name, len(options) or t.max_options),
              _fit("\n\n".join(body)), footer)]
 
